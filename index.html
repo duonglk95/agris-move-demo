@@ -81,6 +81,8 @@ img { display: block; }
 .hero-copy h1 { font-size: clamp(22px, 4.3vw, 62px); font-weight: 800; color: var(--deep); text-transform: uppercase; line-height: 1.02; }
 .hero-cta { position: absolute; left: 50%; bottom: 23%; opacity: 0; transform: translate(-50%, 14px); pointer-events: none; transition: opacity .6s ease, transform .6s ease; }
 .hero-cta.on { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.hero-cta.on .btn { animation: ctaglow 3.6s ease-in-out 1.2s infinite; }
+@keyframes ctaglow { 0%, 70%, 100% { box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 12px 22px -12px rgba(0,113,58,.8), 0 0 0 0 rgba(0,122,61,.35); } 85% { box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 12px 22px -12px rgba(0,113,58,.8), 0 0 0 12px rgba(0,122,61,0); } }
 .hero-ctl { position: absolute; right: max(16px, 2.4%); bottom: 17%; display: flex; gap: 8px; }
 .ctl { font: 600 12px/1 var(--body); color: var(--navy); background: #ffffffcc; border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
 .ctl:hover { border-color: #9ccfb0; }
@@ -235,7 +237,7 @@ main { overflow-x: clip; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .btn, .thumb img, .more svg { transition: none; }
-  .face img, .abi { animation: none; }
+  .face img, .abi, .hero-cta.on .btn { animation: none; }
 }
 </style>
 
@@ -464,7 +466,7 @@ main { overflow-x: clip; }
 (() => {
   const LW = 1600, LH = 900, DT = 1 / 60;
   const T = { p2: 6, storm0: 6.4, lead: 7.4, storm1: 11.8, p3: 12, p4: 19, rotEnd: 21.9, merge: 23.3, word: 24.4,
-              m1: 25.9, m2: 26.7, m3: 27.5, hold: 35, end: 36.6 };
+              m1: 25.9, m2: 26.7, m3: 27.5, settle: 28.4, hold: 1e9, end: 1e9 };
   const CHAPTERS = [
     { n: "01", label: "Những chuyển động riêng lẻ", a: 0, b: T.p2 },
     { n: "02", label: "Dẫn lối giữa thử thách", a: T.p2, b: T.p3 },
@@ -482,6 +484,7 @@ main { overflow-x: clip; }
   const ss = x => x * x * (3 - 2 * x);
   const eio = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
   const eo = x => 1 - Math.pow(1 - x, 3);
+  const back01 = x => { const c = 2.2; x -= 1; return x <= -1 ? 0 : 1 + (c + 1) * x * x * x + c * x * x; };
   const lerp = (a, b, k) => a + (b - a) * k;
   const angLerp = (a, b, k) => { let d = b - a; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; return a + d * k; };
   function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
@@ -644,19 +647,50 @@ main { overflow-x: clip; }
 
   function leadGlow() {}
 
+  // words rise out of a hidden baseline mask one by one, and leave upward the same way
+  function kinetic(text, x, y, size, font, color, tIn, tOut, tt, align = "left") {
+    ctx.save();
+    ctx.font = font; ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+    const words = text.split(" "), sp = ctx.measureText(" ").width;
+    const ws = words.map(w => ctx.measureText(w).width), total = ws.reduce((a, b) => a + b, 0) + sp * (words.length - 1);
+    const x0 = align === "center" ? x - total / 2 : x;
+    ctx.beginPath(); ctx.rect(x0 - 20, y - size * 1.32, total + 40, size * 1.72); ctx.clip();
+    let cx = x0;
+    words.forEach((w, i) => {
+      const kin = eo(prog(tt, tIn + i * 0.075, tIn + i * 0.075 + 0.62));
+      const kout = tOut == null ? 0 : eio(prog(tt, tOut + i * 0.04, tOut + i * 0.04 + 0.42));
+      if (kin > 0 && kout < 1) {
+        ctx.globalAlpha = Math.min(1, kin * 1.4) * (1 - kout);
+        ctx.fillStyle = color;
+        ctx.fillText(w, cx, y + size * 1.15 * (1 - kin) - size * 1.15 * kout);
+      }
+      cx += ws[i] + sp;
+    });
+    ctx.restore();
+    return { x0, total };
+  }
+
   function storyCaption(tt) {
-    for (const [text, a, b] of STORY) {
-      const k = eo(prog(tt, a, a + 0.6)) * (1 - ss(prog(tt, b - 0.5, b)));
-      if (k <= 0) continue;
-      ctx.save(); ctx.globalAlpha = k;
-      ctx.font = `800 54px Montserrat, "Segoe UI", sans-serif`;
-      ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
-      const w = ctx.measureText(text).width, y = 742 + 16 * (1 - k);
-      ctx.fillStyle = "#007a3d"; ctx.fillRect(LW / 2 - 28, y - 82, 56 * eo(prog(tt, a + 0.2, a + 0.8)), 4);
-      ctx.shadowColor = "rgba(243,247,241,0.95)"; ctx.shadowBlur = 18;
-      ctx.fillStyle = "#0f2b4c"; ctx.fillText(text, LW / 2, y);
+    STORY.forEach(([text, a, b], j) => {
+      if (tt < a - 0.1 || tt > b + 0.6) return;
+      const X = 112, Y = 772;
+      // index and hairline, then the message, then an underline that draws out and retracts
+      const ki = eo(prog(tt, a, a + 0.5)) * (1 - eio(prog(tt, b - 0.1, b + 0.35)));
+      ctx.save(); ctx.globalAlpha = ki;
+      ctx.font = `700 19px Montserrat, "Segoe UI", sans-serif`; ctx.fillStyle = "#007a3d"; ctx.textBaseline = "alphabetic";
+      ctx.fillText(`0${j + 1}`, X, Y - 74);
+      ctx.fillStyle = "rgba(0,122,61,.55)"; ctx.fillRect(X + 34, Y - 81, 46 * ki, 1.5);
+      ctx.fillStyle = "rgba(15,43,76,.45)"; ctx.font = `600 15px "Be Vietnam Pro", "Segoe UI", sans-serif`; ctx.fillText("/ 03", X + 90, Y - 75);
       ctx.restore();
-    }
+      const { total } = kinetic(text, X, Y, 50, `800 50px Montserrat, "Segoe UI", sans-serif`, "#0f2b4c", a + 0.12, b - 0.25, tt);
+      const ul = eio(prog(tt, a + 0.75, a + 1.35)), ulOut = eio(prog(tt, b - 0.45, b + 0.05));
+      if (ul > 0 && ulOut < 1) {
+        const x1 = X + total * ulOut, x2 = X + total * ul;
+        const g = ctx.createLinearGradient(X, 0, X + total, 0);
+        g.addColorStop(0, "#007a3d"); g.addColorStop(1, "#8fd16a");
+        ctx.fillStyle = g; ctx.fillRect(x1, Y + 18, Math.max(0, x2 - x1), 3);
+      }
+    });
   }
 
   const LOGO = document.getElementById("lm");
@@ -693,6 +727,51 @@ main { overflow-x: clip; }
     ctx.restore();
   }
 
+  // the resolved logo keeps breathing: the arrow gives a small forward push, and a light sweeps across the mark
+  let OFF = null;
+  function drawLogoAlive(tt) {
+    const live = tt - T.settle;
+    const ph = live > 0 ? (live % 3.6) / 3.6 : 1;
+    const nudge = ph < 0.22 ? Math.sin(Math.PI * ph / 0.22) : 0;
+    const head = new Path2D(); WORD.clip.forEach((p, j) => j ? head.lineTo(p.x, p.y) : head.moveTo(p.x, p.y)); head.closePath();
+    // everything except the arrowhead
+    ctx.save();
+    const rest = new Path2D(); rest.rect(WORD.lx - 40, WORD.ly - 40, WORD.lw + 120, WORD.lh + 80); rest.addPath(head);
+    ctx.clip(rest, "evenodd");
+    ctx.drawImage(LOGO, WORD.lx, WORD.ly, WORD.lw, WORD.lh);
+    ctx.restore();
+    // the arrowhead, pushed forward
+    const dx = 13 * nudge;
+    if (nudge > 0) {
+      for (let k = 0; k < 3; k++) {
+        const yy = WORD.tip.y + (k - 1) * 9, len = (34 + k * 10) * nudge;
+        ctx.fillStyle = `rgba(0,122,61,${0.45 * nudge})`;
+        ctx.fillRect(WORD.tip.x - 62 + dx - len, yy - 1, len, 2);
+      }
+      const rr = 14 + 46 * ph / 0.22;
+      ctx.strokeStyle = `rgba(120,191,28,${0.5 * (1 - ph / 0.22)})`; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(WORD.tip.x + dx, WORD.tip.y, rr, 0, Math.PI * 2); ctx.stroke();
+    }
+    ctx.save(); ctx.translate(dx, 0); ctx.clip(head);
+    ctx.drawImage(LOGO, WORD.lx, WORD.ly, WORD.lw, WORD.lh);
+    ctx.restore();
+    // light sweep, clipped to the logo's own pixels
+    const sw = live > -0.4 ? ((live + 0.4) % 7) / 1.3 : 2;
+    if (sw < 1) {
+      const W2 = Math.ceil(WORD.lw * 2), H2 = Math.ceil(WORD.lh * 2);
+      if (!OFF) { OFF = document.createElement("canvas"); OFF.width = W2; OFF.height = H2; }
+      const o = OFF.getContext("2d");
+      o.globalCompositeOperation = "source-over"; o.clearRect(0, 0, W2, H2);
+      o.drawImage(LOGO, 0, 0, W2, H2);
+      o.globalCompositeOperation = "source-in";
+      const bx = -0.3 * W2 + 1.6 * W2 * eio(sw);
+      const g = o.createLinearGradient(bx - 160, 0, bx + 160, H2);
+      g.addColorStop(0, "rgba(255,255,255,0)"); g.addColorStop(0.5, "rgba(255,255,255,0.75)"); g.addColorStop(1, "rgba(255,255,255,0)");
+      o.fillStyle = g; o.fillRect(0, 0, W2, H2);
+      ctx.drawImage(OFF, WORD.lx, WORD.ly, WORD.lw, WORD.lh);
+    }
+  }
+
   function drawWord(tt) {
     if (!WORD) return;
     const w = eio(prog(tt, T.word - 0.15, T.word + 1.2));
@@ -704,7 +783,7 @@ main { overflow-x: clip; }
       camOn(); ctx.globalAlpha = w;
       const right = WORD.tip.x + 30, span = (WORD.lw + 60) * w;
       ctx.beginPath(); ctx.rect(right - span, WORD.ly - 20, span, WORD.lh + 40); ctx.clip();
-      ctx.drawImage(LOGO, WORD.lx, WORD.ly, WORD.lw, WORD.lh);
+      drawLogoAlive(tt);
       ctx.restore();
     }
     // a quiet single line above the logo, like a kicker: the three messages joined by small green dots
@@ -715,15 +794,10 @@ main { overflow-x: clip; }
     let x = (LW - total) / 2;
     const y = WORD.ly - 58;
     MSG.forEach((m, j) => {
-      const k = eo(prog(tt, [T.m1, T.m2, T.m3][j], [T.m1, T.m2, T.m3][j] + 0.9));
-      if (k > 0) {
-        ctx.save(); ctx.globalAlpha = k; ctx.fillStyle = "#0f2b4c";
-        ctx.fillText(m, x, y + 12 * (1 - k));
-        ctx.restore();
-      }
+      kinetic(m, x, y, 25, `600 25px "Be Vietnam Pro", "Segoe UI", sans-serif`, "#0f2b4c", [T.m1, T.m2, T.m3][j], null, tt);
       if (j < 2) {
-        const sk = eo(prog(tt, [T.m2, T.m3][j] - 0.2, [T.m2, T.m3][j] + 0.4));
-        if (sk > 0) { ctx.fillStyle = `rgba(0,122,61,${sk})`; ctx.beginPath(); ctx.arc(x + widths[j] + gap / 2, y - 8, 4.5 * sk, 0, Math.PI * 2); ctx.fill(); }
+        const sk = back01(prog(tt, [T.m2, T.m3][j] - 0.15, [T.m2, T.m3][j] + 0.35));
+        if (sk > 0) { ctx.fillStyle = "#007a3d"; ctx.beginPath(); ctx.arc(x + widths[j] + gap / 2, y - 8, 4.5 * sk, 0, Math.PI * 2); ctx.fill(); }
       }
       x += widths[j] + gap;
     });
