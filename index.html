@@ -79,7 +79,7 @@ img { display: block; }
 .hero-copy { position: absolute; left: max(20px, 4.2%); top: 7%; display: grid; gap: clamp(6px, 1vw, 14px); pointer-events: none; }
 .hero-copy .kicker { font: 700 clamp(11px, 1.25vw, 17px)/1 var(--display); color: var(--navy); letter-spacing: .02em; }
 .hero-copy h1 { font-size: clamp(22px, 4.3vw, 62px); font-weight: 800; color: var(--deep); text-transform: uppercase; line-height: 1.02; }
-.hero-cta { position: absolute; left: 50%; bottom: 17%; opacity: 0; transform: translate(-50%, 14px); pointer-events: none; transition: opacity .6s ease, transform .6s ease; }
+.hero-cta { position: absolute; left: 50%; bottom: 23%; opacity: 0; transform: translate(-50%, 14px); pointer-events: none; transition: opacity .6s ease, transform .6s ease; }
 .hero-cta.on { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
 .hero-ctl { position: absolute; right: max(16px, 2.4%); bottom: 17%; display: flex; gap: 8px; }
 .ctl { font: 600 12px/1 var(--body); color: var(--navy); background: #ffffffcc; border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px; cursor: pointer; }
@@ -464,7 +464,7 @@ main { overflow-x: clip; }
 (() => {
   const LW = 1600, LH = 900, DT = 1 / 60;
   const T = { p2: 6, storm0: 6.4, lead: 7.4, storm1: 11.8, p3: 12, p4: 19, rotEnd: 21.9, merge: 23.3, word: 24.4,
-              m1: 25.2, m2: 26.5, m3: 27.8, hold: 35, end: 36.6 };
+              m1: 25.9, m2: 26.7, m3: 27.5, hold: 35, end: 36.6 };
   const CHAPTERS = [
     { n: "01", label: "Những chuyển động riêng lẻ", a: 0, b: T.p2 },
     { n: "02", label: "Dẫn lối giữa thử thách", a: T.p2, b: T.p3 },
@@ -508,7 +508,7 @@ main { overflow-x: clip; }
   let WORD = null;
   function layoutWord() {
     // the real AgriS MOVE logo; V stroke anchors measured on a 1200-wide copy of the artwork
-    const lw = 1180, k = lw / 1200, lh = 215 * k, lx = (LW - lw) / 2, ly = 300;
+    const lw = 840, k = lw / 1200, lh = 215 * k, lx = (LW - lw) / 2, ly = 392;
     const P = (x, y) => ({ x: lx + x * k, y: ly + y * k });
     WORD = { lx, ly, lw, lh, k, base: ly + lh,
              // arrowhead measured on the artwork: tip, back corners; the E's top bar is the shaft
@@ -613,7 +613,7 @@ main { overflow-x: clip; }
     const si = stormI(tt);
     ctx.fillStyle = "#f3f7f1"; ctx.fillRect(0, 0, LW, LH);
     // one quiet shape: a large mint disc, drifting almost imperceptibly
-    ctx.fillStyle = "#e6f1e9";
+    ctx.fillStyle = `rgba(230,241,233,${1 - ss(prog(tt, T.merge, T.word + 1.2)) * (1 - ss(prog(tt, T.hold, T.end)))})`;
     ctx.beginPath(); ctx.arc(1180 + Math.sin(tt * 0.08) * 30, 980, 620, 0, Math.PI * 2); ctx.fill();
     if (si > 0) { ctx.fillStyle = `rgba(126,146,152,${0.2 * si})`; ctx.fillRect(0, 0, LW, LH); }
   }
@@ -662,7 +662,7 @@ main { overflow-x: clip; }
   const LOGO = document.getElementById("lm");
   // camera for chapter 4: zoomed into the logo's arrow while the flock lands, then pulling back to the whole logo
   let CAM = { C: { x: 0, y: 0 }, F: { x: 0, y: 0 }, Z: 1 };
-  const ZMAX = 4.4;
+  const ZMAX = 6.2;
   function setCam(tt) {
     const zk = eio(prog(tt, T.merge - 0.1, T.word + 0.9));
     const F = WORD.slot(-2, 0);
@@ -695,7 +695,7 @@ main { overflow-x: clip; }
 
   function drawWord(tt) {
     if (!WORD) return;
-    const w = eio(prog(tt, T.merge + 0.3, T.word + 0.9));
+    const w = eio(prog(tt, T.word - 0.15, T.word + 1.2));
     const cta = document.querySelector(".hero-cta");
     if (cta) { const on = tt > T.m3 + 0.8 && tt < T.hold + 0.4; cta.classList.toggle("on", on); cta.firstElementChild.tabIndex = on ? 0 : -1; }
     document.getElementById("corner").style.opacity = String(1 - ss(prog(tt, T.rotEnd, T.merge)) * (1 - prog(tt, T.hold + 1, T.end)));
@@ -707,22 +707,23 @@ main { overflow-x: clip; }
       ctx.drawImage(LOGO, WORD.lx, WORD.ly, WORD.lw, WORD.lh);
       ctx.restore();
     }
-    ctx.font = `500 34px "Be Vietnam Pro", "Segoe UI", sans-serif`;
+    // a quiet single line above the logo, like a kicker: the three messages joined by small green dots
+    ctx.font = `600 25px "Be Vietnam Pro", "Segoe UI", sans-serif`;
     ctx.textBaseline = "alphabetic"; ctx.textAlign = "left";
     const widths = MSG.map(m => ctx.measureText(m).width);
-    const gap = 64, total = widths.reduce((a, b) => a + b, 0) + gap * 2;
+    const gap = 46, total = widths.reduce((a, b) => a + b, 0) + gap * 2;
     let x = (LW - total) / 2;
-    const y = WORD.base + 118;
+    const y = WORD.ly - 58;
     MSG.forEach((m, j) => {
       const k = eo(prog(tt, [T.m1, T.m2, T.m3][j], [T.m1, T.m2, T.m3][j] + 0.9));
       if (k > 0) {
         ctx.save(); ctx.globalAlpha = k; ctx.fillStyle = "#0f2b4c";
-        ctx.fillText(m, x, y + 18 * (1 - k));
+        ctx.fillText(m, x, y + 12 * (1 - k));
         ctx.restore();
       }
       if (j < 2) {
-        const sk = eo(prog(tt, [T.m2, T.m3][j] - 0.2, [T.m2, T.m3][j] + 0.5));
-        if (sk > 0) { ctx.fillStyle = `rgba(0,122,61,${0.7 * sk})`; ctx.fillRect(x + widths[j] + gap / 2 - 1, y - 30, 2, 40 * sk); }
+        const sk = eo(prog(tt, [T.m2, T.m3][j] - 0.2, [T.m2, T.m3][j] + 0.4));
+        if (sk > 0) { ctx.fillStyle = `rgba(0,122,61,${sk})`; ctx.beginPath(); ctx.arc(x + widths[j] + gap / 2, y - 8, 4.5 * sk, 0, Math.PI * 2); ctx.fill(); }
       }
       x += widths[j] + gap;
     });
