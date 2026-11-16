@@ -513,6 +513,7 @@ main { overflow-x: clip; }
   // chapter 4 is one continuous move: glide into the arrow, dart off revealing it, MOVE slams in, the flock writes the tagline
   const T = { p2: 6, storm0: 6.4, lead: 7.4, storm1: 11.8, p3: 12, p4: 19, rotEnd: 21.4, merge: 21.6, word: 21.9,
               m1: 24.7, m2: 25.3, m3: 25.9, settle: 26.6, cta: 28.2, hold: 1e9, end: 1e9 };
+  const START = 4.2;   // the scattered opening is trimmed: playback joins it shortly before the storm
   const CHAPTERS = [
     { n: "01", label: "Những chuyển động riêng lẻ", a: 0, b: T.p2 },
     { n: "02", label: "Dẫn lối giữa thử thách", a: T.p2, b: T.p3 },
@@ -1195,7 +1196,7 @@ main { overflow-x: clip; }
   });
   function setPlaying(p) { playing = p; playBtn.textContent = p ? "Tạm dừng" : "Phát"; last = null; }
   playBtn.addEventListener("click", () => setPlaying(!playing));
-  document.getElementById("replay").addEventListener("click", () => { seek(0); setPlaying(true); });
+  document.getElementById("replay").addEventListener("click", () => { seek(START); setPlaying(true); });
 
   function resize() {
     const r = cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -1236,7 +1237,7 @@ main { overflow-x: clip; }
           acc -= DT;
           if (t < T.p4) step();
           t += DT;
-          if (t >= T.end) { seek(0); }
+          if (t >= T.end) { seek(START); }
         }
       }
       last = now;
@@ -1355,7 +1356,7 @@ main { overflow-x: clip; }
 
   const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   const start = () => {
-    layoutWord(); resize(); reset();
+    layoutWord(); resize(); seek(START);
     if (reduce) { seek(30); setPlaying(false); }
     requestAnimationFrame(frame);
   };
