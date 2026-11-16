@@ -875,8 +875,7 @@ main { overflow-x: clip; }
     const w = ctx.measureText(text).width, x0 = cx - w / 2;
     // exit: the line flies straight ahead and blurs away
     const go = out * out, dx = 260 * go, fade = 1 - ss(out);
-    scrim(cx + dx * 0.5, yb - TPX * 0.32, w + 130, TPX * 2.6, Math.min(1, r * 1.5) * fade);
-    ctx.fillStyle = "#ffffff"; ctx.shadowColor = `rgba(${glow},.35)`; ctx.shadowBlur = 8;
+    ctx.fillStyle = "#ffffff"; ctx.shadowColor = `rgba(${glow},.55)`; ctx.shadowBlur = 14;   // a light glow, no dark backing
     if (out > 0) for (let g = 3; g >= 1; g--) { ctx.globalAlpha = 0.18 * fade * Math.min(1, out * 4) / g; ctx.fillText(text, x0 + dx - g * 34 * out, yb); }
     if (out > 0) ctx.filter = `blur(${(7 * go).toFixed(2)}px)`;
     ctx.globalAlpha = Math.min(1, r * 1.6) * fade;
