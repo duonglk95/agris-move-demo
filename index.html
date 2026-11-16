@@ -295,7 +295,7 @@ main { overflow-x: clip; }
   </div>
   </div>
 
-  <div class="seam" data-next="#e8f4ec" data-h="84" data-tones="#d6ebdd,#c8e7dd"></div>
+  <div class="seam" data-next="#e8f4ec" data-h="96" data-tones="#0f513dd8,#2e8a63b8" data-line="lime"></div>
   <section class="band band-glow" id="su-kien">
     <div class="in stack">
       <div class="event-head" data-rv><h2>Sự kiện sắp diễn ra</h2></div>
@@ -586,7 +586,7 @@ main { overflow-x: clip; }
   let WORD = null;
   function layoutWord() {
     // the real AgriS MOVE logo; V stroke anchors measured on a 1200-wide copy of the artwork
-    const lw = 840, k = lw / 1200, lh = 215 * k, lx = (LW - lw) / 2, ly = 392;
+    const lw = 840, k = lw / 1200, lh = 215 * k, lx = (LW - lw) / 2, ly = 330;   // logo, tagline and the three messages sit as one group around the centre
     const P = (x, y) => ({ x: lx + x * k, y: ly + y * k });
     WORD = { lx, ly, lw, lh, k, base: ly + lh,
              // arrowhead measured on the artwork: tip, back corners; the E's top bar is the shaft
