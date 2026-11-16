@@ -515,7 +515,7 @@ main { overflow-x: clip; }
   const DF = (w, px) => `${w} ${px}px "${P.display}", "Segoe UI", sans-serif`;
   // chapter 4 is one continuous move: glide into the arrow, dart off revealing it, MOVE slams in, the flock writes the tagline
   const T = { p2: 6, storm0: 6.4, lead: 7.4, storm1: 11.8, p3: 12, p4: 19, rotEnd: 21.4, merge: 21.6, word: 21.9,
-              m1: 24.7, m2: 25.3, m3: 25.9, settle: 26.6, cta: 28.2, hold: 1e9, end: 1e9 };
+              m1: 23.15, m2: 23.3, m3: 23.45, settle: 26.6, cta: 28.2, hold: 1e9, end: 1e9 };
   const START = 4.2;   // the scattered opening is trimmed: playback joins it shortly before the storm
   const CHAPTERS = [
     { n: "01", label: "Những chuyển động riêng lẻ", a: 0, b: T.p2 },
@@ -828,6 +828,51 @@ main { overflow-x: clip; }
     return { x0, total };
   }
 
+  // each message is written into the scene by the birds doing it, and travels with them
+  function trailText(text, xr, yb, px, tIn, tOut, tt, glow, trail) {
+    const r = eo(prog(tt, tIn, tIn + 0.9)), out = ss(prog(tt, tOut - 0.7, tOut));
+    if (r <= 0 || out >= 1) return;
+    ctx.save();
+    ctx.font = DF(800, px); ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+    const w = ctx.measureText(text).width, x0 = xr - w;
+    if (trail) {   // the light trail the text rides on, ending at the bird
+      const g = ctx.createLinearGradient(x0 - 80, 0, trail.x, 0);
+      g.addColorStop(0, `rgba(${glow},0)`); g.addColorStop(0.5, `rgba(${glow},${0.3 * (1 - out)})`); g.addColorStop(1, `rgba(${glow},${0.95 * (1 - out)})`);
+      ctx.fillStyle = g; ctx.fillRect(x0 - 80 + (trail.x - x0 + 80) * (1 - r), yb + 12, (trail.x - x0 + 80) * r, 3);
+    }
+    // revealed from the bird backwards, and dissolved from the far end
+    ctx.beginPath(); ctx.rect(xr - w * r + w * out - 10, yb - px * 1.3, w * r - w * out + 30, px * 1.8); ctx.clip();
+    const g = ctx.createLinearGradient(x0, 0, xr, 0);
+    g.addColorStop(0, "rgba(234,246,239,0)"); g.addColorStop(0.35, "rgba(234,246,239,.6)"); g.addColorStop(0.8, "#ffffff"); g.addColorStop(1, `rgb(${glow})`);
+    ctx.shadowColor = `rgba(${glow},.55)`; ctx.shadowBlur = 22;
+    ctx.globalAlpha = 1 - out * 0.6; ctx.fillStyle = g; ctx.fillText(text, x0, yb);
+    ctx.restore();
+  }
+  function skyText(tt) {
+    if (!POS.length) return;
+    const [m0, m1, m2] = STORY;
+    const L = POS[0];
+    if (L) trailText(m0[0], L.x - 50, L.y - 4, 56, m0[1], m0[2], tt, "255,226,140", { x: L.x - 16 });
+    const H = POS[HURT];
+    if (H && tt > m1[1] - 0.2 && tt < m1[2] + 0.2) {   // in the still air behind the two teammates, next to the bird they shelter
+      const a = eo(prog(tt, m1[1], m1[1] + 0.8)) * (1 - ss(prog(tt, m1[2] - 0.6, m1[2])));
+      ctx.save(); ctx.globalAlpha = a;
+      ctx.font = DF(800, 44); ctx.textAlign = "right"; ctx.textBaseline = "alphabetic";
+      const w = ctx.measureText(m1[0]).width, cx = H.x - 84 - w / 2, cy = H.y;
+      const halo = ctx.createRadialGradient(cx, cy, 0, cx, cy, w * 0.75);
+      halo.addColorStop(0, "rgba(142,240,178,.2)"); halo.addColorStop(1, "rgba(142,240,178,0)");
+      ctx.save(); ctx.translate(cx, cy); ctx.scale(1, 0.45); ctx.translate(-cx, -cy); ctx.fillStyle = halo; ctx.fillRect(cx - w, cy - w, w * 2, w * 2); ctx.restore();
+      ctx.shadowColor = "rgba(142,240,178,.6)"; ctx.shadowBlur = 20; ctx.fillStyle = "#eafff1";
+      ctx.fillText(m1[0], H.x - 84, H.y + 14 + 10 * (1 - a));
+      ctx.restore();
+    }
+    if (tt > m2[1] - 0.2 && tt < m2[2] + 0.3) {   // written on the formation's contrail
+      let minX = 1e9, cy = 0, n = 0;
+      POS.forEach(p => { if (p) { minX = Math.min(minX, p.x); cy += p.y; n++; } });
+      if (n) trailText(m2[0], minX - 40, cy / n + 18, 58, m2[1], m2[2] + 0.2, tt, "142,240,178", { x: minX - 10 });
+    }
+  }
+
   // thin callouts that tie each message to the birds doing it
   function ring(p, r, a, dashed, col, tt) {
     ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = col; ctx.lineWidth = P.shape === "square" ? 1.5 : 2;
@@ -1114,7 +1159,15 @@ main { overflow-x: clip; }
     const y = WORD.ly + WORD.lh + 84;   // the three messages sit under the tagline
     MSG.forEach((m, j) => {
       KICK[j] = { x: x - 10, y: y - 32, w: widths[j] + 20, h: 46, on: tt > [T.m1, T.m2, T.m3][j] + 0.6 };
-      kinetic(m, x, y, 25, `600 25px "Be Vietnam Pro", "Segoe UI", sans-serif`, P.kicker, [T.m1, T.m2, T.m3][j], null, tt);
+      // the three lines written by the birds fly in and land here, one after another
+      const a0 = [T.m1, T.m2, T.m3][j] - 0.9, u = prog(tt, a0, a0 + 0.9);
+      if (u > 0) {
+        const e = eo(u), sx = x - 380 + j * 40, sy = y + 190 + j * 46, sc = lerp(1.5, 1, e), sk = -0.28 * (1 - e);
+        const draw = (px, py, al) => { ctx.save(); ctx.globalAlpha = al; ctx.translate(px, py); ctx.scale(sc, sc); ctx.transform(1, 0, sk, 1, 0, 0);
+          ctx.font = `600 25px "Be Vietnam Pro", "Segoe UI", sans-serif`; ctx.fillStyle = P.kicker; ctx.textBaseline = "alphabetic"; ctx.fillText(m, 0, 0); ctx.restore(); };
+        if (u < 1) for (let g = 2; g >= 1; g--) { const eg = eo(Math.max(0, u - g * 0.04)); draw(lerp(sx, x, eg), lerp(sy, y, eg), 0.07 * (1 - u)); }
+        draw(lerp(sx, x, e), lerp(sy, y, e), Math.min(1, u * 3));
+      }
       if (j < 2) {
         const sk = back01(prog(tt, [T.m2, T.m3][j] - 0.15, [T.m2, T.m3][j] + 0.35));
         if (sk > 0) { ctx.fillStyle = P.kdot; ctx.beginPath(); ctx.arc(x + widths[j] + gap / 2, y - 8, 4.5 * sk, 0, Math.PI * 2); ctx.fill(); }
@@ -1125,7 +1178,7 @@ main { overflow-x: clip; }
 
   function render(tt) {
     renderCore(tt);
-    if (tt < T.rotEnd + 0.5) { annotate(tt); storyCaption(tt); }
+    if (tt < T.rotEnd + 0.5) skyText(tt);
   }
   function renderCore(tt) {
     if (tt < T.rotEnd) document.getElementById("corner").style.opacity = "1";
