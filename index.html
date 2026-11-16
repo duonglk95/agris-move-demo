@@ -88,8 +88,8 @@ img { display: block; }
 .btn { display: inline-flex; align-items: center; gap: 12px; font: 600 16px/1 "Be Vietnam Pro", "Segoe UI", sans-serif; text-decoration: none; padding: 15px 24px;  }
 .btn svg { width: 16px; height: 16px; }
 .btn:focus-visible { outline: 2px solid #8ef0b2; outline-offset: 3px; }
-.replay { position: absolute; right: max(16px, env(safe-area-inset-right, 0px)); bottom: 16px; width: 40px; height: 40px; display: grid; place-items: center; padding: 0; border-radius: 50%; border: 1px solid rgba(142,240,178,.35); background: rgba(142,240,178,.06); color: #eaf6ef; opacity: .6; cursor: pointer; transition: opacity .3s, background .3s, transform .4s; }
-.replay svg { width: 18px; height: 18px; }
+.replay { position: absolute; right: max(16px, env(safe-area-inset-right, 0px)); bottom: 18px; width: 32px; height: 32px; display: grid; place-items: center; padding: 0; border-radius: 50%; border: 1px solid rgba(142,240,178,.22); background: transparent; color: #eaf6ef; opacity: .5; cursor: pointer; transition: opacity .3s, background .3s, transform .4s; }
+.replay svg { width: 14px; height: 14px; }
 .replay:hover, .replay:focus-visible { opacity: 1; background: rgba(142,240,178,.14); outline: none; }
 .replay:hover svg { transform: rotate(-40deg); transition: transform .4s; }
 .replay:focus-visible { box-shadow: 0 0 0 2px #8ef0b2; }
@@ -287,7 +287,7 @@ main { overflow-x: clip; }
       <div class="txt"><span class="k" id="storyKicker"></span><strong class="h2" id="storyTitle"></strong><p id="storyBody"></p></div>
     </div>
     <div hidden><button id="play" type="button">Tạm dừng</button></div>
-    <button class="replay" id="replay" type="button" aria-label="Xem lại từ đầu" title="Xem lại từ đầu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 4v5h5"></path></svg></button>
+    <button class="replay" id="replay" type="button" aria-label="Xem lại từ đầu" title="Xem lại từ đầu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 4v5h5"></path></svg></button>
     <div id="chapters" hidden></div>
   </div>
   </div>
@@ -510,8 +510,9 @@ main { overflow-x: clip; }
   };
   const P = THEMES[window.HERO_THEME] || THEMES.A, PAL = P;
   const DF = (w, px) => `${w} ${px}px "${P.display}", "Segoe UI", sans-serif`;
-  const T = { p2: 6, storm0: 6.4, lead: 7.4, storm1: 11.8, p3: 12, p4: 19, rotEnd: 21.9, merge: 23.3, word: 24.4,
-              m1: 25.9, m2: 26.7, m3: 27.5, settle: 28.4, cta: 31.2, hold: 1e9, end: 1e9 };
+  // chapter 4 is one continuous move: glide into the arrow, dart off revealing it, MOVE slams in, the flock writes the tagline
+  const T = { p2: 6, storm0: 6.4, lead: 7.4, storm1: 11.8, p3: 12, p4: 19, rotEnd: 21.4, merge: 21.6, word: 21.9,
+              m1: 24.7, m2: 25.3, m3: 25.9, settle: 26.6, cta: 28.2, hold: 1e9, end: 1e9 };
   const CHAPTERS = [
     { n: "01", label: "Những chuyển động riêng lẻ", a: 0, b: T.p2 },
     { n: "02", label: "Dẫn lối giữa thử thách", a: T.p2, b: T.p3 },
@@ -520,7 +521,7 @@ main { overflow-x: clip; }
   ];
   const MSG = ["Lãnh đạo làm gương", "Môi trường tích cực", "Đội ngũ cùng hành động"];
   // each message appears inside the story, at the moment it happens: [text, in, out]
-  const STORY = [[MSG[0], 8.3, 11.6], [MSG[1], 14.7, 18.2], [MSG[2], 19.25, 21.9]];
+  const STORY = [[MSG[0], 8.3, 11.6], [MSG[1], 14.7, 18.2], [MSG[2], 19.25, 21.35]];
   // why each message: one plain sentence tying it to what the birds are doing on screen
   // the story told in a warmer voice: what the viewer sees, then what it means
   const WHY = [
@@ -913,7 +914,7 @@ main { overflow-x: clip; }
   let CAM = { C: { x: 0, y: 0 }, F: { x: 0, y: 0 }, Z: 1 };
   const ZMAX = 6.2;
   function setCam(tt) {
-    const zk = eio(prog(tt, T.merge - 0.1, T.word + 0.9));
+    const zk = eio(prog(tt, T.rotEnd + 0.05, T.word + 0.5));   // a fast pull-back while the birds dart off
     const F = WORD.slot(-2, 0);
     const C0 = { x: 1300 - (WORD.tip.x - F.x) * ZMAX, y: 450 };
     CAM = { F, Z: lerp(ZMAX, 1, zk), C: { x: lerp(C0.x, F.x, zk), y: lerp(C0.y, F.y, zk) } };
@@ -933,7 +934,11 @@ main { overflow-x: clip; }
     if (a <= 0 || !WORD) return;
     camOn(); ctx.globalAlpha = a;
     const vec = clamp((CAM.Z - 1.15) / 0.5);          // crisp vector arrow while zoomed in, the logo artwork once at size
-    if (vec > 0) { ctx.save(); ctx.globalAlpha = a * vec; ctx.fillStyle = arrowPath(); ctx.fill(); ctx.restore(); }
+    if (vec > 0) {
+      ctx.save(); ctx.globalAlpha = a * vec; ctx.fillStyle = arrowPath(); ctx.fill();
+      if (a < 1) { ctx.globalAlpha = (1 - a) * vec; ctx.fillStyle = "#ffffff"; ctx.fill(); }   // the reveal flashes white first
+      ctx.restore();
+    }
     if (vec < 1 && LOGO.complete) {
       ctx.globalAlpha = a * (1 - vec);
       ctx.beginPath(); WORD.clip.forEach((p, j) => j ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)); ctx.closePath(); ctx.clip();
@@ -1004,9 +1009,61 @@ main { overflow-x: clip; }
     mini.forEach(([dx, dy], i) => drawBird(o.x + dx * 26, o.y + dy * 13, lerp(0.32, 0.5, k), -0.08 * Math.sin(Math.PI * k), tt * 9 + i, { lead: i === 0 ? 1 : 0, alpha: Math.min(1, ph * 4) * fade }));
   }
 
+  const backOut = x => { const c = 1.9; x -= 1; return 1 + (c + 1) * x * x * x + c * x * x; };
+  // MOVE (artwork x 395-1130, y above the tagline) slams in from the left with a speed lean and ghost trail; AgriS rises after it
+  function drawLogoEnter(tt) {
+    const k = WORD.k, X = x => WORD.lx + x * k, Y = y => WORD.ly + y * k;
+    const u = prog(tt, T.word - 0.1, T.word + 0.42), base = Y(140);
+    const piece = (x0, x1, y0, y1, dx, dy, skew, a) => {
+      if (a <= 0.003) return;
+      ctx.save();
+      const clip = new Path2D(); clip.rect(X(x0), Y(y0), X(x1) - X(x0), Y(y1) - Y(y0));
+      ctx.translate(dx, dy); ctx.transform(1, 0, skew, 1, -skew * base, 0);
+      ctx.clip(clip); ctx.globalAlpha = a;
+      ctx.drawImage(LOGO, WORD.lx, WORD.ly, WORD.lw, WORD.lh);
+      ctx.restore();
+    };
+    if (u > 0) {
+      const p = backOut(u), off = -300 * (1 - p), sk = -0.42 * (1 - eo(u));
+      for (let g = 3; g >= 1; g--) piece(395, 1124, -30, 146, off - g * 55 * (1 - u), 0, sk * 1.15, 0.16 * (1 - u) / g);
+      piece(395, 1124, -30, 146, off, 0, sk, Math.min(1, u * 4));
+    }
+    const v = prog(tt, T.word + 0.2, T.word + 0.75);
+    piece(-30, 395, -30, 250, -40 * (1 - eo(v)), 0, 0, eo(v));
+    piece(395, 1124, 146, 250, 0, 0, 0, 1);
+    piece(1124, 1240, 146, 250, 0, 0, 0, 1);   // the tagline area (kept hidden by the caller until the flock passes)
+  }
+  // the landing: a soft flash behind the mark and speed lines thrown off to the left of MOVE
+  function impact(tt) {
+    const q = prog(tt, T.word + 0.25, T.word + 1.1);
+    if (q <= 0 || q >= 1) return;
+    const k = WORD.k, cx = WORD.lx + 760 * k, cy = WORD.ly + 70 * k;
+    const f = Math.sin(Math.PI * Math.min(1, q * 1.6));
+    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 420);
+    g.addColorStop(0, `rgba(${P.push},${0.22 * f})`); g.addColorStop(1, `rgba(${P.push},0)`);
+    ctx.fillStyle = g; ctx.fillRect(cx - 420, cy - 420, 840, 840);
+    for (let j = 0; j < 7; j++) {
+      const yy = WORD.ly + (12 + j * 19) * k, x0 = WORD.lx + (400 - (j % 3) * 18 + 0.42 * (140 - (12 + j * 19))) * k;
+      const len = (120 + (j * 53) % 140) * eo(q), fade = 1 - ss(prog(q, 0.35, 1));
+      const lg = ctx.createLinearGradient(x0 - len, 0, x0, 0);
+      lg.addColorStop(0, `rgba(${P.push},0)`); lg.addColorStop(1, `rgba(${P.push},${0.7 * fade})`);
+      ctx.fillStyle = lg; ctx.fillRect(x0 - 14 - len, yy, len, 2.5);
+    }
+  }
+  // after the landing the mark sits in a slow, breathing pool of light
+  function logoGlow(tt) {
+    const a = ss(prog(tt, T.word + 0.3, T.word + 1.5)) * (0.75 + 0.25 * Math.sin((tt - T.word) * 1.3));
+    if (a <= 0) return;
+    const cx = WORD.lx + WORD.lw / 2, cy = WORD.ly + WORD.lh * 0.45;
+    ctx.save(); ctx.translate(cx, cy); ctx.scale(1, 0.42);
+    const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 640);
+    g.addColorStop(0, `rgba(${P.calm},${0.16 * a})`); g.addColorStop(1, `rgba(${P.calm},0)`);
+    ctx.fillStyle = g; ctx.fillRect(-640, -640, 1280, 1280); ctx.restore();
+  }
+
   // "CREATE FORWARD" sits under MOVE on the artwork (x 400-1100, y 148-215 at 1200 wide)
   const tagBox = () => { const k = WORD.k; return { x0: WORD.lx + 395 * k, x1: WORD.lx + 1105 * k, y0: WORD.ly + 146 * k, y1: WORD.ly + 218 * k }; };
-  const TAGT = [T.m3 + 0.25, T.m3 + 1.75];
+  const TAGT = [T.word + 1.15, T.word + 2.45];
   const tagReveal = tt => { const tg = tagBox(); return lerp(tg.x0 - 30, tg.x1 + 30, eio(prog(tt, TAGT[0], TAGT[1]))); };
   function tagFlock(tt, tg, rx) {
     const u = prog(tt, TAGT[0] - 0.35, TAGT[1] + 0.9);
@@ -1025,24 +1082,21 @@ main { overflow-x: clip; }
   function drawWord(tt) {
     if (!WORD) return;
     launch(tt);
-    const w = eio(prog(tt, T.word - 0.15, T.word + 1.2));
+    const w = tt > T.word - 0.1 ? 1 : 0;
     const cta = document.querySelector(".hero-cta");
     if (cta) { const on = tt > T.cta && tt < T.hold + 0.4; cta.classList.toggle("on", on); cta.firstElementChild.tabIndex = on ? 0 : -1; }
     document.getElementById("corner").style.opacity = String(1 - ss(prog(tt, T.rotEnd, T.merge)) * (1 - prog(tt, T.hold + 1, T.end)));
     if (w > 0 && LOGO.complete) {
-      // the rest of the logo unrolls leftward from the arrow, as if drawn by the flight
-      camOn(); ctx.globalAlpha = w;
-      const right = WORD.tip.x + 30, span = (WORD.lw + 60) * w;
-      ctx.beginPath(); ctx.rect(right - span, WORD.ly - 20, span, WORD.lh + 40); ctx.clip();
+      camOn(); logoGlow(tt);
       const tg = tagBox(), rx = tagReveal(tt);
       if (rx < tg.x1) {   // the tagline stays hidden until the flock flies over it
         const hide = new Path2D(); hide.rect(WORD.lx - 60, WORD.ly - 60, WORD.lw + 160, WORD.lh + 120);
         hide.rect(Math.max(rx, tg.x0), tg.y0, tg.x1 - Math.max(rx, tg.x0) + 4, tg.y1 - tg.y0);
         ctx.clip(hide, "evenodd");
       }
-      drawLogoAlive(tt);
+      if (tt < T.word + 0.95) drawLogoEnter(tt); else drawLogoAlive(tt);
       ctx.restore();
-      camOn(); tagFlock(tt, tg, rx); ctx.restore();
+      camOn(); impact(tt); tagFlock(tt, tg, rx); ctx.restore();
     }
     // a quiet single line above the logo, like a kicker: the three messages joined by small green dots
     ctx.font = `600 25px "Be Vietnam Pro", "Segoe UI", sans-serif`;
@@ -1092,19 +1146,28 @@ main { overflow-x: clip; }
 
     // chapter 4: the arrow formation glides into the logo's arrow, the birds settle into it, then the logo unrolls
     const e = eio(prog(tt, T.p4, T.rotEnd));
-    const m = ss(prog(tt, T.rotEnd - 0.3, T.merge));
-    drawV(m);
+    const m = ss(prog(tt, T.rotEnd - 0.05, T.rotEnd + 0.45));
     setCam(tt);
+    drawV(m);
     const order = [...slots.keys()].sort((a, b) => slots[a].dy - slots[b].dy);
     for (const i of order) {
       const tgt = cam(WORD.slot(slots[i].dx, slots[i].dy));
       const lag = e * 1.25 + slots[i].dx * 0.06;                  // the leader arrives first, the rows follow
       const k = eio(clamp(lag));
-      const x = lerp(snap[i].x, tgt.x, k), y = lerp(snap[i].y, tgt.y, k);
+      // then every bird darts forward out of the arrow, leader first, and the arrow is left behind them
+      const d = clamp((tt - (T.rotEnd - 0.2 + (-slots[i].dx) * 0.045)) / 0.8), dd = Math.pow(d, 2.1);
+      const x = lerp(snap[i].x, tgt.x, k) + 2300 * dd, y = lerp(snap[i].y, tgt.y, k) + slots[i].dy * 26 * dd;
+      if (d >= 1) continue;
       const head = angLerp(snap[i].head, 0, k);
-      const size = lerp(i === 0 ? 1.0 : 0.8, 0.25 * CAM.Z, k) * lerp(1, 0.8, m);
+      const size = lerp(i === 0 ? 1.0 : 0.8, 0.25 * CAM.Z, k) * lerp(1, 0.7, d);
       const flap = birds[i].flap + (tt - T.p4) * 1.3 * Math.PI * 2;
-      drawBird(x, y, size, head, flap, { lead: i === 0 ? 1 : 0, alpha: 1 - m, glide: ss(prog(tt, T.p4 + 0.8, T.rotEnd)), squash: lerp(0.86, 1, k) });
+      const al = 1 - ss(prog(d, 0.55, 1));
+      if (d > 0) {
+        const len = (60 + 520 * d) * Math.max(0.4, size), g = ctx.createLinearGradient(x - len, y, x, y);
+        g.addColorStop(0, `rgba(${P.push},0)`); g.addColorStop(1, `rgba(${P.push},${0.55 * al})`);
+        ctx.fillStyle = g; ctx.fillRect(x - len, y - 1.5, len, 3);
+      }
+      drawBird(x, y, size, head, flap, { lead: i === 0 ? 1 : 0, alpha: al, glide: Math.max(d, ss(prog(tt, T.p4 + 0.8, T.rotEnd))), squash: lerp(0.86, 1, k) });
       POS[i] = { x, y };
     }
     drawWord(tt);
