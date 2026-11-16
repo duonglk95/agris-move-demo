@@ -841,7 +841,7 @@ main { overflow-x: clip; }
   // each message is written into the scene by the birds doing it, and travels with them
   // a soft clear zone behind a line of text: whatever flies behind it is dimmed so the words stay crisp
   // the scene messages: one size, each parked beside the birds it describes and eased so it never jitters
-  const TPX = 40, TY = 700, TFONT = () => DF(700, TPX);
+  const TPX = 40, TY = 740, TFONT = () => DF(700, TPX);
   let TBOX = [], TW = [380, 340, 420], ANC = [null, null];
   function measureMessages() { ctx.save(); ctx.font = TFONT(); MSG.forEach((m, j) => { TW[j] = ctx.measureText(m).width; }); ctx.restore(); }
   // all messages ride just below the formation, centred under it, eased so they glide with the flock
@@ -946,21 +946,17 @@ main { overflow-x: clip; }
       if (j === 0) {
         const L = POS[0];
         ring(L, 46, on, false, P.ring2, tt); ring(L, 60, on * 0.5, true, P.ring, tt);
-        leader(anchor, { x: L.x - 46, y: L.y + 10 }, line, on);
       } else if (j === 1) {
         const wq = W(tt), H = POS[HURT];
         ring(H, 32, on * 0.9, true, P.hurt, tt);
         const hv = on * ss(prog(wq.cover, 0.4, 1));
         HELP.forEach(i => ring(POS[i], 32, hv, false, P.ring, tt));
-        const c = centroid(HELP);
-        leader(anchor, { x: c.x - 34, y: c.y + 20 }, line * ss(prog(wq.cover, 0.3, 1)), hv);
       } else {
         const A = POS[0], B = POS[10], C = POS[14];
         if (!A || !B || !C) return;
         const pad = 34, tri = [{ x: A.x + pad * 1.6, y: A.y }, { x: B.x - pad, y: B.y - pad }, { x: C.x - pad, y: C.y + pad }];
         ctx.save(); ctx.globalAlpha = on; ctx.strokeStyle = P.ring; ctx.lineWidth = 2; ctx.setLineDash([8, 7]); ctx.lineDashOffset = -tt * 40;
         ctx.beginPath(); tri.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)); ctx.closePath(); ctx.stroke(); ctx.restore();
-        leader(anchor, { x: (B.x + C.x) / 2 - pad, y: (B.y + C.y) / 2 }, line, on);
       }
     });
   }
@@ -1198,7 +1194,7 @@ main { overflow-x: clip; }
 
   function render(tt) {
     renderCore(tt);
-    if (tt < T.rotEnd + 0.5) skyText(tt);
+    if (tt < T.rotEnd + 0.5) { annotate(tt); skyText(tt); }   // rings mark who the line is about
   }
   function renderCore(tt) {
     if (tt < T.rotEnd) document.getElementById("corner").style.opacity = "1";
