@@ -841,14 +841,14 @@ main { overflow-x: clip; }
   // each message is written into the scene by the birds doing it, and travels with them
   // a soft clear zone behind a line of text: whatever flies behind it is dimmed so the words stay crisp
   // the scene messages: one size, each parked beside the birds it describes and eased so it never jitters
-  const TPX = 40, TY = 650, TFONT = () => DF(700, TPX);
+  const TPX = 40, TY = 700, TFONT = () => DF(700, TPX);
   let TBOX = [], TW = [380, 340, 420], ANC = [null, null];
   function measureMessages() { ctx.save(); ctx.font = TFONT(); MSG.forEach((m, j) => { TW[j] = ctx.measureText(m).width; }); ctx.restore(); }
   // all messages ride just below the formation, centred under it, eased so they glide with the flock
   function updateAnchors() {
     let x0 = 1e9, x1 = -1e9, y1 = -1e9;
     for (const b of birds) if (b.i === 0 || (b.joinW > 0.9 && b.i !== HURT)) { x0 = Math.min(x0, b.pos.x); x1 = Math.max(x1, b.pos.x); y1 = Math.max(y1, b.pos.y); }
-    const r = { cx: (x0 + x1) / 2, yb: TY };   // fixed height: the line only travels sideways with the flock
+    const r = { cx: LW / 2, yb: TY };   // each line holds the centre, below the flock
     ANC[0] = ANC[0] ? { cx: lerp(ANC[0].cx, r.cx, 0.05), yb: lerp(ANC[0].yb, r.yb, 0.05) } : r;
     ANC[1] = ANC[0];
   }
@@ -868,15 +868,19 @@ main { overflow-x: clip; }
     ctx.fillStyle = g; ctx.fillRect(-w / 2, -w / 2, w, w); ctx.restore();
   }
   function sceneLine(text, cx, yb, tIn, tOut, tt, glow) {
-    const r = eo(prog(tt, tIn, tIn + 0.8)), out = ss(prog(tt, tOut - 0.6, tOut));
+    const r = eo(prog(tt, tIn, tIn + 0.8)), out = prog(tt, tOut - 0.8, tOut);
     if (r <= 0 || out >= 1) return;
     ctx.save();
     ctx.font = TFONT(); ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
-    const w = ctx.measureText(text).width, x0 = cx - w / 2, xr = cx + w / 2;
-    scrim(cx, yb - TPX * 0.32, w + 130, TPX * 2.6, Math.min(1, r * 1.5) * (1 - out));
-    ctx.shadowColor = `rgba(${glow},.35)`; ctx.shadowBlur = 8;
-    ctx.globalAlpha = Math.min(1, r * 1.6) * (1 - out); ctx.fillStyle = "#ffffff";
-    ctx.fillText(text, x0, yb);
+    const w = ctx.measureText(text).width, x0 = cx - w / 2;
+    // exit: the line flies straight ahead and blurs away
+    const go = out * out, dx = 260 * go, fade = 1 - ss(out);
+    scrim(cx + dx * 0.5, yb - TPX * 0.32, w + 130, TPX * 2.6, Math.min(1, r * 1.5) * fade);
+    ctx.fillStyle = "#ffffff"; ctx.shadowColor = `rgba(${glow},.35)`; ctx.shadowBlur = 8;
+    if (out > 0) for (let g = 3; g >= 1; g--) { ctx.globalAlpha = 0.18 * fade * Math.min(1, out * 4) / g; ctx.fillText(text, x0 + dx - g * 34 * out, yb); }
+    if (out > 0) ctx.filter = `blur(${(7 * go).toFixed(2)}px)`;
+    ctx.globalAlpha = Math.min(1, r * 1.6) * fade;
+    ctx.fillText(text, x0 + dx, yb);
     ctx.restore();
   }
   function skyText(tt) {
@@ -885,9 +889,7 @@ main { overflow-x: clip; }
     if (ANC[0]) sceneLine(m0[0], ANC[0].cx, ANC[0].yb, m0[1], m0[2], tt, "255,226,140");
     if (ANC[0]) sceneLine(m1[0], ANC[0].cx, ANC[0].yb, m1[1], m1[2], tt, "142,240,178");
     if (tt > m2[1] - 0.2 && tt < m2[2] + 0.4) {   // on the formation's contrail, just behind its last row
-      let x0 = 1e9, x1 = -1e9, y1 = -1e9, n = 0;
-      POS.forEach(p => { if (p) { x0 = Math.min(x0, p.x); x1 = Math.max(x1, p.x); y1 = Math.max(y1, p.y); n++; } });
-      if (n) sceneLine(m2[0], (x0 + x1) / 2, TY, m2[1], m2[2] + 0.2, tt, "142,240,178");
+      sceneLine(m2[0], LW / 2, TY, m2[1], m2[2] + 0.2, tt, "142,240,178");
     }
   }
 
