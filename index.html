@@ -844,23 +844,19 @@ main { overflow-x: clip; }
   const TPX = 40, TFONT = () => DF(700, TPX);
   let TBOX = [], TW = [380, 340, 420], ANC = [null, null];
   function measureMessages() { ctx.save(); ctx.font = TFONT(); MSG.forEach((m, j) => { TW[j] = ctx.measureText(m).width; }); ctx.restore(); }
+  // all messages ride just below the formation, centred under it, eased so they glide with the flock
   function updateAnchors() {
-    const L = birds[0].pos, H = birds[HURT].pos;
-    // Lãnh đạo làm gương: just above and behind the leader, lifting to stay clear of the formation as it fills in
-    let top = L.y;
-    for (const b of birds) if (b.joinW > 0.4) top = Math.min(top, b.pos.y);
-    const r0 = { xr: L.x - 26, yb: top - 44 };
-    // Môi trường tích cực: beside the sheltered bird, but never over the rows behind it
-    let minX = 1e9;
-    for (const b of birds) if (b.joinW > 0.5 && b.i !== HURT && !HELP.includes(b.i) && Math.abs(b.pos.y - H.y) < 70) minX = Math.min(minX, b.pos.x);
-    const r1 = { xr: Math.min(H.x - 70, minX - 46), yb: H.y + 14 };
-    [r0, r1].forEach((r, j) => { ANC[j] = ANC[j] ? { xr: lerp(ANC[j].xr, r.xr, 0.06), yb: lerp(ANC[j].yb, r.yb, 0.06) } : r; });
+    let x0 = 1e9, x1 = -1e9, y1 = -1e9;
+    for (const b of birds) if (b.i === 0 || (b.joinW > 0.9 && b.i !== HURT)) { x0 = Math.min(x0, b.pos.x); x1 = Math.max(x1, b.pos.x); y1 = Math.max(y1, b.pos.y); }
+    const r = { cx: (x0 + x1) / 2, yb: y1 + 78 };
+    ANC[0] = ANC[0] ? { cx: lerp(ANC[0].cx, r.cx, 0.05), yb: lerp(ANC[0].yb, r.yb, 0.05) } : r;
+    ANC[1] = ANC[0];
   }
   function textBoxes(tt) {
     const out = [];
     STORY.slice(0, 2).forEach(([, a, b], j) => {
       const k = ss(prog(tt, a - 0.4, a + 0.3)) * (1 - ss(prog(tt, b - 0.2, b + 0.4)));
-      if (k > 0 && ANC[j]) out.push({ x0: ANC[j].xr - TW[j] - 20, x1: ANC[j].xr + 16, y0: ANC[j].yb - TPX, y1: ANC[j].yb + 16, a: k });
+      if (k > 0 && ANC[0]) out.push({ x0: ANC[0].cx - TW[j] / 2 - 20, x1: ANC[0].cx + TW[j] / 2 + 20, y0: ANC[0].yb - TPX, y1: ANC[0].yb + 16, a: k });
     });
     return out;
   }
@@ -871,27 +867,27 @@ main { overflow-x: clip; }
     g.addColorStop(0, `rgba(3,22,17,${0.55 * a})`); g.addColorStop(0.62, `rgba(3,22,17,${0.4 * a})`); g.addColorStop(1, "rgba(3,22,17,0)");
     ctx.fillStyle = g; ctx.fillRect(-w / 2, -w / 2, w, w); ctx.restore();
   }
-  function sceneLine(text, xr, yb, tIn, tOut, tt, glow) {
+  function sceneLine(text, cx, yb, tIn, tOut, tt, glow) {
     const r = eo(prog(tt, tIn, tIn + 0.8)), out = ss(prog(tt, tOut - 0.6, tOut));
     if (r <= 0 || out >= 1) return;
     ctx.save();
     ctx.font = TFONT(); ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
-    const w = ctx.measureText(text).width, x0 = xr - w;
-    scrim(xr - w / 2 - 20, yb - TPX * 0.32, w + 130, TPX * 2.6, Math.min(1, r * 1.5) * (1 - out));
+    const w = ctx.measureText(text).width, x0 = cx - w / 2, xr = cx + w / 2;
+    scrim(cx, yb - TPX * 0.32, w + 130, TPX * 2.6, Math.min(1, r * 1.5) * (1 - out));
     ctx.shadowColor = `rgba(${glow},.35)`; ctx.shadowBlur = 8;
     ctx.globalAlpha = Math.min(1, r * 1.6) * (1 - out); ctx.fillStyle = "#ffffff";
-    ctx.fillText(text, x0 + 30 * (1 - r), yb + 8 * (1 - r));
+    ctx.fillText(text, x0, yb + 14 * (1 - r));
     ctx.restore();
   }
   function skyText(tt) {
     if (!POS.length) return;
     const [m0, m1, m2] = STORY;
-    if (ANC[0]) sceneLine(m0[0], ANC[0].xr, ANC[0].yb, m0[1], m0[2], tt, "255,226,140");
-    if (ANC[1]) sceneLine(m1[0], ANC[1].xr, ANC[1].yb, m1[1], m1[2], tt, "142,240,178");
+    if (ANC[0]) sceneLine(m0[0], ANC[0].cx, ANC[0].yb, m0[1], m0[2], tt, "255,226,140");
+    if (ANC[0]) sceneLine(m1[0], ANC[0].cx, ANC[0].yb, m1[1], m1[2], tt, "142,240,178");
     if (tt > m2[1] - 0.2 && tt < m2[2] + 0.4) {   // on the formation's contrail, just behind its last row
-      let minX = 1e9, cy = 0, n = 0;
-      POS.forEach(p => { if (p) { minX = Math.min(minX, p.x); cy += p.y; n++; } });
-      if (n) sceneLine(m2[0], minX - 40, cy / n + 14, m2[1], m2[2] + 0.2, tt, "142,240,178");
+      let x0 = 1e9, x1 = -1e9, y1 = -1e9, n = 0;
+      POS.forEach(p => { if (p) { x0 = Math.min(x0, p.x); x1 = Math.max(x1, p.x); y1 = Math.max(y1, p.y); n++; } });
+      if (n) sceneLine(m2[0], (x0 + x1) / 2, Math.min(y1 + 78, LH - 60), m2[1], m2[2] + 0.2, tt, "142,240,178");
     }
   }
 
