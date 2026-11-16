@@ -88,8 +88,11 @@ img { display: block; }
 .btn { display: inline-flex; align-items: center; gap: 12px; font: 600 16px/1 "Be Vietnam Pro", "Segoe UI", sans-serif; text-decoration: none; padding: 15px 24px;  }
 .btn svg { width: 16px; height: 16px; }
 .btn:focus-visible { outline: 2px solid #8ef0b2; outline-offset: 3px; }
-.replay { position: absolute; right: max(16px, env(safe-area-inset-right, 0px)); bottom: 16px; font: 600 12px/1 "Be Vietnam Pro", sans-serif; color: #eaf6ef; opacity: .55; background: none; border: 0; padding: 10px; cursor: pointer; }
-.replay:hover, .replay:focus-visible { opacity: 1; }
+.replay { position: absolute; right: max(16px, env(safe-area-inset-right, 0px)); bottom: 16px; width: 40px; height: 40px; display: grid; place-items: center; padding: 0; border-radius: 50%; border: 1px solid rgba(142,240,178,.35); background: rgba(142,240,178,.06); color: #eaf6ef; opacity: .6; cursor: pointer; transition: opacity .3s, background .3s, transform .4s; }
+.replay svg { width: 18px; height: 18px; }
+.replay:hover, .replay:focus-visible { opacity: 1; background: rgba(142,240,178,.14); outline: none; }
+.replay:hover svg { transform: rotate(-40deg); transition: transform .4s; }
+.replay:focus-visible { box-shadow: 0 0 0 2px #8ef0b2; }
 /* the three final messages become doors into the story */
 .kick { position: absolute; left: 0; top: 0; padding: 0; border: 0; background: none; cursor: pointer; border-radius: 10px; opacity: 0; pointer-events: none; transition: opacity .4s; }
 .kick.on { opacity: 1; pointer-events: auto; }
@@ -284,7 +287,7 @@ main { overflow-x: clip; }
       <div class="txt"><span class="k" id="storyKicker"></span><strong class="h2" id="storyTitle"></strong><p id="storyBody"></p></div>
     </div>
     <div hidden><button id="play" type="button">Tạm dừng</button></div>
-    <button class="replay" id="replay" type="button">Xem lại từ đầu</button>
+    <button class="replay" id="replay" type="button" aria-label="Xem lại từ đầu" title="Xem lại từ đầu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 4v5h5"></path></svg></button>
     <div id="chapters" hidden></div>
   </div>
   </div>
