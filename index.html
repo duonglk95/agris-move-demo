@@ -629,6 +629,7 @@ main { overflow-x: clip; }
 
   function step() {
     const tt = simT, si = stormI(tt), gi = gustI(tt);
+    TBOX = textBoxes(tt);
     for (const b of birds) {
       let tgt = wanderTarget(b, tt);
       if (si > 0 && tt < b.join) {   // storm compresses and shoves the scattered birds
@@ -651,6 +652,15 @@ main { overflow-x: clip; }
           sp.x = lerp(sp.x, shield.x, w.cover); sp.y = lerp(sp.y, shield.y, w.cover);
         }
         tgt = { x: lerp(tgt.x, sp.x, jw), y: lerp(tgt.y, sp.y, jw) };
+      }
+      // keep clear of the words: birds steer out of the space around an active message
+      for (const bx of TBOX) {
+        if (bx.skip.includes(b.i)) continue;
+        const m = 46;
+        if (tgt.x > bx.x0 - m && tgt.x < bx.x1 + m && tgt.y > bx.y0 - m && tgt.y < bx.y1 + m) {
+          const up = tgt.y < (bx.y0 + bx.y1) / 2;
+          tgt.y = lerp(tgt.y, up ? bx.y0 - m - 10 : bx.y1 + m + 10, bx.a);
+        }
       }
       const K = 5.2, C = 3.9;
       let ax = K * (tgt.x - b.pos.x) - C * b.vel.x;
@@ -830,11 +840,28 @@ main { overflow-x: clip; }
 
   // each message is written into the scene by the birds doing it, and travels with them
   // a soft clear zone behind a line of text: whatever flies behind it is dimmed so the words stay crisp
+  // where the scene messages sit, worked out from the birds that carry them (used by the birds to keep clear)
+  let TBOX = [], TW = [520, 420];
+  function measureMessages() { ctx.save(); ctx.font = DF(800, 56); TW[0] = ctx.measureText(MSG[0]).width; ctx.font = DF(800, 44); TW[1] = ctx.measureText(MSG[1]).width; ctx.restore(); }
+  function msg1Anchor() {
+    const H = birds[HURT].pos;
+    let minX = 1e9;
+    for (const b of birds) if (b.joinW > 0.5 && b.i !== HURT && !HELP.includes(b.i) && Math.abs(b.pos.y - H.y) < 70) minX = Math.min(minX, b.pos.x);
+    return { xr: Math.min(H.x - 84, minX - 50), yb: H.y + 14 };
+  }
+  function textBoxes(tt) {
+    const out = [], [m0, m1] = STORY;
+    const a0 = ss(prog(tt, m0[1] - 0.4, m0[1] + 0.3)) * (1 - ss(prog(tt, m0[2] - 0.2, m0[2] + 0.4)));
+    if (a0 > 0 && birds[0]) { const L = birds[0].pos, xr = L.x - 50, yb = L.y - 4; out.push({ x0: xr - TW[0] - 20, x1: xr + 10, y0: yb - 56, y1: yb + 26, a: a0, skip: [0] }); }
+    const a1 = ss(prog(tt, m1[1] - 0.4, m1[1] + 0.3)) * (1 - ss(prog(tt, m1[2] - 0.2, m1[2] + 0.4)));
+    if (a1 > 0 && birds[HURT]) { const { xr, yb } = msg1Anchor(); out.push({ x0: xr - TW[1] - 20, x1: xr + 10, y0: yb - 44, y1: yb + 20, a: a1, skip: [0, HURT, ...HELP] }); }
+    return out;
+  }
   function scrim(cx, cy, w, h, a) {
     if (a <= 0) return;
     ctx.save(); ctx.translate(cx, cy); ctx.scale(1, h / w);
     const g = ctx.createRadialGradient(0, 0, 0, 0, 0, w / 2);
-    g.addColorStop(0, `rgba(3,22,17,${0.86 * a})`); g.addColorStop(0.62, `rgba(3,22,17,${0.7 * a})`); g.addColorStop(1, "rgba(3,22,17,0)");
+    g.addColorStop(0, `rgba(3,22,17,${0.6 * a})`); g.addColorStop(0.62, `rgba(3,22,17,${0.45 * a})`); g.addColorStop(1, "rgba(3,22,17,0)");
     ctx.fillStyle = g; ctx.fillRect(-w / 2, -w / 2, w, w); ctx.restore();
   }
   function trailText(text, xr, yb, px, tIn, tOut, tt, glow, trail) {
@@ -849,10 +876,9 @@ main { overflow-x: clip; }
       g.addColorStop(0, `rgba(${glow},0)`); g.addColorStop(0.5, `rgba(${glow},${0.3 * (1 - out)})`); g.addColorStop(1, `rgba(${glow},${0.95 * (1 - out)})`);
       ctx.fillStyle = g; ctx.fillRect(x0 - 80 + (trail.x - x0 + 80) * (1 - r), yb + 12, (trail.x - x0 + 80) * r, 3);
     }
-    // revealed from the bird backwards, and dissolved from the far end
-    ctx.beginPath(); ctx.rect(xr - w * r + w * out - 10, yb - px * 1.3, w * r - w * out + 30, px * 1.8); ctx.clip();
     ctx.shadowColor = `rgba(${glow},.35)`; ctx.shadowBlur = 8;
-    ctx.globalAlpha = 1 - out; ctx.fillStyle = "#ffffff"; ctx.fillText(text, x0, yb);
+    ctx.globalAlpha = Math.min(1, r * 1.6) * (1 - out); ctx.fillStyle = "#ffffff";
+    ctx.fillText(text, x0 + 40 * (1 - r), yb);   // the whole line slides out of the trail, never cut mid-word
     ctx.restore();
   }
   function skyText(tt) {
@@ -865,10 +891,11 @@ main { overflow-x: clip; }
       const a = eo(prog(tt, m1[1], m1[1] + 0.8)) * (1 - ss(prog(tt, m1[2] - 0.6, m1[2])));
       ctx.save(); ctx.globalAlpha = a;
       ctx.font = DF(800, 44); ctx.textAlign = "right"; ctx.textBaseline = "alphabetic";
-      const w = ctx.measureText(m1[0]).width, cx = H.x - 84 - w / 2, cy = H.y;
+      const { xr: ax, yb: ay } = msg1Anchor();
+      const w = ctx.measureText(m1[0]).width, cx = ax - w / 2, cy = ay - 14;
       ctx.globalAlpha = 1; scrim(cx - 25, cy, w + 140, 44 * 2.6, a); ctx.globalAlpha = a;
       ctx.shadowColor = "rgba(142,240,178,.45)"; ctx.shadowBlur = 8; ctx.fillStyle = "#ffffff";
-      ctx.fillText(m1[0], H.x - 84, H.y + 14 + 10 * (1 - a));
+      ctx.fillText(m1[0], ax, ay + 10 * (1 - a));
       ctx.restore();
     }
     if (tt > m2[1] - 0.2 && tt < m2[2] + 0.3) {   // written on the formation's contrail
@@ -1420,7 +1447,7 @@ main { overflow-x: clip; }
 
   const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   const start = () => {
-    layoutWord(); resize(); seek(START);
+    layoutWord(); resize(); measureMessages(); seek(START);
     if (reduce) { seek(30); setPlaying(false); }
     requestAnimationFrame(frame);
   };
