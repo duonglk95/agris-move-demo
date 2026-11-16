@@ -618,7 +618,9 @@ main { overflow-x: clip; }
   }
   function wanderTarget(b, tt) {
     const a = b.w * tt + b.ph;
-    return { x: b.home.x + b.rx * Math.cos(a) + tt * 6 * Math.sign(b.w), y: b.home.y + b.ry * Math.sin(a * 1.3) };
+    // everyone flies forward, but out of step: faster flappers creep ahead, slow ones fall back, some drift up or down
+    const drift = (b.flapRate - 1.55) * 60;
+    return { x: b.home.x + 0.45 * b.rx * Math.cos(a) + tt * drift, y: b.home.y + b.ry * Math.sin(a * 1.3) };
   }
   function stormI(tt) { return ss(prog(tt, T.storm0, T.storm0 + 1.4)) * (1 - ss(prog(tt, T.storm1 - 1.6, T.storm1))); }
 
@@ -659,7 +661,8 @@ main { overflow-x: clip; }
       b.vel.x += ax * DT; b.vel.y += ay * DT;
       b.pos.x += b.vel.x * DT; b.pos.y += b.vel.y * DT;
       const sp = Math.hypot(b.vel.x, b.vel.y);
-      const vh = sp > 8 ? Math.atan2(b.vel.y, b.vel.x) : b.head;
+      const fwd = 170 * (1 - jw);   // the flock travels forward through the sky, so headings point mostly ahead
+      const vh = Math.atan2(b.vel.y, b.vel.x + fwd);
       const hw = b.i === 0 ? jw : Math.pow(jw, 0.6);
       let h = angLerp(vh, 0, hw);
       b.head = angLerp(b.head, h, 0.12);
