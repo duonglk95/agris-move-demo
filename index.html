@@ -209,9 +209,9 @@ img { display: block; }
 .flyby { position: absolute; left: 0; right: 0; top: -190px; height: 220px; overflow: hidden; }
 main { overflow-x: clip; }
 
-.flyby .bee { position: absolute; top: 22px; left: 100%; width: clamp(64px, 7vw, 96px); animation: beefly 26s linear infinite; }
+.flyby .bee { position: absolute; top: 22px; left: 100%; width: clamp(64px, 7vw, 96px); animation: beefly 26s linear infinite; transform: scaleX(-1); }   /* the artwork faces left; flipped so ABI flies forward */
 .flyby .bee img { width: 100%; animation: beebob 2.2s ease-in-out infinite; filter: drop-shadow(0 12px 10px rgba(11, 93, 52, .2)); }
-@keyframes beefly { 0% { left: 104%; } 46%, 100% { left: -14%; } }
+@keyframes beefly { 0% { left: -14%; } 46%, 100% { left: 104%; } }
 @keyframes beebob { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-16px) rotate(3deg); } }
 .flock { position: absolute; top: 70px; left: 0; width: 150px; animation: flockfly 21s linear infinite; }
 .flock svg { width: 100%; display: block; overflow: visible; }
@@ -224,7 +224,7 @@ main { overflow-x: clip; }
 .ticker-row span { display: inline-flex; align-items: center; gap: 28px; padding: 15px 14px; font: 800 clamp(15px, 1.7vw, 21px)/1 var(--display); font-style: italic; letter-spacing: .04em; white-space: nowrap; }
 .ticker-row span::after { content: ""; width: 20px; height: 16px; background: #b6e36a; clip-path: polygon(100% 50%, 0 0, 30% 50%, 0 100%); }
 .ticker-row span:nth-child(even) { color: #d6f5c4; }
-@keyframes tick { to { transform: translateX(-50%); } }
+@keyframes tick { from { transform: translateX(-50%); } to { transform: translateX(0); } }   /* runs left to right, the way the arrows point */
 
 .rv { opacity: .25; transform: translateY(34px); transition: opacity .7s ease, transform .8s cubic-bezier(.2, .7, .2, 1); transition-delay: var(--rd, 0s); }
 .rv.in-view { opacity: 1; transform: none; }
