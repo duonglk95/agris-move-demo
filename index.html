@@ -525,7 +525,7 @@ main { overflow-x: clip; }
   ];
   const MSG = ["Lãnh đạo làm gương", "Môi trường tích cực", "Đội ngũ cùng hành động"];
   // each message appears inside the story, at the moment it happens: [text, in, out]
-  const STORY = [[MSG[0], 8.3, 11.6], [MSG[1], 14.7, 18.2], [MSG[2], 19.25, 21.35]];
+  const STORY = [[MSG[0], 8.3, 13.6], [MSG[1], 14.7, 18.2], [MSG[2], 19.25, 21.35]];
   // why each message: one plain sentence tying it to what the birds are doing on screen
   // the story told in a warmer voice: what the viewer sees, then what it means
   const WHY = [
@@ -617,7 +617,7 @@ main { overflow-x: clip; }
       b.head = Math.atan2(b.vel.y, b.vel.x);
       birds.push(b);
     }
-    snap = null; simT = 0; t = 0;
+    snap = null; simT = 0; t = 0; ANC = [null, null];
   }
   function wanderTarget(b, tt) {
     const a = b.w * tt + b.ph;
@@ -629,7 +629,7 @@ main { overflow-x: clip; }
 
   function step() {
     const tt = simT, si = stormI(tt), gi = gustI(tt);
-    TBOX = textBoxes(tt);
+    updateAnchors(); TBOX = textBoxes(tt);
     for (const b of birds) {
       let tgt = wanderTarget(b, tt);
       if (si > 0 && tt < b.join) {   // storm compresses and shoves the scattered birds
@@ -655,7 +655,7 @@ main { overflow-x: clip; }
       }
       // keep clear of the words: birds steer out of the space around an active message
       for (const bx of TBOX) {
-        if (bx.skip.includes(b.i)) continue;
+        if (b.i === 0 || b.joinW > 0.5) continue;   // the formation holds its shape; only loose birds make way
         const m = 46;
         if (tgt.x > bx.x0 - m && tgt.x < bx.x1 + m && tgt.y > bx.y0 - m && tgt.y < bx.y1 + m) {
           const up = tgt.y < (bx.y0 + bx.y1) / 2;
@@ -840,68 +840,58 @@ main { overflow-x: clip; }
 
   // each message is written into the scene by the birds doing it, and travels with them
   // a soft clear zone behind a line of text: whatever flies behind it is dimmed so the words stay crisp
-  // where the scene messages sit, worked out from the birds that carry them (used by the birds to keep clear)
-  let TBOX = [], TW = [520, 420];
-  function measureMessages() { ctx.save(); ctx.font = DF(800, 56); TW[0] = ctx.measureText(MSG[0]).width; ctx.font = DF(800, 44); TW[1] = ctx.measureText(MSG[1]).width; ctx.restore(); }
-  function msg1Anchor() {
-    const H = birds[HURT].pos;
+  // the scene messages: one size, each parked beside the birds it describes and eased so it never jitters
+  const TPX = 40, TFONT = () => DF(700, TPX);
+  let TBOX = [], TW = [380, 340, 420], ANC = [null, null];
+  function measureMessages() { ctx.save(); ctx.font = TFONT(); MSG.forEach((m, j) => { TW[j] = ctx.measureText(m).width; }); ctx.restore(); }
+  function updateAnchors() {
+    const L = birds[0].pos, H = birds[HURT].pos;
+    // Lãnh đạo làm gương: just above and behind the leader, lifting to stay clear of the formation as it fills in
+    let top = L.y;
+    for (const b of birds) if (b.joinW > 0.4) top = Math.min(top, b.pos.y);
+    const r0 = { xr: L.x - 26, yb: top - 44 };
+    // Môi trường tích cực: beside the sheltered bird, but never over the rows behind it
     let minX = 1e9;
     for (const b of birds) if (b.joinW > 0.5 && b.i !== HURT && !HELP.includes(b.i) && Math.abs(b.pos.y - H.y) < 70) minX = Math.min(minX, b.pos.x);
-    return { xr: Math.min(H.x - 84, minX - 50), yb: H.y + 14 };
+    const r1 = { xr: Math.min(H.x - 70, minX - 46), yb: H.y + 14 };
+    [r0, r1].forEach((r, j) => { ANC[j] = ANC[j] ? { xr: lerp(ANC[j].xr, r.xr, 0.06), yb: lerp(ANC[j].yb, r.yb, 0.06) } : r; });
   }
   function textBoxes(tt) {
-    const out = [], [m0, m1] = STORY;
-    const a0 = ss(prog(tt, m0[1] - 0.4, m0[1] + 0.3)) * (1 - ss(prog(tt, m0[2] - 0.2, m0[2] + 0.4)));
-    if (a0 > 0 && birds[0]) { const L = birds[0].pos, xr = L.x - 50, yb = L.y - 4; out.push({ x0: xr - TW[0] - 20, x1: xr + 10, y0: yb - 56, y1: yb + 26, a: a0, skip: [0] }); }
-    const a1 = ss(prog(tt, m1[1] - 0.4, m1[1] + 0.3)) * (1 - ss(prog(tt, m1[2] - 0.2, m1[2] + 0.4)));
-    if (a1 > 0 && birds[HURT]) { const { xr, yb } = msg1Anchor(); out.push({ x0: xr - TW[1] - 20, x1: xr + 10, y0: yb - 44, y1: yb + 20, a: a1, skip: [0, HURT, ...HELP] }); }
+    const out = [];
+    STORY.slice(0, 2).forEach(([, a, b], j) => {
+      const k = ss(prog(tt, a - 0.4, a + 0.3)) * (1 - ss(prog(tt, b - 0.2, b + 0.4)));
+      if (k > 0 && ANC[j]) out.push({ x0: ANC[j].xr - TW[j] - 20, x1: ANC[j].xr + 16, y0: ANC[j].yb - TPX, y1: ANC[j].yb + 16, a: k });
+    });
     return out;
   }
   function scrim(cx, cy, w, h, a) {
     if (a <= 0) return;
     ctx.save(); ctx.translate(cx, cy); ctx.scale(1, h / w);
     const g = ctx.createRadialGradient(0, 0, 0, 0, 0, w / 2);
-    g.addColorStop(0, `rgba(3,22,17,${0.6 * a})`); g.addColorStop(0.62, `rgba(3,22,17,${0.45 * a})`); g.addColorStop(1, "rgba(3,22,17,0)");
+    g.addColorStop(0, `rgba(3,22,17,${0.55 * a})`); g.addColorStop(0.62, `rgba(3,22,17,${0.4 * a})`); g.addColorStop(1, "rgba(3,22,17,0)");
     ctx.fillStyle = g; ctx.fillRect(-w / 2, -w / 2, w, w); ctx.restore();
   }
-  function trailText(text, xr, yb, px, tIn, tOut, tt, glow, trail) {
-    const r = eo(prog(tt, tIn, tIn + 0.9)), out = ss(prog(tt, tOut - 0.7, tOut));
+  function sceneLine(text, xr, yb, tIn, tOut, tt, glow) {
+    const r = eo(prog(tt, tIn, tIn + 0.8)), out = ss(prog(tt, tOut - 0.6, tOut));
     if (r <= 0 || out >= 1) return;
     ctx.save();
-    ctx.font = DF(800, px); ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+    ctx.font = TFONT(); ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
     const w = ctx.measureText(text).width, x0 = xr - w;
-    scrim(xr - w / 2 - 30, yb - px * 0.32, w + 150, px * 2.6, ss(Math.min(r * 1.5, 1)) * (1 - out));
-    if (trail) {   // the light trail the text rides on, ending at the bird
-      const g = ctx.createLinearGradient(x0 - 80, 0, trail.x, 0);
-      g.addColorStop(0, `rgba(${glow},0)`); g.addColorStop(0.5, `rgba(${glow},${0.3 * (1 - out)})`); g.addColorStop(1, `rgba(${glow},${0.95 * (1 - out)})`);
-      ctx.fillStyle = g; ctx.fillRect(x0 - 80 + (trail.x - x0 + 80) * (1 - r), yb + 12, (trail.x - x0 + 80) * r, 3);
-    }
+    scrim(xr - w / 2 - 20, yb - TPX * 0.32, w + 130, TPX * 2.6, Math.min(1, r * 1.5) * (1 - out));
     ctx.shadowColor = `rgba(${glow},.35)`; ctx.shadowBlur = 8;
     ctx.globalAlpha = Math.min(1, r * 1.6) * (1 - out); ctx.fillStyle = "#ffffff";
-    ctx.fillText(text, x0 + 40 * (1 - r), yb);   // the whole line slides out of the trail, never cut mid-word
+    ctx.fillText(text, x0 + 30 * (1 - r), yb + 8 * (1 - r));
     ctx.restore();
   }
   function skyText(tt) {
     if (!POS.length) return;
     const [m0, m1, m2] = STORY;
-    const L = POS[0];
-    if (L) trailText(m0[0], L.x - 50, L.y - 4, 56, m0[1], m0[2], tt, "255,226,140", { x: L.x - 16 });
-    const H = POS[HURT];
-    if (H && tt > m1[1] - 0.2 && tt < m1[2] + 0.2) {   // in the still air behind the two teammates, next to the bird they shelter
-      const a = eo(prog(tt, m1[1], m1[1] + 0.8)) * (1 - ss(prog(tt, m1[2] - 0.6, m1[2])));
-      ctx.save(); ctx.globalAlpha = a;
-      ctx.font = DF(800, 44); ctx.textAlign = "right"; ctx.textBaseline = "alphabetic";
-      const { xr: ax, yb: ay } = msg1Anchor();
-      const w = ctx.measureText(m1[0]).width, cx = ax - w / 2, cy = ay - 14;
-      ctx.globalAlpha = 1; scrim(cx - 25, cy, w + 140, 44 * 2.6, a); ctx.globalAlpha = a;
-      ctx.shadowColor = "rgba(142,240,178,.45)"; ctx.shadowBlur = 8; ctx.fillStyle = "#ffffff";
-      ctx.fillText(m1[0], ax, ay + 10 * (1 - a));
-      ctx.restore();
-    }
-    if (tt > m2[1] - 0.2 && tt < m2[2] + 0.3) {   // written on the formation's contrail
+    if (ANC[0]) sceneLine(m0[0], ANC[0].xr, ANC[0].yb, m0[1], m0[2], tt, "255,226,140");
+    if (ANC[1]) sceneLine(m1[0], ANC[1].xr, ANC[1].yb, m1[1], m1[2], tt, "142,240,178");
+    if (tt > m2[1] - 0.2 && tt < m2[2] + 0.4) {   // on the formation's contrail, just behind its last row
       let minX = 1e9, cy = 0, n = 0;
       POS.forEach(p => { if (p) { minX = Math.min(minX, p.x); cy += p.y; n++; } });
-      if (n) trailText(m2[0], minX - 40, cy / n + 18, 58, m2[1], m2[2] + 0.2, tt, "142,240,178", { x: minX - 10 });
+      if (n) sceneLine(m2[0], minX - 40, cy / n + 14, m2[1], m2[2] + 0.2, tt, "142,240,178");
     }
   }
 
