@@ -224,6 +224,10 @@ main { overflow-x: clip; }
 .ticker-row span { display: inline-flex; align-items: center; gap: 28px; padding: 15px 14px; font: 800 clamp(15px, 1.7vw, 21px)/1 var(--display); font-style: italic; letter-spacing: .04em; white-space: nowrap; }
 .ticker-row span::after { content: ""; width: 20px; height: 16px; background: #b6e36a; clip-path: polygon(100% 50%, 0 0, 30% 50%, 0 100%); }
 .ticker-row span:nth-child(even) { color: #d6f5c4; }
+/* the quarter's theme stands out in the ticker (change the class "now" when the quarter turns) */
+.ticker-row span.now { color: #06301b; background: #b6e36a; border-radius: 999px; padding: 12px 22px 12px 12px; margin-inline: 10px; box-shadow: 0 0 26px -6px rgba(182,227,106,.8); }
+.ticker-row span.now::before { content: "Quý này"; font: 700 11px/1 var(--body); font-style: normal; letter-spacing: .04em; color: #b6e36a; background: #06301b; border-radius: 999px; padding: 6px 9px; }
+.ticker-row span.now::after { background: #06301b; }
 @keyframes tick { from { transform: translateX(-50%); } to { transform: translateX(0); } }   /* runs left to right, the way the arrows point */
 
 .rv { opacity: .25; transform: translateY(34px); transition: opacity .7s ease, transform .8s cubic-bezier(.2, .7, .2, 1); transition-delay: var(--rd, 0s); }
@@ -326,7 +330,9 @@ main { overflow-x: clip; }
     </div>
   </section>
 
-  <div class="seam" data-next="#f8fcf9" data-h="112" data-tones="#d3eadb,#ffffffc0"><div class="flyby"><div class="flock"></div></div></div>
+  <div class="seam" data-next="#0b6b3a" data-h="72" data-tones="#bfe6ccd0,#2faa5ab0" data-line="lime"></div>
+  <div class="ticker" aria-hidden="true"><div class="ticker-row"><span>MOVE INNOVATION</span><span class="now">MOVE ACTION</span><span>MOVE IMPACT</span><span>MOVE AS ONE</span><span>CREATE FORWARD</span><span>MOVE INNOVATION</span><span class="now">MOVE ACTION</span><span>MOVE IMPACT</span><span>MOVE AS ONE</span><span>CREATE FORWARD</span><span>MOVE INNOVATION</span><span class="now">MOVE ACTION</span><span>MOVE IMPACT</span><span>MOVE AS ONE</span><span>CREATE FORWARD</span><span>MOVE INNOVATION</span><span class="now">MOVE ACTION</span><span>MOVE IMPACT</span><span>MOVE AS ONE</span><span>CREATE FORWARD</span></div></div>
+  <div class="seam" data-next="#f8fcf9" data-h="112" data-tones="#2faa5ab0,#9bd8b1d0" data-line="lime"><div class="flyby"><div class="flock"></div></div></div>
   <section class="band movers" id="movers">
     <div class="in">
       <div class="cloud" id="faces">
@@ -340,9 +346,7 @@ main { overflow-x: clip; }
     </div>
   </section>
 
-  <div class="seam" data-next="#0b6b3a" data-h="72" data-tones="#bfe6ccd0,#2faa5ab0" data-line="lime"></div>
-  <div class="ticker" aria-hidden="true"><div class="ticker-row"><span>MOVE INNOVATION</span><span>MOVE ACTION</span><span>MOVE IMPACT</span><span>MOVE AS ONE</span><span>CREATE FORWARD</span><span>MOVE INNOVATION</span><span>MOVE ACTION</span><span>MOVE IMPACT</span><span>MOVE AS ONE</span><span>CREATE FORWARD</span><span>MOVE INNOVATION</span><span>MOVE ACTION</span><span>MOVE IMPACT</span><span>MOVE AS ONE</span><span>CREATE FORWARD</span><span>MOVE INNOVATION</span><span>MOVE ACTION</span><span>MOVE IMPACT</span><span>MOVE AS ONE</span><span>CREATE FORWARD</span></div></div>
-  <div class="seam" data-next="#e8f4ec" data-h="62" data-tones="#2faa5ab0,#9bd8b1d0" data-line="lime"></div>
+  <div class="seam" data-next="#e8f4ec" data-h="84" data-tones="#d3eadb,#ffffffc0"></div>
   <section class="band band-glow pod" id="agris-thing">
     <div class="ribbon" data-ribbon data-px="-.12"></div>
     <div class="in stack">
