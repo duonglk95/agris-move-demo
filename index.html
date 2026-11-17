@@ -155,7 +155,8 @@ img { display: block; }
 .event-head { display: flex; align-items: flex-end; gap: 16px; padding-right: clamp(100px, 14vw, 170px); }
 
 /* movers */
-.top50 { margin: 0 auto; max-width: 1120px; border-radius: 26px; overflow: hidden; box-shadow: 0 30px 60px -36px rgba(11,93,52,.55), 0 0 0 1px rgba(11,93,52,.06); }
+.top50 { margin: 0 calc(50% - 50vw); width: 100vw; max-width: none; }   /* full-bleed, edge to edge */
+.band.movers { padding-top: 0; }
 .top50 img { display: block; width: 100%; height: auto; }
 .top50-txt { max-width: 620px; margin: 28px auto 0; display: grid; gap: 14px; justify-items: center; text-align: center; }
 .top50-txt p { color: var(--navy); font-size: 17px; margin: 0; }
