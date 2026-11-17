@@ -156,7 +156,9 @@ img { display: block; }
 
 /* movers */
 .top50 { margin: 0 calc(50% - 50vw); width: 100vw; max-width: none; }   /* full-bleed, edge to edge */
-.band.movers { padding-top: 0; }
+.band.movers { padding-top: 0; overflow: visible; }
+/* the banner's top dissolves into the page so it flows out of the wave above instead of starting on a hard edge */
+.top50 { position: relative; z-index: 3; margin-top: -90px; -webkit-mask-image: linear-gradient(180deg, transparent 0, rgba(0,0,0,.4) 8%, #000 20%); mask-image: linear-gradient(180deg, transparent 0, rgba(0,0,0,.4) 8%, #000 20%); }
 .top50 img { display: block; width: 100%; height: auto; }
 .top50 { position: relative; }
 /* the intro sits in the open space under the MOVERS ribbon */
