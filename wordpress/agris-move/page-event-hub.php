@@ -43,6 +43,7 @@ while ( have_posts() ) : the_post();
       <span><?php echo esc_html( number_format_i18n( agm_thanks_count( $hub ) ) ); ?> lời tiếp sức đã lên tường</span></div>
   </section>
 
+  <div class="divider-img harvest" aria-hidden="true"><img src="<?php echo esc_url( agm_img( 'divider-harvest.webp' ) ); ?>" alt="" loading="lazy"></div>
   <section class="band hub-sec alt" id="buu-thiep">
     <div class="in">
       <div class="hub-head center"><img class="abi-side r" src="<?php echo esc_url( agm_img( 'abi-postcard.webp' ) ); ?>" alt="" aria-hidden="true"><p class="eyebrow-c">Bưu thiếp</p><h2 class="gt">Gửi bưu thiếp mùa vụ</h2><p>Chọn một khoảnh khắc đẹp của đội mình, viết lời chúc và tải bưu thiếp về gửi đồng đội.</p></div>
@@ -67,6 +68,8 @@ while ( have_posts() ) : the_post();
     </div>
   </section>
   <?php endif; ?>
+
+  <div class="divider-img campus" aria-hidden="true"><img src="<?php echo esc_url( agm_img( 'divider-campus.webp' ) ); ?>" alt="" loading="lazy"></div>
 
   <dialog class="cf-dlg" id="tkDlg" aria-labelledby="tkT">
     <form class="tk-form" data-tk data-page="<?php echo esc_attr( $hub ); ?>">

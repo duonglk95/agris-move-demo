@@ -515,3 +515,12 @@ a.ev-card:hover h4 { color: var(--green); }
 @keyframes abiFloat { 50% { transform: translateY(-10px); } }
 @media (prefers-reduced-motion: reduce) { .tk .abi-hero, .tk .abi-side { animation: none; } }
 @media (max-width: 760px) { .tk .abi-side { position: static; width: 110px; margin-bottom: 8px; } .tk .abi-hero { position: static; display: block; margin: 12px auto -20px; width: 180px; } }
+
+/* illustrated dividers */
+.tk .divider-img { display: flex; justify-content: center; line-height: 0; position: relative; z-index: 1; pointer-events: none; }
+.tk .divider-img img { width: 100%; height: auto; }
+.tk .divider-img.harvest { background: linear-gradient(180deg, #eef7f1 0 60%, #f3faf5 60%); margin-top: -1px; }
+.tk .divider-img.harvest img { max-width: 760px; }
+.tk .divider-img.campus { background: linear-gradient(180deg, #fbfdf7 0 85%, transparent 85%); padding-top: 24px; }
+.tk .divider-img.campus img { max-width: 1400px; }
+.tk .divider-img.campus { background: #fbfdf7; padding-bottom: clamp(60px, 7vw, 110px); margin-top: calc(-1 * clamp(28px, 4vw, 56px)); }
