@@ -122,17 +122,26 @@
       stamp(W - 60 - 190, 56, 190, 230); postmark(W - 60 - 300, 200);
       const line = (y) => { c.strokeStyle = "#d8cfb4"; c.lineWidth = 2; c.beginPath(); c.moveTo(x, y); c.lineTo(W - 60, y); c.stroke(); };
       c.fillStyle = "#8a8169"; c.font = `600 22px ${BODY}`; c.fillText("Từ", x, 352); c.fillText("Gửi đến", x, 432);
-      c.fillStyle = "#0b4a2b"; c.font = `600 44px ${HAND}`; wrap(c, val("from") || "một AgriS-er", x + 60, 350, w - 60, 46, 1); wrap(c, val("to") || "Đồng đội", x + 110, 430, w - 110, 46, 1);
+      const fitOne = (txt, max, min, width) => { let z = max; c.font = `600 ${z}px ${HAND}`; while (z > min && c.measureText(txt).width > width) { z -= 2; c.font = `600 ${z}px ${HAND}`; } return z; };
+      const oneLine = (txt, tx, ty, width) => { let t = txt; while (t.length > 1 && c.measureText(t).width > width) t = t.slice(0, -2) + "…"; c.fillText(t, tx, ty); };
+      const lines = (txt, width) => { let n = 1, cur = ""; for (const wd of String(txt).split(/\s+/)) { const t = cur ? cur + " " + wd : wd; if (c.measureText(t).width > width && cur) { n++; cur = wd; } else cur = t; } return n; };
+      c.fillStyle = "#0b4a2b";
+      const fromT = val("from") || "một AgriS-er", toT = val("to") || "Đồng đội";
+      fitOne(fromT, 44, 26, w - 60); oneLine(fromT, x + 60, 350, w - 60);
+      fitOne(toT, 44, 26, w - 110); oneLine(toT, x + 110, 430, w - 110);
       line(366); line(446);
-      for (let y = 540; y < H - 150; y += 62) line(y);
-      c.fillStyle = "#1f3a33"; c.font = `600 40px ${HAND}`; wrap(c, val("wish") || "Lời chúc của bạn…", x, 528, w, 62, 7);
-      for (let i = 0; i < 20; i++) { c.fillStyle = i % 2 ? "#0b5d34" : "#fbf8ef"; c.fillRect(x + i * w / 20, H - 120, w / 20, 10); }
-      c.fillStyle = "#0b6b3a"; c.font = `700 24px ${BODY}`; c.fillText(S.tags || "", x, H - 74);
+      const wish = val("wish") || "Lời chúc của bạn…", top = 528, bottom = H - 130;
+      let z = 44, lh;
+      for (; z >= 24; z -= 2) { c.font = `600 ${z}px ${HAND}`; lh = Math.round(z * 1.45); if (lines(wish, w) * lh <= bottom - top + lh * .3) break; }
+      for (let y = top + 12; y < bottom; y += lh) line(y);
+      c.fillStyle = "#1f3a33"; c.font = `600 ${Math.max(z, 24)}px ${HAND}`; wrap(c, wish, x, top, w, lh, Math.floor((bottom - top) / lh) + 1);
+      c.fillStyle = "#0b6b3a"; c.font = `800 31px ${FONT}`; c.fillText(S.tags || "", x, H - 66);
     };
     if (document.fonts) Promise.all(['600 40px "Dancing Script"'].map(f => document.fonts.load(f, 'Đội ơi ạ'))).then(() => draw()).catch(() => {});
     const pick = async () => { const r = pcForm.querySelector("[name=photo]:checked"); credit = r ? r.dataset.credit : ""; photo = r ? await loadImg(r.value).catch(() => null) : null; draw(); };
     pcForm.addEventListener("input", e => (e.target.name === "photo" ? pick() : draw()));
     document.addEventListener("agm-logo", draw);
+    const cnt = pcForm.querySelector("[data-count]"); if (cnt) pcForm.elements.wish.addEventListener("input", e => (cnt.textContent = e.target.value.length + "/220"));
     document.getElementById("pcDown").addEventListener("click", () => download(cv, "buu-thiep-vao-vu.jpg"));
     pick();
   }
