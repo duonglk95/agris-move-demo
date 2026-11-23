@@ -23,7 +23,7 @@ function amv_enqueue() {
 }
 
 add_action( 'wp_enqueue_scripts', function () {
-	if ( is_singular( 'mover' ) || is_post_type_archive( 'mover' ) || is_page_template( 'page-top50.php' ) || ( is_singular() && has_shortcode( (string) get_post_field( 'post_content', get_queried_object_id() ), 'amv_movers' ) ) ) {
+	if ( is_singular( 'mover' ) || is_post_type_archive( 'mover' ) || is_page_template( 'page-top50.php' ) || ( is_singular() && has_shortcode( (string) get_post_field( 'post_content', get_queried_object_id() ), 'amv_movers' ) ) || apply_filters( 'amv_needs_assets', false ) ) {
 		amv_enqueue();
 	}
 } );
@@ -38,7 +38,7 @@ function amv_love_button( $mover_id, $count, $big = false ) {
 		'<button type="button" class="amv-love%s" data-mover="%d" aria-pressed="false" aria-label="%s">%s<span class="amv-n"%s>%s</span><span class="amv-l">%s</span></button>',
 		$big ? ' big' : '',
 		$mover_id,
-		esc_attr( 'Love câu chuyện của ' . get_the_title( $mover_id ) ),
+		esc_attr( 'Love ' . get_the_title( $mover_id ) ),
 		amv_heart(),
 		$show ? '' : ' hidden',
 		$show ? esc_html( number_format_i18n( $count ) ) : '',

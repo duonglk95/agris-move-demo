@@ -3,7 +3,7 @@
   <div class="ribbon" data-ribbon></div>
   <div class="in">
     <a class="brand" href="<?php echo esc_url( is_front_page() ? '#top' : home_url( '/' ) ); ?>" aria-label="AgriS MOVE – Trang chủ"><img alt="AgriS MOVE" src="<?php echo esc_url( agm_img( 'logo-move.png' ) ); ?>"></a>
-    <nav class="nav" aria-label="Điều hướng chân trang"><?php if ( is_front_page() ) { agm_menu( has_nav_menu( 'footer' ) ? 'footer' : 'primary' ); } else { agm_sub_menu(); } ?></nav>
+    <nav class="nav" aria-label="Điều hướng chân trang"><?php if ( is_front_page() ) { agm_menu( has_nav_menu( 'footer' ) ? 'footer' : 'primary' ); } elseif ( agm_hub_id() ) { agm_hub_menu( agm_hub_id() ); } else { agm_sub_menu(); } ?></nav>
     <button type="button" class="btn" data-cf-open>Liên hệ chương trình <?php echo agm_arrow( 'chev' ); // phpcs:ignore ?></button>
     <small>© <?php echo esc_html( wp_date( 'Y' ) ); ?> AgriS</small>
   </div>

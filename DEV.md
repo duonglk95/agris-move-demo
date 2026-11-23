@@ -22,3 +22,9 @@ Zip `wordpress/agris-move` và `wordpress/agris-move-vote`, tải lên https://a
 ## Lưu ý
 - SĐT chỉ lưu dạng hash; MSNV và SĐT phải do người dùng tự gõ.
 - Không dùng Railway.
+
+## Mini-site sự kiện (Vào vụ)
+- Trang cha dùng mẫu "Mini-site sự kiện" (`page-event-hub.php`); trang con = hoạt động, hiện trong menu riêng theo thứ tự trang.
+- Mẫu hoạt động: `page-thanks.php` (Lời tiếp sức, chờ duyệt), `page-postcard.php`, `page-avatar.php`, `page-contest.php` (ảnh đăng ngay, admin hậu kiểm; love dùng plugin bình chọn qua filter `amv_vote_types`).
+- Canvas khung ảnh/bưu thiếp/avatar: `assets/js/studio.js`; khung PNG thật tải ở Tùy biến → Khung ảnh sự kiện.
+- Seed local: `php dev/seed-ev.php` rồi `php dev/seed-mini.php`.

@@ -83,7 +83,7 @@ amv_ajax( 'amv_vote', function () {
 		wp_send_json_error( array( 'message' => 'before' === $state ? 'Cổng bình chọn chưa mở.' : 'Cổng bình chọn đã đóng.' ), 403 );
 	}
 	$mover = isset( $_POST['mover'] ) ? absint( $_POST['mover'] ) : 0;
-	if ( ! $mover || 'mover' !== get_post_type( $mover ) || 'publish' !== get_post_status( $mover ) ) {
+	if ( ! $mover || ! in_array( get_post_type( $mover ), (array) apply_filters( 'amv_vote_types', array( 'mover' ) ), true ) || 'publish' !== get_post_status( $mover ) ) {
 		wp_send_json_error( array( 'message' => 'Không tìm thấy hồ sơ MOVER này.' ), 404 );
 	}
 	$on = amv_toggle_vote( (int) $person->id, $mover );
