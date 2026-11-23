@@ -589,6 +589,6 @@ a.ph-item:hover img { transform: scale(1.04); }
 .pc-zoom { display: flex; align-items: center; gap: 12px; width: 100%; font: 600 14px var(--body); color: var(--navy); }
 .pc-zoom input { flex: 1; accent-color: var(--green); }
 @media (max-width: 560px) { .pc-hint { font-size: 12px; padding: 8px 12px; } }
-.pc-hint { left: 30%; top: 45%; max-width: 54%; white-space: normal; text-align: left; }
+.pc-hint { left: 30%; top: 48%; max-width: 54%; white-space: normal; text-align: left; }
 .pc-hand { width: 26px; height: 26px; flex: none; font-size: 0; }
 @media (max-width: 560px) { .pc-hint { gap: 6px; padding: 7px 10px; font-size: 11px; } .pc-hand { width: 18px; height: 18px; } }

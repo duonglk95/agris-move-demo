@@ -90,7 +90,7 @@
     const val = n => (pcForm.elements[n] && pcForm.elements[n].value || "").trim();
     const HAND = '"Dancing Script", cursive';
     let pox = 0, poy = 0, pz = 1;
-    const clampOff = () => { if (!photo) return { x: 0, y: 0 }; const w = 824, h = 864, sc = Math.max(w / photo.width, h / photo.height) * pz, mx = Math.max(0, (photo.width * sc - w) / 2), my = Math.max(0, (photo.height * sc - h) / 2); return { x: Math.max(-mx, Math.min(mx, pox)), y: Math.max(-my, Math.min(my, poy)) }; };
+    const clampOff = () => { if (!photo) return { x: 0, y: 0 }; const w = 844, h = 633, sc = Math.max(w / photo.width, h / photo.height) * pz, mx = Math.max(0, (photo.width * sc - w) / 2), my = Math.max(0, (photo.height * sc - h) / 2); return { x: Math.max(-mx, Math.min(mx, pox)), y: Math.max(-my, Math.min(my, poy)) }; };
     let stampImg = null;
     if (S.stamps && S.stamps.length) loadImg(S.stamps[Math.floor(Math.random() * S.stamps.length)]).then(i => { stampImg = i; draw(); }).catch(() => {});
     const stamp = (x, y, w, h) => {
@@ -115,7 +115,8 @@
       c.fillStyle = "#fbf8ef"; c.fillRect(0, 0, W, H);
       c.strokeStyle = "#e7dfc8"; c.lineWidth = 2; c.strokeRect(14, 14, W - 28, H - 28);
       // photo with white border, slightly tilted
-      const px = 56, py = 64, pw = 860, ph = 900;
+      const px = 48, py = 190, pw = 880, ph = 669;
+      c.fillStyle = "#0b6b3a"; c.font = `600 54px ${HAND}`; c.fillText("Thư tay tiếp sức", px + 10, 120); c.fillStyle = "#8a8169"; c.font = `600 22px ${BODY}`; c.fillText("VÀO VỤ 2026 – 2027", px + 14, 158);
       c.save(); c.translate(px + pw / 2, py + ph / 2); c.rotate(-0.012); c.shadowColor = "rgba(0,0,0,.22)"; c.shadowBlur = 24; c.shadowOffsetY = 8;
       c.fillStyle = "#fff"; c.fillRect(-pw / 2, -ph / 2, pw, ph + 70); c.shadowColor = "transparent";
       photo ? cover(c, photo, -pw / 2 + 18, -ph / 2 + 18, pw - 36, ph - 36, pz, clampOff().x, clampOff().y) : placeholder(c, -pw / 2 + 18, -ph / 2 + 18, pw - 36, ph - 36, "Chọn một ảnh");
@@ -150,7 +151,7 @@
     if (zr) zr.addEventListener("input", e => { pz = +e.target.value; draw(); });
     const hint = document.querySelector(".pc-hint");
     let drag = null;
-    const inPhoto = (e) => { const r = cv.getBoundingClientRect(), k = cv.width / r.width, x = (e.clientX - r.left) * k, y = (e.clientY - r.top) * k; return x > 60 && x < 930 && y > 60 && y < 980; };
+    const inPhoto = (e) => { const r = cv.getBoundingClientRect(), k = cv.width / r.width, x = (e.clientX - r.left) * k, y = (e.clientY - r.top) * k; return x > 50 && x < 940 && y > 190 && y < 870; };
     cv.addEventListener("pointerdown", e => { if (!photo || !inPhoto(e)) return; drag = [e.clientX, e.clientY, pox, poy]; cv.setPointerCapture(e.pointerId); cv.classList.add("dragging"); if (hint) hint.classList.add("gone"); });
     cv.addEventListener("pointermove", e => { if (!drag) return; const k = cv.width / cv.getBoundingClientRect().width; pox = drag[2] + (e.clientX - drag[0]) * k; poy = drag[3] + (e.clientY - drag[1]) * k; draw(); });
     const end = () => { if (!drag) return; drag = null; const o = clampOff(); pox = o.x; poy = o.y; cv.classList.remove("dragging"); };
