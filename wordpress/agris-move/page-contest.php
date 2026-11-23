@@ -39,8 +39,8 @@ while ( have_posts() ) : the_post();
   <div class="seam" data-next="#f3faf5" data-h="90" data-tones="#bfe6ccd0,#2faa5ab0" data-line="lime"></div>
   <section class="band ct-gal" id="thu-vien">
     <div class="in">
-      <div class="st-head"><div><h2 class="gt">Bình chọn ảnh</h2><p class="ct-count"><b><?php echo esc_html( count( $items ) ); ?></b> ảnh dự thi · bấm tim để vote</p></div>
-        <nav class="st-sort"><a href="?xep=new#thu-vien"<?php echo 'new' === $order ? ' aria-current="true"' : ''; ?>>Mới nhất</a><a href="?xep=love#thu-vien"<?php echo 'love' === $order ? ' aria-current="true"' : ''; ?>>Nhiều love nhất</a></nav></div>
+      <div class="st-head"><div><h2 class="gt">Bình chọn ảnh</h2></div>
+        <nav class="st-sort"><a href="?xep=new#thu-vien"<?php echo 'new' === $order ? ' aria-current="true"' : ''; ?>>Mới nhất</a><a href="?xep=love#thu-vien"<?php echo 'love' === $order ? ' aria-current="true"' : ''; ?>>Được yêu thích nhất</a></nav></div>
       <?php if ( function_exists( 'amv_bar' ) ) { echo amv_bar(); } // phpcs:ignore ?>
       <?php if ( $items ) : ?>
       <ul class="st-gallery">
