@@ -14,6 +14,7 @@ require get_template_directory() . '/inc/helpers.php';
 require get_template_directory() . '/inc/contact.php';
 require get_template_directory() . '/inc/thanks.php';
 require get_template_directory() . '/inc/minisite.php';
+require get_template_directory() . '/inc/pitcrew.php';
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );

@@ -15,8 +15,23 @@ while ( have_posts() ) : the_post();
 <main id="top" class="tk">
   <?php get_template_part( 'parts/mini-hero' ); ?>
   <section class="band">
+    <?php
+    $pit = get_posts( array( 'post_type' => 'page', 'post_parent' => get_the_ID(), 'post_status' => 'publish', 'meta_key' => '_wp_page_template', 'meta_value' => 'page-pitcrew.php', 'numberposts' => 1 ) );
+    if ( $pit && function_exists( 'agm_pit_open' ) ) :
+      $days = max( 0, (int) ceil( ( strtotime( agm_pit_deadline() . ' 23:59:59' ) - current_time( 'timestamp' ) ) / DAY_IN_SECONDS ) );
+      $t    = array_values( agm_pit_tours() );
+      ?>
+    <div class="in"><a class="pit-banner" href="<?php echo esc_url( get_permalink( $pit[0] ) ); ?>">
+      <div><span class="ev-pill live"><?php echo agm_pit_open() ? 'Đang tuyển · hạn ' . esc_html( wp_date( 'd/m', strtotime( agm_pit_deadline() ) ) ) : 'Đã đóng đăng ký'; ?></span>
+        <h2>Gia nhập Pit Crew</h2>
+        <p><?php echo esc_html( $pit[0]->post_excerpt ? $pit[0]->post_excerpt : 'Cùng đoàn HO ra tận trạm PIT, tiếp sức cho đội vào vụ.' ); ?><?php echo $t ? ' ' . esc_html( $t[0][1] . ' – ' . end( $t )[2] ) . '.' : ''; ?></p>
+        <span class="btn"><?php echo agm_pit_open() ? 'Đăng ký Pit Crew' : 'Tra cứu kết quả'; ?> <?php echo agm_arrow( 'chev' ); // phpcs:ignore ?></span></div>
+      <div class="pit-stats"><div><b><?php echo esc_html( agm_pit_count() ); ?></b><span>Pit Crew đã đăng ký</span></div>
+        <div><b><?php echo agm_pit_open() ? esc_html( $days ) . ' ngày' : '—'; ?></b><span>đến hạn đăng ký</span></div></div>
+    </a></div>
+    <?php endif; ?>
     <div class="in hub-grid">
-      <?php foreach ( agm_hub_children( get_the_ID() ) as $c ) : $tpl = get_page_template_slug( $c ); ?>
+      <?php foreach ( agm_hub_children( get_the_ID() ) as $c ) : $tpl = get_page_template_slug( $c ); if ( 'page-pitcrew.php' === $tpl ) { continue; } ?>
       <a class="hub-card" href="<?php echo esc_url( get_permalink( $c ) ); ?>">
         <span class="hub-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="<?php echo esc_attr( $icons[ $tpl ] ?? 'M5 12h14M13 6l6 6-6 6' ); ?>"></path></svg></span>
         <h2><?php echo esc_html( get_the_title( $c ) ); ?></h2>

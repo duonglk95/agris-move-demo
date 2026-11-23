@@ -29,7 +29,8 @@ function agm_hub_menu( $hub ) {
 	printf( '<a class="nav-back" href="%s">%s Trang chủ</a>', esc_url( home_url( '/' ) ), '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"></path></svg>' );
 	printf( '<a href="%s"%s>%s</a>', esc_url( get_permalink( $hub ) ), $cur === $hub ? ' aria-current="page"' : '', esc_html( get_the_title( $hub ) ) );
 	foreach ( agm_hub_children( $hub ) as $c ) {
-		printf( '<a href="%s"%s>%s</a>', esc_url( get_permalink( $c ) ), $cur === $c->ID ? ' aria-current="page"' : '', esc_html( get_the_title( $c ) ) );
+		$hot = 'page-pitcrew.php' === get_page_template_slug( $c ) ? ' class="nav-hot"' : '';
+		printf( '<a href="%s"%s%s>%s</a>', esc_url( get_permalink( $c ) ), $hot, $cur === $c->ID ? ' aria-current="page"' : '', esc_html( get_the_title( $c ) ) );
 	}
 }
 
