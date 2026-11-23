@@ -54,3 +54,18 @@
   if (!on || !box) return;
   on.addEventListener("change", () => { box.hidden = !on.checked; if (on.checked) box.focus(); });
 })();
+
+// countdown to the registration deadline
+(() => {
+  const box = document.querySelector(".pit-cd[data-deadline]");
+  if (!box) return;
+  const end = Date.parse(box.dataset.deadline), p = n => String(n).padStart(2, "0");
+  const tick = () => {
+    let s = Math.max(0, Math.floor((end - Date.now()) / 1000));
+    box.querySelector("[data-d]").textContent = p(Math.floor(s / 86400)); s %= 86400;
+    box.querySelector("[data-h]").textContent = p(Math.floor(s / 3600)); s %= 3600;
+    box.querySelector("[data-m]").textContent = p(Math.floor(s / 60));
+    box.querySelector("[data-s]").textContent = p(s % 60);
+  };
+  tick(); setInterval(tick, 1000);
+})();

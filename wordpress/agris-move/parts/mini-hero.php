@@ -13,5 +13,12 @@ $is_hub = $hub === get_the_ID();
     <div class="tk-intro"><?php the_content(); ?></div>
     <?php if ( $is_hub || 'page-pitcrew.php' === get_page_template_slug() ) : ?><img class="abi-hero" src="<?php echo esc_url( agm_img( 'abi-flag.webp' ) ); ?>" alt="" aria-hidden="true"><?php endif; ?>
   </div>
-  <div class="cane-edge" aria-hidden="true"><img src="<?php echo esc_url( agm_img( 'divider-harvest.webp' ) ); ?>" alt=""></div>
+  <?php if ( 'page-pitcrew.php' === get_page_template_slug() && function_exists( 'agm_pit_deadline' ) && agm_pit_open() ) : ?>
+  <div class="in pit-cd" data-deadline="<?php echo esc_attr( agm_pit_deadline() ); ?>T23:59:59+07:00">
+    <p>Hạn đăng ký còn</p>
+    <div class="pit-cd-t"><div><b data-d>--</b><span>Ngày</span></div><div><b data-h>--</b><span>Giờ</span></div><div><b data-m>--</b><span>Phút</span></div><div><b data-s>--</b><span>Giây</span></div></div>
+    <small>Đóng đăng ký lúc 23:59 ngày <?php echo esc_html( wp_date( 'd/m/Y', strtotime( agm_pit_deadline() ) ) ); ?></small>
+  </div>
+  <?php endif; ?>
+  <?php if ( 'page-pitcrew.php' !== get_page_template_slug() ) : ?><div class="cane-edge" aria-hidden="true"><img src="<?php echo esc_url( agm_img( 'divider-harvest.webp' ) ); ?>" alt=""></div><?php endif; ?>
 </section>

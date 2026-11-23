@@ -13,7 +13,6 @@ while ( have_posts() ) : the_post();
       <?php if ( ! $open ) : ?><div class="tk-form"><h2>Đã đóng đăng ký</h2><p class="tk-note">Cảm ơn bạn đã quan tâm. Ban tổ chức sẽ báo kết quả tới những bạn đã đăng ký.</p></div><?php endif; ?>
       <form class="tk-form st-form" data-pit<?php echo $open ? '' : ' hidden'; ?>>
         <h2>Đăng ký Pit Crew</h2>
-        <p class="tk-note">Hạn đăng ký: hết ngày <?php echo esc_html( wp_date( 'd/m/Y', strtotime( agm_pit_deadline() ) ) ); ?>. Nhập đúng thông tin đã đăng ký với HR.</p>
         <label>Họ và tên<input name="name" required autocomplete="name"></label>
         <label>MSNV<input name="msnv" required autocomplete="off"></label>
         <fieldset><legend>Đơn vị</legend><div class="chips"><?php foreach ( AGM_CENTERS as $c ) { printf( '<label><input type="radio" name="center" value="%1$s"><span>%1$s</span></label>', esc_html( $c ) ); } ?></div></fieldset>

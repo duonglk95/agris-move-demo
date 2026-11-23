@@ -677,3 +677,11 @@ a.ph-item:hover img { transform: scale(1.04); }
 .ct-pills li + li::before { position: absolute; left: -40px; top: 50%; width: 34px; margin: 0; }
 @media (max-width: 900px) { .ct-pills li + li { margin-left: 8px; } }
 .ct-card canvas { background: #066904; border-radius: 22px; }
+.tk .pit-cd { display: grid; justify-items: center; gap: 10px; padding-block: 0 clamp(40px, 5vw, 64px); text-align: center; }
+.pit-cd p { font: 700 16px var(--body); color: var(--green); margin: 0; }
+.pit-cd-t { display: flex; gap: 12px; }
+.pit-cd-t div { min-width: 86px; padding: 14px 10px; border-radius: 20px; background: #fff; border: 1px solid #e1ece5; box-shadow: 0 20px 40px -28px rgba(11, 93, 52, .5); display: grid; gap: 4px; }
+.pit-cd-t b { font: 900 38px/1 var(--display); background: var(--grad, var(--green)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.pit-cd-t span { font: 600 13px var(--body); color: var(--muted); }
+.pit-cd small { color: var(--muted); font-size: 13px; }
+@media (max-width: 560px) { .pit-cd-t div { min-width: 64px; } .pit-cd-t b { font-size: 28px; } }
