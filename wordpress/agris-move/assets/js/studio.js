@@ -89,6 +89,8 @@
     const cv = document.getElementById("pcCanvas"), c = cv.getContext("2d"); let photo = null, credit = "";
     const val = n => (pcForm.elements[n] && pcForm.elements[n].value || "").trim();
     const HAND = '"Dancing Script", cursive';
+    let pox = 0, poy = 0, pz = 1;
+    const clampOff = () => { if (!photo) return { x: 0, y: 0 }; const w = 824, h = 864, sc = Math.max(w / photo.width, h / photo.height) * pz, mx = Math.max(0, (photo.width * sc - w) / 2), my = Math.max(0, (photo.height * sc - h) / 2); return { x: Math.max(-mx, Math.min(mx, pox)), y: Math.max(-my, Math.min(my, poy)) }; };
     let stampImg = null;
     if (S.stamps && S.stamps.length) loadImg(S.stamps[Math.floor(Math.random() * S.stamps.length)]).then(i => { stampImg = i; draw(); }).catch(() => {});
     const stamp = (x, y, w, h) => {
@@ -116,7 +118,7 @@
       const px = 56, py = 64, pw = 860, ph = 900;
       c.save(); c.translate(px + pw / 2, py + ph / 2); c.rotate(-0.012); c.shadowColor = "rgba(0,0,0,.22)"; c.shadowBlur = 24; c.shadowOffsetY = 8;
       c.fillStyle = "#fff"; c.fillRect(-pw / 2, -ph / 2, pw, ph + 70); c.shadowColor = "transparent";
-      photo ? cover(c, photo, -pw / 2 + 18, -ph / 2 + 18, pw - 36, ph - 36) : placeholder(c, -pw / 2 + 18, -ph / 2 + 18, pw - 36, ph - 36, "Chọn một ảnh");
+      photo ? cover(c, photo, -pw / 2 + 18, -ph / 2 + 18, pw - 36, ph - 36, pz, clampOff().x, clampOff().y) : placeholder(c, -pw / 2 + 18, -ph / 2 + 18, pw - 36, ph - 36, "Chọn một ảnh");
       c.fillStyle = "#6b6450"; c.font = `500 22px ${BODY}`; wrap(c, credit ? "Ảnh: " + credit : "", -pw / 2 + 22, ph / 2 + 36, pw - 44, 26, 1);
       c.restore();
       // divider
@@ -141,7 +143,18 @@
       c.fillStyle = "#0b6b3a"; c.font = `800 31px ${FONT}`; c.fillText(S.tags || "", x, H - 66);
     };
     if (document.fonts) Promise.all(['600 40px "Dancing Script"'].map(f => document.fonts.load(f, 'Đội ơi ạ'))).then(() => draw()).catch(() => {});
-    const pick = async () => { const r = pcForm.querySelector("[name=photo]:checked"); credit = r ? r.dataset.credit : ""; photo = r ? await loadImg(r.value).catch(() => null) : null; draw(); };
+    const pick = async () => { const r = pcForm.querySelector("[name=photo]:checked"); credit = r ? r.dataset.credit : ""; photo = r ? await loadImg(r.value).catch(() => null) : null; pox = poy = 0; pz = 1; if (zr) zr.value = 1; draw(); };
+    // pan / zoom the photo inside the polaroid
+    const PW = 824, PH = 864;
+    const zr = pcForm.querySelector("[name=pzoom]");
+    if (zr) zr.addEventListener("input", e => { pz = +e.target.value; draw(); });
+    const hint = document.querySelector(".pc-hint");
+    let drag = null;
+    const inPhoto = (e) => { const r = cv.getBoundingClientRect(), k = cv.width / r.width, x = (e.clientX - r.left) * k, y = (e.clientY - r.top) * k; return x > 60 && x < 930 && y > 60 && y < 980; };
+    cv.addEventListener("pointerdown", e => { if (!photo || !inPhoto(e)) return; drag = [e.clientX, e.clientY, pox, poy]; cv.setPointerCapture(e.pointerId); cv.classList.add("dragging"); if (hint) hint.classList.add("gone"); });
+    cv.addEventListener("pointermove", e => { if (!drag) return; const k = cv.width / cv.getBoundingClientRect().width; pox = drag[2] + (e.clientX - drag[0]) * k; poy = drag[3] + (e.clientY - drag[1]) * k; draw(); });
+    const end = () => { if (!drag) return; drag = null; const o = clampOff(); pox = o.x; poy = o.y; cv.classList.remove("dragging"); };
+    cv.addEventListener("pointerup", end); cv.addEventListener("pointercancel", end);
     pcForm.addEventListener("input", e => (e.target.name === "photo" ? pick() : draw()));
     document.addEventListener("agm-logo", draw);
     const cnt = pcForm.querySelector("[data-count]"); if (cnt) pcForm.elements.wish.addEventListener("input", e => (cnt.textContent = e.target.value.length + "/220"));
