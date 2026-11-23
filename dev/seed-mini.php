@@ -7,7 +7,7 @@ $kids=array(
  array('Lời tiếp sức','loi-tiep-suc','page-thanks.php','Gửi lời cảm ơn, lời động viên tới đồng đội đang ở tuyến đầu mùa vụ.'),
  array('Bưu thiếp mùa vụ','buu-thiep','page-postcard.php','Chọn một khoảnh khắc đẹp, viết lời chúc và tải bưu thiếp về gửi đồng đội.'),
  array('Khoác áo Pit Crew','khoac-ao-pit-crew','page-avatar.php','Đổi avatar với khung Pitstop để cả đội cùng một màu áo.'),
- array('Khoảnh khắc Move Action','khoanh-khac','page-contest.php','Gửi ảnh mùa vụ của bạn, rủ đồng đội thả love. Ảnh nhiều love nhất sẽ được vinh danh.'),
+ array('Khoảnh khắc đội mình','khoanh-khac','page-contest.php','Mùa vụ là lúc cả AgriS cùng vào việc. Người bám ruộng từ sớm, người đứng máy xuyên ca, người chạy từng chuyến xe mía về nhà máy, người mang sản phẩm đến tay khách hàng, và những đồng đội lặng lẽ hỗ trợ phía sau. Hãy bắt lại những khoảnh khắc đội mình cùng nhau làm nên mùa vụ, từ ruộng mía, nhà máy, kho hàng, thị trường đến văn phòng. Những bức ảnh đạt giải sẽ được dùng trong các ấn phẩm truyền thông của Công ty.'),
 );
 foreach($kids as $i=>$k){ $id=wp_insert_post(array('post_type'=>'page','post_status'=>'publish','post_title'=>$k[0],'post_name'=>$k[1],'post_parent'=>$hid,'menu_order'=>$i,'post_content'=>$k[3])); update_post_meta($id,'_wp_page_template',$k[2]);
  if($k[2]==='page-thanks.php'){ foreach(get_posts(array('post_type'=>'loi_cam_on','post_status'=>'any','numberposts'=>-1)) as $n) update_post_meta($n->ID,'_agm_page',$id);} }

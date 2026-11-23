@@ -12,6 +12,30 @@ while ( have_posts() ) : the_post();
 	?>
 <main id="top" class="tk">
   <?php get_template_part( 'parts/mini-hero' ); ?>
+  <section class="band ct-guide">
+    <div class="in">
+      <div class="hub-head center"><h2 class="gt">Cách tham gia</h2></div>
+      <ol class="ct-steps">
+        <li><span>1</span><h3>Chụp khoảnh khắc đội mình</h3><p>Chụp ảnh thật trong lúc làm việc, theo một trong các chủ đề:</p>
+          <ul><li><b>Thu hoạch:</b> ruộng mía, xe mía, đội nông vụ</li><li><b>Sản xuất:</b> ép, chế biến, vận hành</li><li><b>Thị trường:</b> đội ngũ kinh doanh, sản phẩm đến tay khách hàng, kho vận</li><li><b>Đồng đội:</b> những lúc cả đội cùng ra tay, hỗ trợ và tiếp sức cho nhau</li><li><b>Mùa vụ đẹp:</b> bình minh, hoàng hôn, những góc nhìn khiến bạn tự hào</li></ul></li>
+        <li><span>2</span><h3>Gửi ảnh dự thi</h3><p>Tải ảnh lên ngay tại trang này, kèm tên ảnh, mô tả ngắn, địa điểm và đơn vị. Ảnh được gắn sẵn khung và hashtag:</p><p class="ct-tags"><?php echo esc_html( AGM_HASHTAGS ); ?></p></li>
+        <li><span>3</span><h3>Rủ đồng đội vote</h3><p>Gửi xong, bạn nhận được một đoạn giới thiệu kèm link ảnh. Đăng lên Viva Engage và rủ đồng đội vào trang này thả love cho ảnh của bạn. Số love trên website là căn cứ chấm giải.</p></li>
+      </ol>
+      <div class="ct-info">
+        <div><b>Đối tượng</b>Toàn thể CBNV AgriS</div>
+        <div><b>Thời gian</b><?php echo esc_html( get_theme_mod( 'agm_ct_time', '[ngày bắt đầu] – [ngày kết thúc]' ) ); ?></div>
+        <div><b>Số ảnh</b><?php echo esc_html( get_theme_mod( 'agm_ct_limit', 'Tối đa [số] ảnh mỗi người' ) ); ?></div>
+      </div>
+      <div class="ct-crit"><h3>Tiêu chí chấm giải</h3><ul><li><b>Nội dung và thông điệp:</b> đúng chủ đề, thể hiện tinh thần Move Action</li><li><b>Chất lượng ảnh:</b> bố cục, ánh sáng, cảm xúc</li><li><b>Mức độ lan toả:</b> số love trên website</li></ul></div>
+      <div class="hub-head center ct-prize-h"><h2 class="gt">Cơ cấu giải thưởng</h2></div>
+      <div class="ct-prizes">
+        <div class="ct-pz"><h3>Giải cá nhân</h3>
+          <table><tr><th>Giải nhất</th><td>01</td><td>3.000.000đ</td></tr><tr><th>Giải nhì</th><td>01</td><td>2.000.000đ</td></tr><tr><th>Giải ba</th><td>03</td><td>1.000.000đ</td></tr><tr><th>Giải khuyến khích</th><td>30</td><td>500.000đ</td></tr></table></div>
+        <div class="ct-pz team"><h3>Giải tập thể</h3><p><?php echo esc_html( get_theme_mod( 'agm_ct_team', 'Dành cho [đơn vị] có nhiều ảnh dự thi hợp lệ và tổng love cao nhất.' ) ); ?></p>
+          <table><tr><th>Giải nhất</th><td>01</td><td>10.000.000đ</td></tr><tr><th>Giải nhì</th><td>01</td><td>5.000.000đ</td></tr><tr><th>Giải ba</th><td>01</td><td>3.000.000đ</td></tr></table></div>
+      </div>
+    </div>
+  </section>
   <section class="band">
     <div class="in st-grid">
       <form class="tk-form st-form" data-contest data-page="<?php echo esc_attr( $pid ); ?>">

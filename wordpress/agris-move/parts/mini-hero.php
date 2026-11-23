@@ -8,7 +8,7 @@ $is_hub = $hub === get_the_ID();
 <section class="tk-hero<?php echo $is_hub ? ' is-hub' : ''; ?>">
   <?php if ( $img ) : ?><img src="<?php echo esc_url( $img ); ?>" alt=""><?php endif; ?>
   <div class="in tk-hero-txt">
-    <?php if ( $hub && ! $is_hub ) : ?><p class="tk-kicker"><?php echo esc_html( get_the_title( $hub ) ); ?></p><?php endif; ?>
+    <?php if ( $hub && ! $is_hub && 'page-contest.php' !== get_page_template_slug() ) : ?><p class="tk-kicker"><?php echo esc_html( get_the_title( $hub ) ); ?></p><?php endif; ?>
     <h1 class="gt"><?php the_title(); ?></h1>
     <div class="tk-intro"><?php the_content(); ?></div>
     <?php if ( $is_hub || 'page-pitcrew.php' === get_page_template_slug() ) : ?><img class="abi-hero" src="<?php echo esc_url( agm_img( 'abi-flag.webp' ) ); ?>" alt="" aria-hidden="true"><?php endif; ?>

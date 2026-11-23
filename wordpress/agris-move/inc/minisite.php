@@ -8,7 +8,7 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 const AGM_CENTERS  = array( 'HO', 'ComC', 'ProC', 'AgriC' );
-const AGM_HASHTAGS = '#AgriS #MOVE #Vaovu #Action';
+const AGM_HASHTAGS = '#AGRIS #MOVEACTION #Niendo2627 #Khoanhkhacdoiminh';
 
 /** The hub page of the mini-site the current page belongs to, or 0. */
 function agm_hub_id( $id = 0 ) {
@@ -132,6 +132,10 @@ add_action( 'admin_notices', function () {
 /* frames: optional PNG overlays uploaded in Customizer; without them the built-in mock frame is drawn */
 add_action( 'customize_register', function ( $wp ) {
 	$wp->add_section( 'agm_frames', array( 'title' => 'Khung ảnh sự kiện', 'priority' => 45 ) );
+	foreach ( array( 'agm_ct_time' => 'Cuộc thi ảnh – thời gian', 'agm_ct_limit' => 'Cuộc thi ảnh – số ảnh mỗi người', 'agm_ct_team' => 'Cuộc thi ảnh – điều kiện giải tập thể' ) as $k => $label ) {
+		$wp->add_setting( $k, array( 'sanitize_callback' => 'sanitize_text_field' ) );
+		$wp->add_control( $k, array( 'label' => $label, 'section' => 'agm_frames', 'type' => 'text' ) );
+	}
 	foreach ( array( 'agm_frame_contest' => 'Khung ảnh dự thi (PNG nền trong, 1080×1350)', 'agm_frame_avatar' => 'Khung avatar (PNG nền trong, 1080×1080)' ) as $k => $label ) {
 		$wp->add_setting( $k, array( 'sanitize_callback' => 'esc_url_raw' ) );
 		$wp->add_control( new WP_Customize_Image_Control( $wp, $k, array( 'label' => $label, 'section' => 'agm_frames' ) ) );
