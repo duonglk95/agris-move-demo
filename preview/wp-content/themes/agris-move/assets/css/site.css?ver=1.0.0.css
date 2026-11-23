@@ -445,3 +445,24 @@ a.ev-card:hover h4 { color: var(--green); }
 .hub-arrow { position: absolute; top: 42%; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #fff; color: var(--green); font-size: 26px; line-height: 1; cursor: pointer; box-shadow: var(--shadow); }
 .hub-arrow.prev { left: -18px; } .hub-arrow.next { right: -18px; }
 @media (max-width: 760px) { .hub-track { grid-auto-columns: 72%; } .hub-arrow { display: none; } }
+
+/* pit wall: thank-you notes as two scrolling rows on a dark garage wall */
+.pitwall { position: relative; overflow: hidden; color: #fff; background: radial-gradient(120% 80% at 80% 0%, #1d8a4c 0%, transparent 60%), linear-gradient(180deg, #0a4a2b, #073821); padding-block: clamp(44px, 6vw, 80px); }
+.pitwall::before { content: ""; position: absolute; inset: 0 0 auto; height: 14px; background: repeating-conic-gradient(#fff 0 25%, #0a4a2b 0 50%) 0 0 / 14px 14px; opacity: .5; }
+.pitwall::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(115deg, rgba(255,255,255,.035) 0 2px, transparent 2px 9px); }
+.hub-head.light h2 { color: #fff; } .hub-head.light p, .tk-empty.light { color: rgba(255,255,255,.8); }
+.pw-row { overflow: hidden; padding: 10px 0; mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); position: relative; z-index: 1; }
+.pw-track { display: flex; gap: 18px; width: max-content; animation: pwMove 60s linear infinite; }
+.pw-row.rev .pw-track { animation-direction: reverse; animation-duration: 70s; }
+.pw-row:hover .pw-track { animation-play-state: paused; }
+@keyframes pwMove { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .pw-track { animation: none; } .pw-row { overflow-x: auto; } }
+.pw-card { margin: 0; width: 320px; flex: none; background: #fff; color: var(--ink); border-radius: 18px; padding: 18px 20px 16px; display: grid; gap: 10px; align-content: start; box-shadow: 0 18px 30px -18px rgba(0,0,0,.6); position: relative; }
+.pw-card::before { content: "“"; position: absolute; right: 16px; top: -6px; font: 800 72px/1 var(--display); color: #e3f1e8; }
+.pw-to { justify-self: start; font: 700 12px/1 var(--body); color: var(--deep); background: #b6e34a; padding: 6px 10px; border-radius: 999px; position: relative; }
+.pw-card blockquote { margin: 0; font-size: 15px; line-height: 1.55; position: relative; }
+.pw-card figcaption { display: flex; align-items: center; gap: 8px; font: 600 13px var(--body); color: var(--muted); }
+.pw-av { width: 28px; height: 28px; border-radius: 50%; background: var(--green); color: #fff; display: grid; place-items: center; font: 800 13px var(--display); }
+.pitwall .hub-cta { position: relative; z-index: 1; margin-top: 22px; }
+.pitwall .hub-cta span { color: rgba(255,255,255,.8); }
+.btn.lime { background: #b6e34a; color: var(--deep); box-shadow: 0 14px 24px -14px rgba(182,227,74,.9); }

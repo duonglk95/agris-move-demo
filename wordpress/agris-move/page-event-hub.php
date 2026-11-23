@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Mini-site sự kiện
- * One long page: Pit Crew banner, "Tiếp sức đội mình" wall (+ popup form), postcard, avatar, slideshow of
+ * One long page: "Tiếp sức đội mình" wall (+ popup form), postcard, slideshow of
  * contest photos. Child pages (Đăng ký Pit Crew, Khoảnh khắc đội mình) appear in the mini-site menu.
  */
 get_header();
@@ -15,34 +15,32 @@ while ( have_posts() ) : the_post();
 <main id="top" class="tk">
   <?php get_template_part( 'parts/mini-hero' ); ?>
 
-  <?php if ( isset( $kids['page-pitcrew.php'] ) && function_exists( 'agm_pit_open' ) ) :
-    $pit = $kids['page-pitcrew.php'];
-    $days = max( 0, (int) ceil( ( strtotime( agm_pit_deadline() . ' 23:59:59' ) - current_time( 'timestamp' ) ) / DAY_IN_SECONDS ) );
-    $t = array_values( agm_pit_tours() ); ?>
-  <section class="band hub-sec"><div class="in"><a class="pit-banner" href="<?php echo esc_url( get_permalink( $pit ) ); ?>">
-    <div><span class="ev-pill live"><?php echo agm_pit_open() ? 'Đang tuyển · hạn ' . esc_html( wp_date( 'd/m', strtotime( agm_pit_deadline() ) ) ) : 'Đã đóng đăng ký'; ?></span>
-      <h2>Gia nhập Pit Crew</h2>
-      <p><?php echo esc_html( $pit->post_excerpt ? $pit->post_excerpt : 'Cùng đoàn HO ra tận trạm PIT, tiếp sức cho đội vào vụ.' ); ?><?php echo $t ? ' ' . esc_html( $t[0][1] . ' – ' . end( $t )[2] ) . '.' : ''; ?></p>
-      <span class="btn"><?php echo agm_pit_open() ? 'Đăng ký Pit Crew' : 'Tra cứu kết quả'; ?> <?php echo agm_arrow( 'chev' ); // phpcs:ignore ?></span></div>
-    <div class="pit-stats"><div><b><?php echo esc_html( agm_pit_count() ); ?></b><span>Pit Crew đã đăng ký</span></div>
-      <div><b><?php echo agm_pit_open() ? esc_html( $days ) . ' ngày' : '—'; ?></b><span>đến hạn đăng ký</span></div></div>
-  </a></div></section>
-  <?php endif; ?>
 
-  <section class="band hub-sec" id="tiep-suc">
+  <section class="hub-sec pitwall" id="tiep-suc">
     <div class="in">
-      <div class="hub-head"><h2>Tiếp sức đội mình</h2><p>Những lời cảm ơn, động viên gửi tới đồng đội đang ở tuyến đầu mùa vụ.</p></div>
-      <?php if ( $notes ) : ?>
-      <div class="tk-wall wide">
-        <?php foreach ( $notes as $n ) : $to = get_post_meta( $n->ID, '_agm_to', true ); $from = get_post_meta( $n->ID, '_agm_from', true ); ?>
-        <figure class="tk-note-card"><blockquote><?php echo esc_html( $n->post_content ); ?></blockquote>
-          <figcaption>Gửi <?php echo esc_html( $to ? $to : 'đồng đội' ); ?> · <?php echo esc_html( $from ? $from : 'Ẩn danh' ); ?></figcaption></figure>
-        <?php endforeach; ?>
-      </div>
-      <?php else : ?><p class="tk-empty">Tường đang chờ lời tiếp sức đầu tiên. Bạn mở màn nhé!</p><?php endif; ?>
-      <div class="hub-cta"><button type="button" class="btn" data-tk-open>Gửi lời cảm ơn <?php echo agm_arrow( 'chev' ); // phpcs:ignore ?></button>
-        <span><?php echo esc_html( number_format_i18n( agm_thanks_count( $hub ) ) ); ?> lời tiếp sức đã lên tường</span></div>
+      <div class="hub-head light"><h2>Tiếp sức đội mình</h2><p>Mỗi lời cảm ơn là một lần thay lốp, tiếp nhiên liệu cho đồng đội đang chạy đua mùa vụ.</p></div>
     </div>
+    <?php if ( $notes ) :
+      $rows = array( array(), array() );
+      foreach ( $notes as $i => $n ) { $rows[ $i % 2 ][] = $n; }
+      foreach ( $rows as $ri => $row ) :
+        if ( ! $row ) { continue; }
+        while ( count( $row ) < 6 ) { $row = array_merge( $row, $row ); } ?>
+    <div class="pw-row<?php echo $ri ? ' rev' : ''; ?>"><div class="pw-track">
+      <?php foreach ( array_merge( $row, $row ) as $k => $n ) :
+        $to = get_post_meta( $n->ID, '_agm_to', true ); $from = get_post_meta( $n->ID, '_agm_from', true ); $from = $from ? $from : 'Ẩn danh'; ?>
+      <figure class="pw-card"<?php echo $k >= count( $row ) ? ' aria-hidden="true"' : ''; ?>>
+        <span class="pw-to">Gửi <?php echo esc_html( $to ? $to : 'đồng đội' ); ?></span>
+        <blockquote><?php echo esc_html( wp_trim_words( $n->post_content, 32 ) ); ?></blockquote>
+        <figcaption><span class="pw-av"><?php echo esc_html( mb_strtoupper( mb_substr( $from, 0, 1 ) ) ); ?></span><?php echo esc_html( $from ); ?></figcaption>
+      </figure>
+      <?php endforeach; ?>
+    </div></div>
+    <?php endforeach; else : ?>
+    <div class="in"><p class="tk-empty light">Tường đang chờ lời tiếp sức đầu tiên. Bạn mở màn nhé!</p></div>
+    <?php endif; ?>
+    <div class="in hub-cta"><button type="button" class="btn lime" data-tk-open>Gửi lời cảm ơn <?php echo agm_arrow( 'chev' ); // phpcs:ignore ?></button>
+      <span><?php echo esc_html( number_format_i18n( agm_thanks_count( $hub ) ) ); ?> lời tiếp sức đã lên tường</span></div>
   </section>
 
   <section class="band hub-sec alt" id="buu-thiep">
@@ -52,12 +50,6 @@ while ( have_posts() ) : the_post();
     </div>
   </section>
 
-  <section class="band hub-sec" id="avatar">
-    <div class="in">
-      <div class="hub-head"><h2>Khoác áo Pit Crew</h2><p>Đổi avatar với khung Pitstop để cả đội cùng một màu áo.</p></div>
-      <div class="st-grid"><?php get_template_part( 'parts/avatar' ); ?></div>
-    </div>
-  </section>
 
   <?php if ( isset( $kids['page-contest.php'] ) ) : $ct = $kids['page-contest.php']; ?>
   <section class="band hub-sec alt" id="khoanh-khac">
