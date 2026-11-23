@@ -58,7 +58,7 @@ while ( have_posts() ) : the_post();
   <div class="seam" data-next="#e9f6fb" data-h="90" data-tones="#d3eadb,#9bd8b1d0" data-line="lime"></div>
   <section class="band ct-rules" id="the-le">
     <div class="in ct-faq">
-      <div><p class="eyebrow-c">Đọc kỹ trước khi tham gia</p><h2 class="gt">Thể lệ<br>cuộc thi</h2><img src="<?php echo esc_url( agm_img( 'abi-camera-2.webp' ) ); ?>" alt="" aria-hidden="true"></div>
+      <div><h2 class="gt">Thể lệ<br>cuộc thi</h2><img src="<?php echo esc_url( agm_img( 'abi-camera-2.webp' ) ); ?>" alt="" aria-hidden="true"></div>
       <div class="ct-acc">
         <details open><summary>Giới thiệu cuộc thi</summary><div><?php the_content(); ?></div></details>
         <details><summary>Đối tượng, thời gian và số ảnh</summary><div><ul><li><b>Đối tượng:</b> Toàn thể CBNV AgriS</li><li><b>Thời gian:</b> <?php echo esc_html( get_theme_mod( 'agm_ct_time', '[ngày bắt đầu] – [ngày kết thúc]' ) ); ?></li><li><b>Số ảnh:</b> <?php echo esc_html( get_theme_mod( 'agm_ct_limit', 'Tối đa [số] ảnh mỗi người' ) ); ?></li></ul></div></details>
