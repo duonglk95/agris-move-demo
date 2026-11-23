@@ -10,8 +10,7 @@ while ( have_posts() ) : the_post();
   <?php get_template_part( 'parts/mini-hero' ); ?>
   <section class="band pit-sec">
     <div class="in pit pit-wrap">
-      <div class="pit-art"><img src="<?php echo esc_url( agm_img( 'abi-pitcrew-tractor.webp' ) ); ?>" alt="" aria-hidden="true">
-        <ul class="pit-perks"><li>Theo chân đoàn HO đến nhà máy và vùng nguyên liệu</li><li>Trực tiếp tiếp sức, giao lưu với đồng đội tuyến đầu</li><li>Nhận áo Pit Crew và thẻ thành viên</li></ul></div>
+      <div class="pit-art"><img src="<?php echo esc_url( agm_img( 'abi-pitcrew-tractor.webp' ) ); ?>" alt="" aria-hidden="true"></div>
       <div class="pit-main">
       <?php if ( ! $open ) : ?><div class="tk-form"><h2>Đã đóng đăng ký</h2><p class="tk-note">Cảm ơn bạn đã quan tâm. Ban tổ chức sẽ báo kết quả tới những bạn đã đăng ký.</p></div><?php endif; ?>
       <form class="tk-form st-form" data-pit<?php echo $open ? '' : ' hidden'; ?>>
