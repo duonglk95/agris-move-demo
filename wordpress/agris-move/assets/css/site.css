@@ -423,3 +423,25 @@ a.ev-card:hover h4 { color: var(--green); }
 .nav.is-hub a { white-space: nowrap; font-size: 13.5px; }
 @media (min-width: 761px) { .top .in { flex-wrap: nowrap; } }
 .st-grid.pit:has(> [data-pit][hidden]) { grid-template-columns: minmax(0, 640px); justify-content: center; }
+
+/* mini-site one-pager */
+.hub-sec { padding-block: clamp(36px, 5vw, 64px); }
+.hub-sec.alt { background: var(--mint); }
+.hub-head { margin-bottom: 22px; display: grid; gap: 6px; }
+.hub-head h2 { font: 800 clamp(26px, 3vw, 36px)/1.15 var(--display); color: var(--navy); }
+.hub-head p { color: var(--muted); max-width: 620px; }
+.hub-head.row { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; }
+.tk-wall.wide { columns: 3 260px; }
+.hub-cta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
+.hub-cta span { color: var(--muted); font-size: 14px; }
+.hub-sec .pit-banner { margin-bottom: 0; }
+.hub-slides { position: relative; }
+.hub-track { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(240px, 23%); gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 4px 2px 10px; }
+.hub-slide { scroll-snap-align: start; position: relative; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); color: #fff; text-decoration: none; }
+.hub-slide img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; transition: transform .4s; }
+.hub-slide:hover img { transform: scale(1.04); }
+.hub-slide span { position: absolute; inset: auto 0 0; padding: 40px 14px 12px; background: linear-gradient(0deg, rgba(5, 40, 22, .85), transparent); font-size: 13px; display: grid; }
+.hub-slide b { font: 700 15px/1.3 var(--display); }
+.hub-arrow { position: absolute; top: 42%; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #fff; color: var(--green); font-size: 26px; line-height: 1; cursor: pointer; box-shadow: var(--shadow); }
+.hub-arrow.prev { left: -18px; } .hub-arrow.next { right: -18px; }
+@media (max-width: 760px) { .hub-track { grid-auto-columns: 72%; } .hub-arrow { display: none; } }

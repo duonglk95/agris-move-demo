@@ -156,3 +156,19 @@
     sub.disabled = false;
   });
 })();
+
+// mini-site: thank-you popup and the contest slideshow
+(() => {
+  const dlg = document.getElementById("tkDlg");
+  if (dlg) {
+    document.querySelectorAll("[data-tk-open]").forEach(b => b.addEventListener("click", () => { dlg.querySelector(".tk-msg").hidden = true; dlg.showModal(); }));
+    dlg.querySelector("[data-tk-close]").addEventListener("click", () => dlg.close());
+  }
+  document.querySelectorAll("[data-slides]").forEach(box => {
+    const track = box.querySelector(".hub-track"), step = () => track.clientWidth * .8;
+    box.querySelector(".prev").addEventListener("click", () => track.scrollBy({ left: -step(), behavior: "smooth" }));
+    box.querySelector(".next").addEventListener("click", () => track.scrollBy({ left: step(), behavior: "smooth" }));
+    let t = setInterval(() => { if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 4) track.scrollTo({ left: 0, behavior: "smooth" }); else track.scrollBy({ left: step(), behavior: "smooth" }); }, 4500);
+    box.addEventListener("pointerenter", () => clearInterval(t));
+  });
+})();

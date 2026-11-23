@@ -26,10 +26,11 @@ function agm_hub_children( $hub ) {
 
 function agm_hub_menu( $hub ) {
 	$cur = get_queried_object_id();
-	printf( '<a class="nav-back" href="%s">%s Trang chủ</a>', esc_url( home_url( '/' ) ), '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"></path></svg>' );
-	printf( '<a href="%s"%s>%s</a>', esc_url( get_permalink( $hub ) ), $cur === $hub ? ' aria-current="page"' : '', esc_html( get_the_title( $hub ) ) );
+	printf( '<a href="%s"%s>%s</a>', esc_url( get_permalink( $hub ) ), $cur === $hub ? ' aria-current="page"' : '', esc_html( get_post_meta( $hub, 'menu_label', true ) ? get_post_meta( $hub, 'menu_label', true ) : get_the_title( $hub ) ) );
 	foreach ( agm_hub_children( $hub ) as $c ) {
-		$hot = 'page-pitcrew.php' === get_page_template_slug( $c ) ? ' class="nav-hot"' : '';
+		$tpl = get_page_template_slug( $c );
+		if ( ! in_array( $tpl, array( 'page-pitcrew.php', 'page-contest.php' ), true ) ) { continue; }
+		$hot = 'page-pitcrew.php' === $tpl ? ' class="nav-hot"' : '';
 		printf( '<a href="%s"%s%s>%s</a>', esc_url( get_permalink( $c ) ), $hot, $cur === $c->ID ? ' aria-current="page"' : '', esc_html( get_the_title( $c ) ) );
 	}
 }
@@ -139,7 +140,7 @@ add_action( 'customize_register', function ( $wp ) {
 } );
 
 add_action( 'wp_enqueue_scripts', function () {
-	if ( is_page_template( array( 'page-contest.php', 'page-postcard.php', 'page-avatar.php' ) ) ) {
+	if ( is_page_template( array( 'page-contest.php', 'page-postcard.php', 'page-avatar.php', 'page-event-hub.php' ) ) ) {
 		$uri = get_template_directory_uri() . '/assets';
 		wp_enqueue_script( 'agm-studio', $uri . '/js/studio.js', array( 'agm-site' ), AGM_VER, true );
 		wp_localize_script( 'agm-studio', 'AGS', array(
