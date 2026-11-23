@@ -27,15 +27,21 @@
     const val = n => (ctForm.elements[n].value || "").trim();
     const draw = () => {
       const W = 1080, H = 1350, B = 34, TOP = 120, BOT = 250;
+      if (overlay) {
+        c.fillStyle = "#fff"; c.fillRect(0, 0, W, H);
+        photo ? cover(c, photo, 14, 14, W - 28, H - 28 - 170) : placeholder(c, 14, 14, W - 28, H - 28 - 170, "Ảnh của bạn");
+        c.drawImage(overlay, 0, 0, W, H);
+        c.fillStyle = "#fff"; c.font = `800 40px ${FONT}`; wrap(c, val("title") || "Tên ảnh", 52, H - 128, W - 104, 46, 1);
+        c.font = `500 25px ${BODY}`; c.fillStyle = "rgba(255,255,255,.92)";
+        c.fillText([val("author") || "Tên bạn", val("place") || "Địa điểm", val("center") || "Đơn vị"].join("  ·  "), 52, H - 86);
+        c.fillStyle = "#e9ff9e"; c.font = `700 24px ${BODY}`; c.fillText(S.tags || "", 52, H - 50);
+        return;
+      }
       c.fillStyle = G; c.fillRect(0, 0, W, H);
       photo ? cover(c, photo, B, TOP, W - 2 * B, H - TOP - BOT) : placeholder(c, B, TOP, W - 2 * B, H - TOP - BOT, "Ảnh của bạn");
-      if (overlay) c.drawImage(overlay, 0, 0, W, H);
-      else {
-        c.fillStyle = "#fff"; c.font = `800 46px ${FONT}`; c.fillText("AgriS", B + 6, 78);
-        c.fillStyle = LIME; c.font = `italic 800 40px ${FONT}`; c.textAlign = "right"; c.fillText("PITSTOP", W - B - 6, 76);
-        c.fillStyle = "rgba(255,255,255,.7)"; c.font = `600 22px ${BODY}`; c.fillText(S.event || "", W - B - 6, 104); c.textAlign = "left";
-        for (let i = 0; i < 6; i++) { c.fillStyle = i % 2 ? "#fff" : LIME; c.fillRect(W - B - 260 - i * 18, 54, 12, 12); }
-      }
+      c.fillStyle = "#fff"; c.font = `800 46px ${FONT}`; c.fillText("AgriS", B + 6, 78);
+      c.fillStyle = LIME; c.font = `italic 800 40px ${FONT}`; c.textAlign = "right"; c.fillText("PITSTOP", W - B - 6, 76);
+      c.fillStyle = "rgba(255,255,255,.7)"; c.font = `600 22px ${BODY}`; c.fillText(S.event || "", W - B - 6, 104); c.textAlign = "left";
       let y = H - BOT + 62;
       c.fillStyle = "#fff"; c.font = `800 44px ${FONT}`; y = wrap(c, val("title") || "Tên ảnh", B + 6, y, W - 2 * B - 12, 52, 1);
       c.font = `500 28px ${BODY}`; c.fillStyle = "rgba(255,255,255,.88)";

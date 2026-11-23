@@ -503,3 +503,15 @@ a.ev-card:hover h4 { color: var(--green); }
 .tk .st-preview canvas { border-radius: 20px; }
 .tk .hub-slide { border-radius: 22px; }
 .tk .hub-slide span { display: none; }
+
+/* ABI mascots + sugarcane edge */
+.tk .tk-hero { position: relative; }
+.tk .tk-hero-txt { position: relative; min-height: 260px; }
+.tk .abi-hero { position: absolute; right: 2%; bottom: -40px; width: clamp(180px, 22vw, 320px); z-index: 2; animation: abiFloat 4s ease-in-out infinite; }
+.tk .cane-edge { height: clamp(70px, 9vw, 140px); background: url(../img/border-cane.webp) repeat-x center bottom / auto 100%; margin-top: -30px; position: relative; z-index: 1; pointer-events: none; }
+.tk .hub-head.center { position: relative; }
+.tk .abi-side { position: absolute; top: -20px; width: clamp(110px, 12vw, 180px); animation: abiFloat 4.6s ease-in-out infinite; }
+.tk .abi-side.l { left: 2%; } .tk .abi-side.r { right: 0; top: -60px; }
+@keyframes abiFloat { 50% { transform: translateY(-10px); } }
+@media (prefers-reduced-motion: reduce) { .tk .abi-hero, .tk .abi-side { animation: none; } }
+@media (max-width: 760px) { .tk .abi-side { position: static; width: 110px; margin-bottom: 8px; } .tk .abi-hero { position: static; display: block; margin: 12px auto -20px; width: 180px; } }

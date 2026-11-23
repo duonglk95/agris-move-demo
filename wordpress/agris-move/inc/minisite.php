@@ -148,7 +148,7 @@ add_action( 'wp_enqueue_scripts', function () {
 			'nonce'    => wp_create_nonce( 'agm_contest' ),
 			'tags'     => AGM_HASHTAGS,
 			'event'    => agm_hub_id() ? get_the_title( agm_hub_id() ) : 'Vào vụ',
-			'frameCt'  => get_theme_mod( 'agm_frame_contest' ),
+			'frameCt'  => get_theme_mod( 'agm_frame_contest', agm_img( 'frame-contest.png' ) ),
 			'frameAv'  => get_theme_mod( 'agm_frame_avatar' ),
 			'logo'     => agm_img( 'logo-move.png' ),
 		) );
