@@ -151,7 +151,7 @@
     try {
       const r = await fetch(AGM.ajax, { method: "POST", body: fd }).then(r => r.json());
       msg.textContent = r.data && r.data.message || "Chưa gửi được, bạn thử lại nhé."; msg.hidden = false;
-      if (r.success) form.reset();
+      if (r.success) { form.reset(); const d = form.closest("dialog"); if (d) setTimeout(() => d.close(), 2200); }
     } catch { msg.textContent = "Chưa gửi được, bạn kiểm tra mạng rồi thử lại nhé."; msg.hidden = false; }
     sub.disabled = false;
   });
@@ -171,4 +171,13 @@
     let t = setInterval(() => { if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 4) track.scrollTo({ left: 0, behavior: "smooth" }); else track.scrollBy({ left: step(), behavior: "smooth" }); }, 4500);
     box.addEventListener("pointerenter", () => clearInterval(t));
   });
+})();
+
+// mini-site hero video: sound toggle, pause when off-screen
+(() => {
+  const box = document.querySelector(".tk-video"); if (!box) return;
+  const v = box.querySelector("video"), b = box.querySelector("[data-sound]");
+  b.addEventListener("click", () => { v.muted = !v.muted; if (!v.muted) { v.currentTime = 0; v.play(); } box.classList.toggle("unmuted", !v.muted); b.querySelector("span").textContent = v.muted ? "Bật tiếng" : "Tắt tiếng"; b.setAttribute("aria-label", b.querySelector("span").textContent); });
+  if ("IntersectionObserver" in window) new IntersectionObserver(([e]) => { e.isIntersecting ? v.play().catch(() => {}) : v.pause(); }).observe(v);
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); v.controls = true; }
 })();

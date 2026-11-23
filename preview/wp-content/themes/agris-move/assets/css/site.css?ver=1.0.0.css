@@ -716,3 +716,9 @@ a.ph-item:hover img { transform: scale(1.04); }
 .pc-studio > .pc-dl { width: 100%; }
 .tk .pit-main .tk-form { border: 2px solid #b9dcc6; box-shadow: 0 30px 60px -34px rgba(11, 93, 52, .5); }
 .ct-card canvas { border-radius: 14px; }
+.tk-video { position: relative; background: #0b3d26; line-height: 0; }
+.tk-video video { width: 100%; height: auto; display: block; aspect-ratio: 16 / 9; object-fit: cover; }
+.tk-sound { position: absolute; right: 20px; bottom: 20px; display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border: 0; border-radius: 999px; background: rgba(8, 40, 24, .7); color: #fff; font: 600 14px var(--body); cursor: pointer; backdrop-filter: blur(6px); line-height: 1; }
+.tk-sound svg { width: 20px; height: 20px; }
+.tk-sound .on, .tk-video.unmuted .tk-sound .off { display: none; }
+.tk-video.unmuted .tk-sound .on { display: inline; }
