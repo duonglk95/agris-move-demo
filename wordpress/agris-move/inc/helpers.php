@@ -128,3 +128,20 @@ function agm_event_groups() {
 	usort( $out['soon'], function ( $a, $b ) { return $a['start'] - $b['start']; } );
 	return $out;
 }
+
+/** URL of the first published page using a given template, or ''. */
+function agm_page_by_template( $tpl ) {
+	$p = get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'numberposts' => 1, 'meta_key' => '_wp_page_template', 'meta_value' => $tpl, 'fields' => 'ids' ) );
+	return $p ? get_permalink( $p[0] ) : '';
+}
+
+/** Navigation on sub-pages: homepage plus level-2 pages only (no homepage section anchors). */
+function agm_sub_menu() {
+	$items = array( array( 'Trang chủ', home_url( '/' ), is_front_page() ) );
+	$ev = agm_page_by_template( 'page-events.php' );
+	if ( $ev ) { $items[] = array( 'Sự kiện', $ev, is_page_template( 'page-events.php' ) || is_page_template( 'page-thanks.php' ) ); }
+	$items[] = array( 'TOP 50 MOVERS', agm_top50_url(), is_page_template( 'page-top50.php' ) || is_singular( 'mover' ) );
+	foreach ( $items as $i ) {
+		printf( '<a href="%s"%s>%s</a>', esc_url( $i[1] ), $i[2] ? ' aria-current="page"' : '', esc_html( $i[0] ) );
+	}
+}
