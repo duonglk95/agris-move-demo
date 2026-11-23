@@ -88,22 +88,48 @@
   if (pcForm) {
     const cv = document.getElementById("pcCanvas"), c = cv.getContext("2d"); let photo = null, credit = "";
     const val = n => (pcForm.elements[n] && pcForm.elements[n].value || "").trim();
-    const draw = () => {
-      const W = 1600, H = 1100, PW = 960;
-      c.fillStyle = "#fbfdf7"; c.fillRect(0, 0, W, H);
-      photo ? cover(c, photo, 0, 0, PW, H) : placeholder(c, 0, 0, PW, H, "Chọn một ảnh");
-      if (credit) { c.fillStyle = "rgba(0,0,0,.45)"; c.fillRect(0, H - 64, PW, 64); c.fillStyle = "#fff"; c.font = `500 24px ${BODY}`; c.fillText("Ảnh: " + credit, 28, H - 24); }
-      const x = PW + 56, w = W - x - 56;
-      if (logo) { const lw = 300, lh = lw * logo.height / logo.width; c.drawImage(logo, W - 56 - lw, 56, lw, lh); }
-      c.fillStyle = "#5f7a72"; c.font = `600 24px ${BODY}`; c.fillText("Từ", x, 210);
-      c.fillStyle = INK; c.font = `800 34px ${FONT}`; wrap(c, val("from") || "một AgriS-er", x + 70, 210, w - 70, 40, 1);
-      c.fillStyle = "#5f7a72"; c.font = `600 24px ${BODY}`; c.fillText("Gửi đến", x, 266);
-      c.fillStyle = INK; c.font = `800 34px ${FONT}`; wrap(c, val("to") || "Đồng đội", x + 110, 266, w - 110, 40, 1);
-      c.strokeStyle = "#d5e5da"; c.lineWidth = 2; c.beginPath(); c.moveTo(x, 310); c.lineTo(W - 56, 310); c.stroke();
-      c.fillStyle = "#23423a"; c.font = `italic 500 36px ${BODY}`; wrap(c, val("wish") || "Lời chúc của bạn…", x, 380, w, 54, 10);
-      for (let i = 0; i < 24; i++) { c.fillStyle = i % 2 ? "#0b5d34" : "#fff"; c.fillRect(x + i * ((W - 56 - x) / 24), H - 100, (W - 56 - x) / 24, 10); }
-      c.fillStyle = G2; c.font = `700 24px ${BODY}`; c.fillText(S.tags || "", x, H - 56);
+    const HAND = '"Dancing Script", cursive';
+    const stamp = (x, y, w, h) => {
+      c.save(); c.fillStyle = "#fff"; c.shadowColor = "rgba(0,0,0,.15)"; c.shadowBlur = 10; c.fillRect(x, y, w, h); c.restore();
+      c.fillStyle = "#fbf8ef"; const r = 7, step = 22;
+      for (let i = x + step / 2; i < x + w; i += step) { c.beginPath(); c.arc(i, y, r, 0, 7); c.arc(i, y + h, r, 0, 7); c.fill(); }
+      for (let j = y + step / 2; j < y + h; j += step) { c.beginPath(); c.arc(x, j, r, 0, 7); c.arc(x + w, j, r, 0, 7); c.fill(); }
+      c.fillStyle = "#eef7f1"; c.fillRect(x + 16, y + 16, w - 32, h - 32);
+      for (let i = 0; i < 8; i++) { c.fillStyle = i % 2 ? "#0b5d34" : "#fff"; c.fillRect(x + 16 + i * (w - 32) / 8, y + h - 40, (w - 32) / 8, 12); c.fillStyle = i % 2 ? "#fff" : "#0b5d34"; c.fillRect(x + 16 + i * (w - 32) / 8, y + h - 28, (w - 32) / 8, 12); }
+      if (logo) { const lw = w - 44, lh = lw * logo.height / logo.width; c.drawImage(logo, x + 22, y + (h - 40) / 2 - lh / 2, lw, lh); }
     };
+    const postmark = (cx, cy) => {
+      c.save(); c.strokeStyle = "rgba(11,93,52,.55)"; c.fillStyle = "rgba(11,93,52,.6)"; c.lineWidth = 4;
+      c.beginPath(); c.arc(cx, cy, 78, 0, 7); c.stroke(); c.lineWidth = 2; c.beginPath(); c.arc(cx, cy, 64, 0, 7); c.stroke();
+      c.textAlign = "center"; c.font = `800 22px ${FONT}`; c.fillText("VÀO VỤ", cx, cy - 4); c.font = `700 18px ${BODY}`; c.fillText("2026 – 2027", cx, cy + 22);
+      c.lineWidth = 4; for (let k = 0; k < 4; k++) { c.beginPath(); for (let t = 0; t <= 200; t += 10) { const px = cx + 80 + t, py = cy - 30 + k * 20 + Math.sin(t / 18) * 6; t ? c.lineTo(px, py) : c.moveTo(px, py); } c.stroke(); }
+      c.restore(); c.textAlign = "left";
+    };
+    const draw = () => {
+      const W = 1600, H = 1100;
+      c.fillStyle = "#fbf8ef"; c.fillRect(0, 0, W, H);
+      c.strokeStyle = "#e7dfc8"; c.lineWidth = 2; c.strokeRect(14, 14, W - 28, H - 28);
+      // photo with white border, slightly tilted
+      const px = 56, py = 64, pw = 860, ph = 900;
+      c.save(); c.translate(px + pw / 2, py + ph / 2); c.rotate(-0.012); c.shadowColor = "rgba(0,0,0,.22)"; c.shadowBlur = 24; c.shadowOffsetY = 8;
+      c.fillStyle = "#fff"; c.fillRect(-pw / 2, -ph / 2, pw, ph + 70); c.shadowColor = "transparent";
+      photo ? cover(c, photo, -pw / 2 + 18, -ph / 2 + 18, pw - 36, ph - 36) : placeholder(c, -pw / 2 + 18, -ph / 2 + 18, pw - 36, ph - 36, "Chọn một ảnh");
+      c.fillStyle = "#6b6450"; c.font = `500 22px ${BODY}`; wrap(c, credit ? "Ảnh: " + credit : "", -pw / 2 + 22, ph / 2 + 36, pw - 44, 26, 1);
+      c.restore();
+      // divider
+      const dx = 980; c.strokeStyle = "#d8cfb4"; c.lineWidth = 2; c.setLineDash([10, 10]); c.beginPath(); c.moveTo(dx, 70); c.lineTo(dx, H - 70); c.stroke(); c.setLineDash([]);
+      const x = dx + 44, w = W - 60 - x;
+      stamp(W - 60 - 190, 56, 190, 230); postmark(W - 60 - 300, 200);
+      const line = (y) => { c.strokeStyle = "#d8cfb4"; c.lineWidth = 2; c.beginPath(); c.moveTo(x, y); c.lineTo(W - 60, y); c.stroke(); };
+      c.fillStyle = "#8a8169"; c.font = `600 22px ${BODY}`; c.fillText("Từ", x, 352); c.fillText("Gửi đến", x, 432);
+      c.fillStyle = "#0b4a2b"; c.font = `600 44px ${HAND}`; wrap(c, val("from") || "một AgriS-er", x + 60, 350, w - 60, 46, 1); wrap(c, val("to") || "Đồng đội", x + 110, 430, w - 110, 46, 1);
+      line(366); line(446);
+      for (let y = 540; y < H - 150; y += 62) line(y);
+      c.fillStyle = "#1f3a33"; c.font = `600 40px ${HAND}`; wrap(c, val("wish") || "Lời chúc của bạn…", x, 528, w, 62, 7);
+      for (let i = 0; i < 20; i++) { c.fillStyle = i % 2 ? "#0b5d34" : "#fbf8ef"; c.fillRect(x + i * w / 20, H - 120, w / 20, 10); }
+      c.fillStyle = "#0b6b3a"; c.font = `700 24px ${BODY}`; c.fillText(S.tags || "", x, H - 74);
+    };
+    if (document.fonts) Promise.all(['600 40px "Dancing Script"'].map(f => document.fonts.load(f, 'Đội ơi ạ'))).then(() => draw()).catch(() => {});
     const pick = async () => { const r = pcForm.querySelector("[name=photo]:checked"); credit = r ? r.dataset.credit : ""; photo = r ? await loadImg(r.value).catch(() => null) : null; draw(); };
     pcForm.addEventListener("input", e => (e.target.name === "photo" ? pick() : draw()));
     document.addEventListener("agm-logo", draw);
