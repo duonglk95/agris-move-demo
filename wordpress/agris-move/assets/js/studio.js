@@ -51,7 +51,8 @@
     ctForm.addEventListener("input", draw); document.addEventListener("agm-logo", draw);
     ctForm.elements.photo.addEventListener("change", async e => { const f = e.target.files[0]; photo = f ? await fileImg(f).catch(() => null) : null; draw(); });
     draw();
-    const msg = ctForm.querySelector(".tk-msg"), sub = ctForm.querySelector("[type=submit]");
+    const msg = ctForm.querySelector(".tk-msg"), sub = document.querySelector("[data-send]") || ctForm.querySelector("[type=submit]");
+    const pickBtn = document.querySelector("[data-pick]"); if (pickBtn) pickBtn.addEventListener("click", () => ctForm.elements.photo.click());
     const rawBlob = () => new Promise(ok => { const m = 1600, s = Math.min(1, m / Math.max(photo.width, photo.height)), t = document.createElement("canvas"); t.width = photo.width * s; t.height = photo.height * s; t.getContext("2d").drawImage(photo, 0, 0, t.width, t.height); t.toBlob(ok, "image/jpeg", .9); });
     ctForm.addEventListener("submit", async e => {
       e.preventDefault(); msg.hidden = true;
