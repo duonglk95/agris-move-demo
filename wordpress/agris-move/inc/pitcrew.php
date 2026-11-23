@@ -80,6 +80,8 @@ function agm_pit_submit() {
 	$center = sanitize_text_field( wp_unslash( $_POST['center'] ?? '' ) );
 	$size   = sanitize_text_field( wp_unslash( $_POST['size'] ?? '' ) );
 	$roles  = array_values( array_intersect( array_map( 'sanitize_text_field', wp_unslash( (array) ( $_POST['roles'] ?? array() ) ) ), AGM_ROLES ) );
+	$other = sanitize_text_field( wp_unslash( $_POST['role_other'] ?? '' ) );
+	if ( ! empty( $_POST['role_other_on'] ) && '' !== $other ) { $roles[] = 'Khác: ' . mb_substr( $other, 0, 80 ); }
 	if ( ! $tours || ! in_array( $center, AGM_CENTERS, true ) || ! in_array( $size, AGM_SIZES, true ) ) {
 		wp_send_json_error( array( 'message' => 'Bạn chọn tour, đơn vị và size áo nhé.' ), 400 );
 	}
@@ -138,7 +140,7 @@ function agm_pit_box( $post ) {
 	$st = (array) get_post_meta( $post->ID, '_pit_status', true );
 	echo '<p><strong>#' . (int) agm_pit_number( $post ) . '</strong> · MSNV ' . esc_html( get_post_meta( $post->ID, '_pit_msnv', true ) ) . ' · ' . esc_html( get_post_meta( $post->ID, '_pit_unit', true ) ) . ' · ' . esc_html( get_post_meta( $post->ID, '_pit_center', true ) ) . '</p>';
 	echo '<p>Size áo: <strong>' . esc_html( get_post_meta( $post->ID, '_pit_size', true ) ) . '</strong> · Vai trò: ' . esc_html( implode( ', ', (array) get_post_meta( $post->ID, '_pit_roles', true ) ) ) . '</p>';
-	echo '<p>Ghi chú: ' . esc_html( get_post_meta( $post->ID, '_pit_note', true ) ) . '</p><table class="form-table">';
+	echo '<p>Lưu ý cá nhân: ' . esc_html( get_post_meta( $post->ID, '_pit_note', true ) ) . '</p><table class="form-table">';
 	foreach ( agm_pit_tours() as $k => $t ) {
 		if ( ! in_array( $k, (array) get_post_meta( $post->ID, '_pit_tours', true ), true ) ) { continue; }
 		echo '<tr><th>' . esc_html( $t[0] ) . '</th><td><select name="pit_status[' . esc_attr( $k ) . ']">';
@@ -165,7 +167,7 @@ add_action( 'admin_post_agm_pit_csv', function () {
 	$tours = agm_pit_tours();
 	header( 'Content-Type: text/csv; charset=utf-8' ); header( 'Content-Disposition: attachment; filename="pit-crew-' . wp_date( 'Ymd' ) . '.csv"' );
 	$out = fopen( 'php://output', 'w' ); fwrite( $out, "\xEF\xBB\xBF" );
-	$head = array( '#', 'Họ tên', 'MSNV', 'Đơn vị (HR)', 'Center', 'Size áo', 'Vai trò', 'Ghi chú', 'Ngày đăng ký' );
+	$head = array( '#', 'Họ tên', 'MSNV', 'Đơn vị (HR)', 'Center', 'Size áo', 'Vai trò', 'Lưu ý cá nhân', 'Ngày đăng ký' );
 	foreach ( $tours as $t ) { $head[] = $t[0]; }
 	fputcsv( $out, $head );
 	foreach ( array_reverse( get_posts( array( 'post_type' => 'pit_crew', 'post_status' => 'private', 'numberposts' => -1 ) ) ) as $i => $p ) {

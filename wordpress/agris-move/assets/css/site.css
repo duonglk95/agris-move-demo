@@ -524,3 +524,5 @@ a.ev-card:hover h4 { color: var(--green); }
 .tk .divider-img.campus { background: linear-gradient(180deg, #fbfdf7 0 85%, transparent 85%); padding-top: 24px; }
 .tk .divider-img.campus img { max-width: 1400px; }
 .tk .divider-img.campus { background: #fbfdf7; padding-bottom: clamp(60px, 7vw, 110px); margin-top: calc(-1 * clamp(28px, 4vw, 56px)); }
+.tk .st-grid.pit { grid-template-columns: minmax(0, 640px); justify-content: center; }
+.tk .pit fieldset > input[name=role_other] { font: 400 15px/1.4 var(--body); padding: 11px 13px; border: 1.5px solid #e1ece5; border-radius: 14px; background: #fafdfb; margin-top: 4px; }

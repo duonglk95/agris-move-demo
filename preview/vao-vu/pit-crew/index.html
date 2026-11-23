@@ -66,20 +66,21 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 </section>
   <section class="band">
     <div class="in st-grid wide pit">
-      <form class="tk-form st-form" data-pit>
+            <form class="tk-form st-form" data-pit>
         <h2>Đăng ký Pit Crew</h2>
         <p class="tk-note">Hạn đăng ký: hết ngày 05/12/2026. Nhập đúng thông tin đã đăng ký với HR.</p>
         <label>Họ và tên<input name="name" required autocomplete="name"></label>
         <label>MSNV<input name="msnv" required autocomplete="off"></label>
+        <fieldset><legend>Đơn vị</legend><div class="chips"><label><input type="radio" name="center" value="HO"><span>HO</span></label><label><input type="radio" name="center" value="ComC"><span>ComC</span></label><label><input type="radio" name="center" value="ProC"><span>ProC</span></label><label><input type="radio" name="center" value="AgriC"><span>AgriC</span></label></div></fieldset>
         <label>Số điện thoại<input name="phone" required inputmode="tel" autocomplete="off"></label>
         <fieldset><legend>Chọn tour</legend>
                     <label class="pit-tour"><input type="checkbox" name="tours[]" value="t1"><span><b>Tour Tây Ninh – Campuchia</b>13/12 – 15/12</span></label>
                     <label class="pit-tour"><input type="checkbox" name="tours[]" value="t2"><span><b>Tour miền Trung – Lào</b>16/12 – 22/12</span></label>
                   </fieldset>
-        <fieldset><legend>Đơn vị</legend><div class="chips"><label><input type="radio" name="center" value="HO"><span>HO</span></label><label><input type="radio" name="center" value="ComC"><span>ComC</span></label><label><input type="radio" name="center" value="ProC"><span>ProC</span></label><label><input type="radio" name="center" value="AgriC"><span>AgriC</span></label></div></fieldset>
-        <fieldset><legend>Bạn muốn góp sức ở đâu <small>(chọn nhiều)</small></legend><div class="chips"><label><input type="checkbox" name="roles[]" value="Booth tiếp sức"><span>Booth tiếp sức</span></label><label><input type="checkbox" name="roles[]" value="Hậu cần"><span>Hậu cần</span></label><label><input type="checkbox" name="roles[]" value="Chụp ảnh / quay"><span>Chụp ảnh / quay</span></label><label><input type="checkbox" name="roles[]" value="Giao lưu, tiết mục"><span>Giao lưu, tiết mục</span></label></div></fieldset>
+        <fieldset><legend>Bạn muốn góp sức ở khâu nào <small>(chọn nhiều)</small></legend><div class="chips"><label><input type="checkbox" name="roles[]" value="Booth tiếp sức"><span>Booth tiếp sức</span></label><label><input type="checkbox" name="roles[]" value="Hậu cần"><span>Hậu cần</span></label><label><input type="checkbox" name="roles[]" value="Chụp ảnh / quay"><span>Chụp ảnh / quay</span></label><label><input type="checkbox" name="roles[]" value="Giao lưu, tiết mục"><span>Giao lưu, tiết mục</span></label><label><input type="checkbox" name="role_other_on" value="1" data-other><span>Khác</span></label></div>
+          <input name="role_other" maxlength="80" placeholder="Bạn muốn góp sức ở khâu nào khác?" hidden></fieldset>
         <fieldset><legend>Size áo Pit Crew</legend><div class="chips"><label><input type="radio" name="size" value="S"><span>S</span></label><label><input type="radio" name="size" value="M"><span>M</span></label><label><input type="radio" name="size" value="L"><span>L</span></label><label><input type="radio" name="size" value="XL"><span>XL</span></label><label><input type="radio" name="size" value="XXL"><span>XXL</span></label></div></fieldset>
-        <label>Ghi chú <small>(không bắt buộc)</small><textarea name="note" maxlength="300" placeholder="Ăn chay, có bằng lái…"></textarea></label>
+        <label>Lưu ý cá nhân <small>(không bắt buộc) để BTC sắp xếp và hỗ trợ bạn chu đáo</small><textarea name="note" maxlength="300" placeholder="Say xe, ăn chay, dị ứng…"></textarea></label>
         <p class="tk-msg" role="status" hidden></p>
         <button class="btn" type="submit">Gửi đăng ký</button>
       </form>
@@ -88,19 +89,11 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
           <p class="pit-ok">Đăng ký thành công</p>
           <h2 class="pit-num"></h2>
           <ul class="pit-st"></ul>
-          <p class="tk-note">Ban tổ chức sẽ xét chọn và báo kết quả. Bạn tra cứu lại bằng MSNV và số điện thoại ở khung bên dưới.</p>
+          <p class="tk-note">Ban tổ chức sẽ xét chọn và báo kết quả tới bạn.</p>
           <canvas id="pitCard" width="1080" height="1350"></canvas>
           <div class="pit-act"><button type="button" class="btn" id="pitDown">Tải thẻ Pit Crew</button><button type="button" class="btn ghost" id="pitCopy">Sao chép để share Engage</button></div>
           <p class="cf-msg" id="pitCopied" hidden>Đã sao chép</p>
         </div>
-        <form class="tk-form pit-check" data-pitcheck>
-          <h2>Tra cứu kết quả</h2>
-                    <label>Họ và tên<input name="name" required></label>
-          <label>MSNV<input name="msnv" required autocomplete="off"></label>
-          <label>Số điện thoại<input name="phone" required inputmode="tel" autocomplete="off"></label>
-          <p class="tk-msg" role="status" hidden></p>
-          <button class="btn ghost" type="submit">Tra cứu</button>
-        </form>
       </div>
     </div>
   </section>

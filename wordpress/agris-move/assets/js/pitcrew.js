@@ -47,3 +47,10 @@
   document.getElementById("pitDown").addEventListener("click", () => document.getElementById("pitCard").toBlob(b => { const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "the-pit-crew.png"; a.click(); }, "image/png"));
   document.getElementById("pitCopy").addEventListener("click", async () => { try { await navigator.clipboard.writeText(share); } catch {} document.getElementById("pitCopied").hidden = false; });
 })();
+
+// "Khác" role: show its text box
+(() => {
+  const on = document.querySelector("[data-other]"), box = document.querySelector("[name=role_other]");
+  if (!on || !box) return;
+  on.addEventListener("change", () => { box.hidden = !on.checked; if (on.checked) box.focus(); });
+})();
