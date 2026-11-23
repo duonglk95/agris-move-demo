@@ -18,7 +18,7 @@ while ( have_posts() ) : the_post();
 
   <section class="hub-sec pitwall" id="tiep-suc">
     <div class="in">
-      <div class="hub-head center"><img class="abi-side l" src="<?php echo esc_url( agm_img( 'abi-letter.webp' ) ); ?>" alt="" aria-hidden="true"><p class="eyebrow-c">Bức tường cảm ơn</p><h2 class="gt">Tiếp sức đội mình</h2><p>Mỗi lời cảm ơn là một lần thay lốp, tiếp nhiên liệu cho đồng đội đang chạy đua mùa vụ.</p></div>
+      <div class="hub-head center"><img class="abi-side l" src="<?php echo esc_url( agm_img( 'abi-letter.webp' ) ); ?>" alt="" aria-hidden="true"><p class="eyebrow-c">Bức tường cảm ơn</p><h2 class="gt">Tiếp sức đội mình</h2><p>Cùng gửi lời cảm ơn, lời chúc hoặc vài dòng động viên đến đồng đội trong mùa vụ này nhé!</p></div>
     </div>
     <?php if ( $notes ) :
       $rows = array( array(), array() );

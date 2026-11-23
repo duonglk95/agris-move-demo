@@ -2,7 +2,7 @@
 $_SERVER['HTTP_HOST']='localhost:8080'; require '/home/claude/wptest/wp-load.php'; wp_set_current_user(1);
 $hub = get_page_by_path('vao-vu'); $hid=$hub->ID;
 update_post_meta($hid,'_wp_page_template','page-event-hub.php');
-wp_update_post(array('ID'=>$hid,'post_content'=>'Mùa vụ là đường đua của cả đội. Chọn một hoạt động để tiếp sức cho đồng đội ở tuyến đầu.'));
+wp_update_post(array('ID'=>$hid,'post_content'=>'Mùa vụ mới bắt đầu rồi! Chọn một hoạt động để gửi lời động viên đến những đồng đội đang ngày ngày bám ruộng, bám ca.'));
 $kids=array(
  array('Lời tiếp sức','loi-tiep-suc','page-thanks.php','Gửi lời cảm ơn, lời động viên tới đồng đội đang ở tuyến đầu mùa vụ.'),
  array('Bưu thiếp mùa vụ','buu-thiep','page-postcard.php','Chọn một khoảnh khắc đẹp, viết lời chúc và tải bưu thiếp về gửi đồng đội.'),
