@@ -33,7 +33,7 @@ while ( have_posts() ) : the_post();
         <button type="button" class="btn" data-pick><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg> Tải ảnh lên</button>
         <button type="submit" class="btn" form="ctForm" data-send>Gửi ảnh dự thi</button>
       </div>
-      <img class="ct-abi" src="<?php echo esc_url( agm_img( 'abi-flag.webp' ) ); ?>" alt="" aria-hidden="true">
+      <img class="ct-abi" src="<?php echo esc_url( agm_img( 'abi-camera-1.webp' ) ); ?>" alt="" aria-hidden="true">
     </div>
   </section>
   <div class="seam" data-next="#f3faf5" data-h="90" data-tones="#bfe6ccd0,#2faa5ab0" data-line="lime"></div>
@@ -58,7 +58,7 @@ while ( have_posts() ) : the_post();
   <div class="seam" data-next="#e9f6fb" data-h="90" data-tones="#d3eadb,#9bd8b1d0" data-line="lime"></div>
   <section class="band ct-rules" id="the-le">
     <div class="in ct-faq">
-      <div><p class="eyebrow-c">Đọc kỹ trước khi tham gia</p><h2 class="gt">Thể lệ<br>cuộc thi</h2><img src="<?php echo esc_url( agm_img( 'abi-letter.webp' ) ); ?>" alt="" aria-hidden="true"></div>
+      <div><p class="eyebrow-c">Đọc kỹ trước khi tham gia</p><h2 class="gt">Thể lệ<br>cuộc thi</h2><img src="<?php echo esc_url( agm_img( 'abi-camera-2.webp' ) ); ?>" alt="" aria-hidden="true"></div>
       <div class="ct-acc">
         <details open><summary>Giới thiệu cuộc thi</summary><div><?php the_content(); ?></div></details>
         <details><summary>Đối tượng, thời gian và số ảnh</summary><div><ul><li><b>Đối tượng:</b> Toàn thể CBNV AgriS</li><li><b>Thời gian:</b> <?php echo esc_html( get_theme_mod( 'agm_ct_time', '[ngày bắt đầu] – [ngày kết thúc]' ) ); ?></li><li><b>Số ảnh:</b> <?php echo esc_html( get_theme_mod( 'agm_ct_limit', 'Tối đa [số] ảnh mỗi người' ) ); ?></li></ul></div></details>
