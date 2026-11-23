@@ -154,3 +154,42 @@ add_action( 'wp_enqueue_scripts', function () {
 		) );
 	}
 } );
+
+/* ---------- postcard photo library (admin-curated, e.g. last season's photos) ---------- */
+add_action( 'init', function () {
+	register_post_type( 'anh_buu_thiep', array(
+		'label' => 'Ảnh bưu thiếp', 'public' => false, 'show_ui' => true, 'show_in_menu' => 'edit.php?post_type=anh_du_thi',
+		'supports' => array( 'title', 'thumbnail', 'page-attributes' ),
+		'labels' => array( 'name' => 'Ảnh bưu thiếp', 'add_new_item' => 'Thêm ảnh bưu thiếp', 'edit_item' => 'Sửa ảnh bưu thiếp', 'featured_image' => 'Ảnh', 'set_featured_image' => 'Chọn ảnh' ),
+	) );
+} );
+add_action( 'add_meta_boxes', function () {
+	add_meta_box( 'agm_pc_credit', 'Thông tin ảnh', function ( $post ) {
+		wp_nonce_field( 'agm_pc_save', 'agm_pc_nonce' );
+		foreach ( array( '_agm_author' => 'Tác giả', '_agm_place' => 'Địa điểm / đơn vị' ) as $k => $label ) {
+			printf( '<p><label><strong>%s</strong><br><input type="text" class="widefat" name="%s" value="%s"></label></p>', esc_html( $label ), esc_attr( $k ), esc_attr( get_post_meta( $post->ID, $k, true ) ) );
+		}
+		echo '<p class="description">Tiêu đề bài = tên ảnh. Ảnh đại diện = ảnh dùng làm bưu thiếp. Thứ tự (Order) nhỏ hiện trước.</p>';
+	}, 'anh_buu_thiep', 'normal', 'high' );
+} );
+add_action( 'save_post_anh_buu_thiep', function ( $id ) {
+	if ( ! isset( $_POST['agm_pc_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['agm_pc_nonce'] ) ), 'agm_pc_save' ) || ! current_user_can( 'edit_post', $id ) ) { return; }
+	foreach ( array( '_agm_author', '_agm_place' ) as $k ) { update_post_meta( $id, $k, sanitize_text_field( wp_unslash( $_POST[ $k ] ?? '' ) ) ); }
+} );
+add_filter( 'manage_anh_buu_thiep_posts_columns', function ( $c ) { return array( 'cb' => $c['cb'], 'agm_img' => 'Ảnh', 'title' => 'Tên ảnh', 'agm_who' => 'Tác giả · địa điểm' ); } );
+add_action( 'manage_anh_buu_thiep_posts_custom_column', function ( $col, $id ) {
+	if ( 'agm_img' === $col ) { echo get_the_post_thumbnail( $id, array( 90, 90 ) ); }
+	if ( 'agm_who' === $col ) { echo esc_html( trim( get_post_meta( $id, '_agm_author', true ) . ' · ' . get_post_meta( $id, '_agm_place', true ), ' ·' ) ); }
+}, 10, 2 );
+
+/** Photos for the postcard picker: library first, then approved contest photos. */
+function agm_postcard_photos() {
+	$out = array();
+	foreach ( get_posts( array( 'post_type' => 'anh_buu_thiep', 'post_status' => 'publish', 'numberposts' => 60, 'orderby' => 'menu_order date', 'order' => 'ASC' ) ) as $p ) {
+		$out[] = array( 'title' => get_the_title( $p ), 'author' => get_post_meta( $p->ID, '_agm_author', true ), 'place' => get_post_meta( $p->ID, '_agm_place', true ), 'raw' => get_the_post_thumbnail_url( $p, 'large' ) );
+	}
+	$hub     = agm_hub_id();
+	$contest = $hub ? get_posts( array( 'post_type' => 'page', 'post_parent' => $hub, 'meta_key' => '_wp_page_template', 'meta_value' => 'page-contest.php', 'numberposts' => 1, 'fields' => 'ids' ) ) : array();
+	if ( $contest ) { $out = array_merge( $out, array_map( 'agm_entry_data', agm_entries( $contest[0], 'love' ) ) ); }
+	return array_values( array_filter( $out, function ( $p ) { return ! empty( $p['raw'] ); } ) );
+}
