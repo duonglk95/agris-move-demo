@@ -68,14 +68,15 @@ function agm_entry_data( $p ) {
 	);
 }
 
-function agm_save_upload( $field, $parent ) {
+function agm_save_upload( $field, $parent, $name = '' ) {
 	if ( empty( $_FILES[ $field ]['tmp_name'] ) || $_FILES[ $field ]['size'] > 6 * MB_IN_BYTES ) { return 0; }
 	$check = wp_check_filetype_and_ext( $_FILES[ $field ]['tmp_name'], $_FILES[ $field ]['name'], array( 'jpg|jpeg' => 'image/jpeg', 'png' => 'image/png' ) );
 	if ( empty( $check['type'] ) ) { return 0; }
 	require_once ABSPATH . 'wp-admin/includes/image.php';
 	require_once ABSPATH . 'wp-admin/includes/file.php';
 	require_once ABSPATH . 'wp-admin/includes/media.php';
-	$id = media_handle_upload( $field, $parent, array(), array( 'test_form' => false, 'mimes' => array( 'jpg|jpeg' => 'image/jpeg', 'png' => 'image/png' ) ) );
+	if ( $name ) { $_FILES[ $field ]['name'] = $name . '.jpg'; }
+	$id = media_handle_upload( $field, $parent, $name ? array( 'post_title' => $name ) : array(), array( 'test_form' => false, 'mimes' => array( 'jpg|jpeg' => 'image/jpeg', 'png' => 'image/png' ) ) );
 	return is_wp_error( $id ) ? 0 : $id;
 }
 
@@ -94,8 +95,10 @@ function agm_contest_submit() {
 		wp_send_json_error( array( 'message' => 'Bạn điền đủ tên ảnh, tên bạn, địa điểm và đơn vị nhé.' ), 400 );
 	}
 	$id = wp_insert_post( array( 'post_type' => 'anh_du_thi', 'post_status' => 'publish', 'post_title' => $title, 'post_content' => mb_substr( $desc, 0, 300 ) ) );
-	$framed = agm_save_upload( 'framed', $id );
-	$raw    = agm_save_upload( 'raw', $id );
+	// file name: CENTER_YYYYMMDD-HHMM_ten-tac-gia_ID_frame|goc  (e.g. AgriC_20261123-1542_nguyen-van-an_57_goc.jpg)
+	$base   = $center . '_' . wp_date( 'Ymd-Hi' ) . '_' . sanitize_title( remove_accents( $author ) ) . '_' . $id;
+	$framed = agm_save_upload( 'framed', $id, $base . '_frame' );
+	$raw    = agm_save_upload( 'raw', $id, $base . '_goc' );
 	if ( ! $framed || ! $raw ) {
 		wp_delete_post( $id, true );
 		wp_send_json_error( array( 'message' => 'Ảnh chưa tải lên được. Bạn thử ảnh JPG hoặc PNG khác nhé.' ), 400 );
