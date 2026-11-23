@@ -22,7 +22,7 @@ $photos = agm_postcard_photos();
     </div>
     <div class="pc-preview">
       <canvas id="pcCanvas" width="1600" height="1100"></canvas>
-      <button class="btn" type="button" id="pcDown">Tải bưu thiếp</button>
+      <div class="pc-dl"><h3><span>3</span>Tải thư về và gửi đồng đội</h3><button class="btn" type="button" id="pcDown">Tải thư tay</button></div>
     </div>
   </div>
 </form>

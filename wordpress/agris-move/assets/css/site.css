@@ -575,3 +575,6 @@ a.ph-item:hover img { transform: scale(1.04); }
 .pc-studio, .pc-step, .pc-grid > * { min-width: 0; }
 .pc-grid { align-items: start; }
 .pc-preview canvas { max-width: 100%; }
+.pc-dl { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; background: #fff; border-radius: 20px; padding: 14px 16px 14px 20px; border: 1px solid #eef4f0; box-shadow: 0 20px 40px -32px rgba(11, 93, 52, .45); }
+.pc-dl h3 { margin: 0; font-size: 17px; }
+@media (max-width: 560px) { .pc-dl { flex-direction: column; align-items: stretch; } }

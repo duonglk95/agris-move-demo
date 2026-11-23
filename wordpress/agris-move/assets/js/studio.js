@@ -145,7 +145,7 @@
     pcForm.addEventListener("input", e => (e.target.name === "photo" ? pick() : draw()));
     document.addEventListener("agm-logo", draw);
     const cnt = pcForm.querySelector("[data-count]"); if (cnt) pcForm.elements.wish.addEventListener("input", e => (cnt.textContent = e.target.value.length + "/220"));
-    document.getElementById("pcDown").addEventListener("click", () => download(cv, "buu-thiep-vao-vu.jpg"));
+    document.getElementById("pcDown").addEventListener("click", () => download(cv, "thu-tay-tiep-suc.jpg"));
     pick();
   }
 
