@@ -96,7 +96,6 @@ $cover = function ( $post, $demo, $size = 'agm-card' ) {
     <div class="ribbon" data-ribbon data-px="-.12"></div>
     <div class="in stack">
       <div class="stack" style="gap:12px" data-rv>
-        <span class="eyebrow">Podcast</span>
         <h2>AgriS-thing</h2>
         <p class="lede">Mỗi tháng, AgriS-thing lại có một khách mời đặc biệt cùng những câu chuyện về cuộc sống, môi trường làm việc tại AgriS và nhiều điều thú vị hơn thế… Ask me anything!</p>
       </div>

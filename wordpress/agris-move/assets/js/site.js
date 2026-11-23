@@ -112,3 +112,30 @@
     run();
   }
 })();
+
+// compact header once the page has scrolled past the top
+(() => {
+  const top = document.querySelector(".top");
+  if (!top) return;
+  const set = () => top.classList.toggle("is-compact", scrollY > 80);
+  addEventListener("scroll", set, { passive: true }); set();
+})();
+
+// "Liên hệ chương trình" form
+(() => {
+  const dlg = document.getElementById("cfDlg");
+  if (!dlg || !window.AGM) return;
+  const form = dlg.querySelector("form"), msg = dlg.querySelector(".cf-msg"), sub = form.querySelector("[type=submit]");
+  document.querySelectorAll("[data-cf-open]").forEach(b => b.addEventListener("click", () => { msg.hidden = true; dlg.showModal(); }));
+  dlg.querySelector("[data-cf-close]").addEventListener("click", () => dlg.close());
+  form.addEventListener("submit", async e => {
+    e.preventDefault(); sub.disabled = true;
+    const fd = new FormData(form); fd.append("action", "agm_contact"); fd.append("nonce", AGM.cfNonce);
+    try {
+      const r = await fetch(AGM.ajax, { method: "POST", body: fd }).then(r => r.json());
+      msg.textContent = r.data && r.data.message || "Chưa gửi được, bạn thử lại nhé."; msg.hidden = false;
+      if (r.success) { form.reset(); setTimeout(() => dlg.close(), 1800); }
+    } catch { msg.textContent = "Chưa gửi được, bạn kiểm tra mạng rồi thử lại nhé."; msg.hidden = false; }
+    sub.disabled = false;
+  });
+})();
