@@ -89,20 +89,23 @@
     const cv = document.getElementById("pcCanvas"), c = cv.getContext("2d"); let photo = null, credit = "";
     const val = n => (pcForm.elements[n] && pcForm.elements[n].value || "").trim();
     const HAND = '"Dancing Script", cursive';
+    let stampImg = null;
+    if (S.stamps && S.stamps.length) loadImg(S.stamps[Math.floor(Math.random() * S.stamps.length)]).then(i => { stampImg = i; draw(); }).catch(() => {});
     const stamp = (x, y, w, h) => {
-      c.save(); c.fillStyle = "#fff"; c.shadowColor = "rgba(0,0,0,.15)"; c.shadowBlur = 10; c.fillRect(x, y, w, h); c.restore();
-      c.fillStyle = "#fbf8ef"; const r = 7, step = 22;
-      for (let i = x + step / 2; i < x + w; i += step) { c.beginPath(); c.arc(i, y, r, 0, 7); c.arc(i, y + h, r, 0, 7); c.fill(); }
-      for (let j = y + step / 2; j < y + h; j += step) { c.beginPath(); c.arc(x, j, r, 0, 7); c.arc(x + w, j, r, 0, 7); c.fill(); }
-      c.fillStyle = "#eef7f1"; c.fillRect(x + 16, y + 16, w - 32, h - 32);
-      for (let i = 0; i < 8; i++) { c.fillStyle = i % 2 ? "#0b5d34" : "#fff"; c.fillRect(x + 16 + i * (w - 32) / 8, y + h - 40, (w - 32) / 8, 12); c.fillStyle = i % 2 ? "#fff" : "#0b5d34"; c.fillRect(x + 16 + i * (w - 32) / 8, y + h - 28, (w - 32) / 8, 12); }
-      if (logo) { const lw = w - 44, lh = lw * logo.height / logo.width; c.drawImage(logo, x + 22, y + (h - 40) / 2 - lh / 2, lw, lh); }
+      if (!stampImg) return;
+      c.save(); c.translate(x + w / 2, y + h / 2); c.rotate(0.03); c.shadowColor = "rgba(0,0,0,.18)"; c.shadowBlur = 12; c.shadowOffsetY = 4;
+      c.drawImage(stampImg, -w / 2, -h / 2, w, h); c.restore();
     };
     const postmark = (cx, cy) => {
-      c.save(); c.strokeStyle = "rgba(11,93,52,.55)"; c.fillStyle = "rgba(11,93,52,.6)"; c.lineWidth = 4;
-      c.beginPath(); c.arc(cx, cy, 78, 0, 7); c.stroke(); c.lineWidth = 2; c.beginPath(); c.arc(cx, cy, 64, 0, 7); c.stroke();
-      c.textAlign = "center"; c.font = `800 22px ${FONT}`; c.fillText("VÀO VỤ", cx, cy - 4); c.font = `700 18px ${BODY}`; c.fillText("2026 – 2027", cx, cy + 22);
-      c.lineWidth = 4; for (let k = 0; k < 4; k++) { c.beginPath(); for (let t = 0; t <= 200; t += 10) { const px = cx + 80 + t, py = cy - 30 + k * 20 + Math.sin(t / 18) * 6; t ? c.lineTo(px, py) : c.moveTo(px, py); } c.stroke(); }
+      const R = 92;
+      c.save(); c.globalAlpha = .9;
+      c.fillStyle = "rgba(251,248,239,.82)"; c.beginPath(); c.arc(cx, cy, R, 0, 7); c.fill();
+      c.strokeStyle = "rgba(11,93,52,.7)"; c.lineWidth = 4; c.beginPath(); c.arc(cx, cy, R, 0, 7); c.stroke();
+      c.lineWidth = 2; c.beginPath(); c.arc(cx, cy, R - 12, 0, 7); c.stroke();
+      if (logo) { const lw = 132, lh = lw * logo.height / logo.width; c.drawImage(logo, cx - lw / 2, cy - lh / 2 - 12, lw, lh); }
+      c.fillStyle = "rgba(11,93,52,.85)"; c.textAlign = "center"; c.font = `800 15px ${FONT}`; c.fillText("VÀO VỤ", cx, cy + 30); c.font = `700 13px ${BODY}`; c.fillText("2026 – 2027", cx, cy + 48);
+      c.strokeStyle = "rgba(11,93,52,.45)"; c.lineWidth = 4;
+      for (let k = 0; k < 4; k++) { c.beginPath(); for (let t = 0; t <= 230; t += 10) { const px = cx + R + 6 + t, py = cy - 34 + k * 22 + Math.sin(t / 18) * 6; t ? c.lineTo(px, py) : c.moveTo(px, py); } c.stroke(); }
       c.restore(); c.textAlign = "left";
     };
     const draw = () => {
@@ -119,7 +122,7 @@
       // divider
       const dx = 980; c.strokeStyle = "#d8cfb4"; c.lineWidth = 2; c.setLineDash([10, 10]); c.beginPath(); c.moveTo(dx, 70); c.lineTo(dx, H - 70); c.stroke(); c.setLineDash([]);
       const x = dx + 44, w = W - 60 - x;
-      stamp(W - 60 - 190, 56, 190, 230); postmark(W - 60 - 300, 200);
+      stamp(W - 60 - 300, 50, 300, 200); postmark(W - 60 - 320, 196);
       const line = (y) => { c.strokeStyle = "#d8cfb4"; c.lineWidth = 2; c.beginPath(); c.moveTo(x, y); c.lineTo(W - 60, y); c.stroke(); };
       c.fillStyle = "#8a8169"; c.font = `600 22px ${BODY}`; c.fillText("Từ", x, 352); c.fillText("Gửi đến", x, 432);
       const fitOne = (txt, max, min, width) => { let z = max; c.font = `600 ${z}px ${HAND}`; while (z > min && c.measureText(txt).width > width) { z -= 2; c.font = `600 ${z}px ${HAND}`; } return z; };

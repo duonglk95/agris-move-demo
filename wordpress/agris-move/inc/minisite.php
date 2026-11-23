@@ -150,6 +150,7 @@ add_action( 'wp_enqueue_scripts', function () {
 			'frameCt'  => get_theme_mod( 'agm_frame_contest', agm_img( 'frame-contest.png' ) ),
 			'frameAv'  => get_theme_mod( 'agm_frame_avatar' ),
 			'logo'     => agm_img( 'logo-agris-move.png' ),
+			'stamps'   => array_map( function ( $i ) { return agm_img( "stamp-$i.webp" ); }, range( 1, 5 ) ),
 		) );
 	}
 } );
