@@ -54,13 +54,11 @@ while ( have_posts() ) : the_post();
   <?php if ( isset( $kids['page-contest.php'] ) ) : $ct = $kids['page-contest.php']; ?>
   <section class="band hub-sec alt" id="khoanh-khac">
     <div class="in">
-      <div class="hub-head row"><div><h2><?php echo esc_html( get_the_title( $ct ) ); ?></h2><p>Ảnh mùa vụ do chính AgriS-er chụp. Gửi ảnh của bạn và rủ đồng đội thả love.</p></div>
-        <a class="btn" href="<?php echo esc_url( get_permalink( $ct ) ); ?>">Tham gia cuộc thi <?php echo agm_arrow( 'chev' ); // phpcs:ignore ?></a></div>
       <?php if ( $shots ) : ?>
       <div class="hub-slides" data-slides>
         <div class="hub-track">
           <?php foreach ( array_slice( $shots, 0, 12 ) as $p ) : $d = agm_entry_data( $p ); ?>
-          <a class="hub-slide" href="<?php echo esc_url( get_permalink( $ct ) . '#anh-' . $p->ID ); ?>"><img src="<?php echo esc_url( get_the_post_thumbnail_url( $p, 'medium_large' ) ); ?>" alt="<?php echo esc_attr( $d['title'] ); ?>" loading="lazy"><span><b><?php echo esc_html( $d['title'] ); ?></b><?php echo esc_html( $d['author'] . ' · ' . $d['center'] ); ?></span></a>
+          <a class="hub-slide" href="<?php echo esc_url( get_permalink( $ct ) . '#anh-' . $p->ID ); ?>"><img src="<?php echo esc_url( get_the_post_thumbnail_url( $p, 'medium_large' ) ); ?>" alt="<?php echo esc_attr( $d['title'] ); ?>" loading="lazy"></a>
           <?php endforeach; ?>
         </div>
         <button type="button" class="hub-arrow prev" aria-label="Ảnh trước">‹</button><button type="button" class="hub-arrow next" aria-label="Ảnh sau">›</button>
