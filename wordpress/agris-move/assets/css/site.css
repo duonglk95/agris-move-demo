@@ -676,3 +676,4 @@ a.ph-item:hover img { transform: scale(1.04); }
 .ct-pills li + li { margin-left: 46px; }
 .ct-pills li + li::before { position: absolute; left: -40px; top: 50%; width: 34px; margin: 0; }
 @media (max-width: 900px) { .ct-pills li + li { margin-left: 8px; } }
+.ct-card canvas { background: #066904; border-radius: 22px; }

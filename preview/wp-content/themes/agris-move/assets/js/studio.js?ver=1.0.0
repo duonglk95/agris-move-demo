@@ -28,7 +28,7 @@
     const draw = () => {
       const W = 1080, H = 1350, B = 34, TOP = 120, BOT = 250;
       if (overlay) {
-        c.fillStyle = "#fff"; c.fillRect(0, 0, W, H);
+        c.fillStyle = "#066904"; c.fillRect(0, 0, W, H);
         photo ? cover(c, photo, 14, 14, W - 28, H - 28 - 170) : placeholder(c, 14, 14, W - 28, H - 28 - 170, "Ảnh của bạn");
         c.drawImage(overlay, 0, 0, W, H);
         c.fillStyle = "#fff"; c.font = `800 40px ${FONT}`; wrap(c, val("title") || "Tên ảnh", 52, H - 128, W - 104, 46, 1);
