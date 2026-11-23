@@ -18,7 +18,7 @@ while ( have_posts() ) : the_post();
 
   <section class="hub-sec pitwall" id="tiep-suc">
     <div class="in">
-      <div class="hub-head light"><h2>Tiếp sức đội mình</h2><p>Mỗi lời cảm ơn là một lần thay lốp, tiếp nhiên liệu cho đồng đội đang chạy đua mùa vụ.</p></div>
+      <div class="hub-head center"><p class="eyebrow-c">Bức tường cảm ơn</p><h2 class="gt">Tiếp sức đội mình</h2><p>Mỗi lời cảm ơn là một lần thay lốp, tiếp nhiên liệu cho đồng đội đang chạy đua mùa vụ.</p></div>
     </div>
     <?php if ( $notes ) :
       $rows = array( array(), array() );
@@ -37,15 +37,15 @@ while ( have_posts() ) : the_post();
       <?php endforeach; ?>
     </div></div>
     <?php endforeach; else : ?>
-    <div class="in"><p class="tk-empty light">Tường đang chờ lời tiếp sức đầu tiên. Bạn mở màn nhé!</p></div>
+    <div class="in"><p class="tk-empty">Tường đang chờ lời tiếp sức đầu tiên. Bạn mở màn nhé!</p></div>
     <?php endif; ?>
-    <div class="in hub-cta"><button type="button" class="btn lime" data-tk-open>Gửi lời cảm ơn <?php echo agm_arrow( 'chev' ); // phpcs:ignore ?></button>
+    <div class="in hub-cta center"><button type="button" class="btn" data-tk-open>Gửi lời cảm ơn <?php echo agm_arrow( 'chev' ); // phpcs:ignore ?></button>
       <span><?php echo esc_html( number_format_i18n( agm_thanks_count( $hub ) ) ); ?> lời tiếp sức đã lên tường</span></div>
   </section>
 
   <section class="band hub-sec alt" id="buu-thiep">
     <div class="in">
-      <div class="hub-head"><h2>Gửi bưu thiếp mùa vụ</h2><p>Chọn một khoảnh khắc đẹp của đội mình, viết lời chúc và tải bưu thiếp về gửi đồng đội.</p></div>
+      <div class="hub-head center"><p class="eyebrow-c">Bưu thiếp</p><h2 class="gt">Gửi bưu thiếp mùa vụ</h2><p>Chọn một khoảnh khắc đẹp của đội mình, viết lời chúc và tải bưu thiếp về gửi đồng đội.</p></div>
       <div class="st-grid wide"><?php get_template_part( 'parts/postcard' ); ?></div>
     </div>
   </section>

@@ -466,3 +466,40 @@ a.ev-card:hover h4 { color: var(--green); }
 .pitwall .hub-cta { position: relative; z-index: 1; margin-top: 22px; }
 .pitwall .hub-cta span { color: rgba(255,255,255,.8); }
 .btn.lime { background: #b6e34a; color: var(--deep); box-shadow: 0 14px 24px -14px rgba(182,227,74,.9); }
+
+/* ===== clean style for event mini-sites (light, airy, big gradient headings) ===== */
+.tk { --grad: linear-gradient(90deg, #1a9a46 0%, #138a7a 45%, #1b6fb5 100%); background: #fff; }
+.tk .gt { text-transform: uppercase; font: 900 clamp(38px, 5vw, 68px)/1.02 var(--display); letter-spacing: -.01em; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 2px 0 #fff) drop-shadow(0 0 1px #fff); }
+.tk .eyebrow-c, .tk .tk-kicker { font: 600 clamp(17px, 1.6vw, 21px)/1.3 var(--body); color: var(--navy); margin: 0 0 10px; }
+.tk .tk-hero { background: #fff; color: var(--ink); }
+.tk .tk-hero img { max-height: 560px; }
+.tk .tk-hero:not(.is-hub) img { max-height: 300px; }
+.tk .tk-hero-txt { padding-block: clamp(48px, 7vw, 96px) clamp(24px, 4vw, 48px); }
+.tk .tk-hero h1 { color: transparent; }
+.tk .tk-intro { color: var(--muted); font-size: 18px; line-height: 1.6; max-width: 620px; opacity: 1; margin-top: 18px; }
+.tk .band, .tk .hub-sec { padding-block: clamp(56px, 8vw, 112px); }
+.tk .hub-sec.alt { background: linear-gradient(180deg, #f3faf5, #fbfdf7); }
+.tk .hub-head { margin-bottom: clamp(32px, 4vw, 56px); gap: 0; }
+.tk .hub-head.center { text-align: center; justify-items: center; }
+.tk .hub-head p:not(.eyebrow-c) { color: var(--muted); font-size: 17px; margin-top: 14px; max-width: 560px; }
+.tk .hub-cta.center { justify-content: center; }
+.tk .btn { border-radius: 999px; background: var(--grad); color: #fff; padding: 14px 26px; box-shadow: 0 14px 28px -16px rgba(19, 120, 110, .8); border: 0; }
+.tk .btn.ghost { background: #fff; color: var(--green); box-shadow: inset 0 0 0 1.5px #b9dcc6; }
+/* wall goes light */
+.tk .pitwall { background: linear-gradient(180deg, #fbfdf7 0%, #eef7f1 100%); color: var(--ink); }
+.tk .pitwall::before, .tk .pitwall::after { display: none; }
+.tk .pw-row { padding: 14px 0; }
+.tk .pw-card { border-radius: 22px; padding: 24px 24px 20px; gap: 14px; box-shadow: 0 24px 50px -32px rgba(11, 93, 52, .45); border: 1px solid #edf3ef; }
+.tk .pw-card::before { color: #edf5f0; }
+.tk .pw-to { background: #e7f5ec; color: var(--green); }
+.tk .pitwall .hub-cta span { color: var(--muted); }
+/* cards and forms */
+.tk .tk-form, .tk .pit-done, .tk .st-gallery li, .tk .hub-card { border-radius: 24px; box-shadow: 0 28px 60px -40px rgba(11, 93, 52, .45); border: 1px solid #eef4f0; }
+.tk .tk-form { padding: clamp(24px, 3vw, 36px); gap: 16px; }
+.tk .tk-form h2 { font: 800 22px/1.25 var(--display); color: var(--green); }
+.tk .tk-form input, .tk .tk-form textarea, .tk .tk-form select { border-radius: 14px; border-color: #e1ece5; background: #fafdfb; }
+.tk .chips span, .tk .pit-tour { border-color: #e1ece5; }
+.tk .tk-wall-h { font: 800 26px var(--display); color: var(--green); }
+.tk .st-preview canvas { border-radius: 20px; }
+.tk .hub-slide { border-radius: 22px; }
+.tk .hub-slide span { display: none; }
