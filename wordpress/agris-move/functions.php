@@ -12,6 +12,7 @@ require get_template_directory() . '/inc/content-types.php';
 require get_template_directory() . '/inc/customizer.php';
 require get_template_directory() . '/inc/helpers.php';
 require get_template_directory() . '/inc/contact.php';
+require get_template_directory() . '/inc/thanks.php';
 
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
@@ -33,7 +34,7 @@ add_action( 'wp_enqueue_scripts', function () {
 
 	// ribbons, wave seams, scroll reveals and the event countdown
 	wp_enqueue_script( 'agm-site', $uri . '/js/site.js', array(), AGM_VER, true );
-	wp_localize_script( 'agm-site', 'AGM', array( 'events' => agm_upcoming_events(), 'ajax' => admin_url( 'admin-ajax.php' ), 'cfNonce' => wp_create_nonce( 'agm_contact' ) ) );
+	wp_localize_script( 'agm-site', 'AGM', array( 'events' => agm_upcoming_events(), 'ajax' => admin_url( 'admin-ajax.php' ), 'cfNonce' => wp_create_nonce( 'agm_contact' ), 'tkNonce' => wp_create_nonce( 'agm_thanks' ) ) );
 
 	if ( is_front_page() ) {
 		wp_enqueue_script( 'agm-hero', $uri . '/js/hero.js', array(), AGM_VER, true );

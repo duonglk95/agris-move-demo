@@ -139,3 +139,20 @@
     sub.disabled = false;
   });
 })();
+
+// thank-you wall form
+(() => {
+  const form = document.querySelector("[data-tk]");
+  if (!form || !window.AGM) return;
+  const msg = form.querySelector(".tk-msg"), sub = form.querySelector("[type=submit]");
+  form.addEventListener("submit", async e => {
+    e.preventDefault(); sub.disabled = true;
+    const fd = new FormData(form); fd.append("action", "agm_thanks"); fd.append("nonce", AGM.tkNonce); fd.append("page", form.dataset.page);
+    try {
+      const r = await fetch(AGM.ajax, { method: "POST", body: fd }).then(r => r.json());
+      msg.textContent = r.data && r.data.message || "Chưa gửi được, bạn thử lại nhé."; msg.hidden = false;
+      if (r.success) form.reset();
+    } catch { msg.textContent = "Chưa gửi được, bạn kiểm tra mạng rồi thử lại nhé."; msg.hidden = false; }
+    sub.disabled = false;
+  });
+})();

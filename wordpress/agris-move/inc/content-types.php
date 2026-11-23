@@ -25,7 +25,7 @@ add_action( 'init', function () {
 		'show_in_rest' => true,
 		'menu_icon'    => 'dashicons-calendar-alt',
 		'menu_position'=> 21,
-		'supports'     => array( 'title' ),
+		'supports'     => array( 'title', 'thumbnail' ),
 	) );
 
 	register_post_type( 'podcast', array(
@@ -64,12 +64,17 @@ function agm_event_box( $post ) {
 	?>
 	<p><label for="agm_at"><strong>Ngày giờ bắt đầu</strong> (giờ Việt Nam)</label><br>
 		<input type="datetime-local" id="agm_at" name="agm_at" value="<?php echo esc_attr( $at ); ?>" required></p>
+	<p><label for="agm_end"><strong>Ngày giờ kết thúc</strong> (bỏ trống nếu chỉ diễn ra một lúc)</label><br>
+		<input type="datetime-local" id="agm_end" name="agm_end" value="<?php echo esc_attr( get_post_meta( $post->ID, '_agm_end', true ) ); ?>"></p>
+	<p><label for="agm_page"><strong>Trang con của sự kiện</strong> (để thẻ sự kiện bấm được)</label><br>
+		<?php wp_dropdown_pages( array( 'name' => 'agm_page', 'id' => 'agm_page', 'selected' => (int) get_post_meta( $post->ID, '_agm_page', true ), 'show_option_none' => '— Không có —', 'option_none_value' => '0' ) ); ?>
+		<span class="description">Ví dụ trang dùng mẫu "Lời cảm ơn" cho Vào vụ.</span></p>
 	<p><label><input type="checkbox" name="agm_allday" value="1" <?php checked( $allday, '1' ); ?>> Sự kiện cả ngày (giữ trên trang chủ đến hết ngày)</label></p>
 	<p><label for="agm_place"><strong>Địa điểm hoặc ghi chú</strong></label><br>
 		<input type="text" id="agm_place" name="agm_place" class="widefat" value="<?php echo esc_attr( $place ); ?>" placeholder="Ví dụ: Khai vụ tại TTCA"></p>
 	<p><label for="agm_cd"><strong>Chữ trong dòng đếm ngược</strong></label><br>
 		Còn lại đến <input type="text" id="agm_cd" name="agm_cd" value="<?php echo esc_attr( $cd ); ?>" placeholder="sự kiện"> <span class="description">ví dụ: ngày khai vụ, ngày vào vụ</span></p>
-	<p class="description">Trang chủ luôn hiện sự kiện gần nhất chưa diễn ra, và tự chuyển sang sự kiện tiếp theo khi ngày đã qua.</p>
+	<p class="description">Trang chủ tự xếp sự kiện vào Sắp diễn ra hoặc Đang diễn ra theo thời gian, và ẩn sự kiện khi đã kết thúc. Ảnh đại diện dùng làm ảnh thẻ khi sự kiện đang diễn ra.</p>
 	<?php
 }
 
@@ -100,6 +105,9 @@ add_action( 'save_post', function ( $post_id ) {
 	if ( 'su_kien' === $type ) {
 		$at = isset( $_POST['agm_at'] ) ? sanitize_text_field( wp_unslash( $_POST['agm_at'] ) ) : '';
 		update_post_meta( $post_id, '_agm_at', preg_match( '/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', $at ) ? $at : '' );
+		$end = isset( $_POST['agm_end'] ) ? sanitize_text_field( wp_unslash( $_POST['agm_end'] ) ) : '';
+		update_post_meta( $post_id, '_agm_end', preg_match( '/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', $end ) ? $end : '' );
+		update_post_meta( $post_id, '_agm_page', isset( $_POST['agm_page'] ) ? absint( $_POST['agm_page'] ) : 0 );
 		update_post_meta( $post_id, '_agm_allday', empty( $_POST['agm_allday'] ) ? '' : '1' );
 		update_post_meta( $post_id, '_agm_place', isset( $_POST['agm_place'] ) ? sanitize_text_field( wp_unslash( $_POST['agm_place'] ) ) : '' );
 		update_post_meta( $post_id, '_agm_cd', isset( $_POST['agm_cd'] ) ? sanitize_text_field( wp_unslash( $_POST['agm_cd'] ) ) : '' );

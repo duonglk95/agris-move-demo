@@ -92,3 +92,39 @@ function agm_menu( $location ) {
 		agm_default_menu();
 	}
 }
+
+/**
+ * Events split for the homepage: [ 'live' => [...], 'soon' => [...] ], each item with
+ * title, start, end (timestamps), place, url, img, count (thank-you notes, if any).
+ */
+function agm_event_groups() {
+	$tz  = wp_timezone();
+	$now = time();
+	$out = array( 'live' => array(), 'soon' => array() );
+	foreach ( get_posts( array( 'post_type' => 'su_kien', 'post_status' => 'publish', 'numberposts' => 100 ) ) as $p ) {
+		$at = get_post_meta( $p->ID, '_agm_at', true );
+		if ( ! $at ) { continue; }
+		$start = ( new DateTime( $at, $tz ) )->getTimestamp();
+		$end_s = get_post_meta( $p->ID, '_agm_end', true );
+		if ( $end_s ) {
+			$end = ( new DateTime( $end_s, $tz ) )->getTimestamp();
+		} elseif ( get_post_meta( $p->ID, '_agm_allday', true ) ) {
+			$end = ( new DateTime( substr( $at, 0, 10 ) . ' 23:59:59', $tz ) )->getTimestamp();
+		} else {
+			$end = $start + 3 * HOUR_IN_SECONDS;
+		}
+		if ( $end < $now ) { continue; }
+		$page = (int) get_post_meta( $p->ID, '_agm_page', true );
+		$ev   = array(
+			'title' => get_the_title( $p ), 'start' => $start, 'end' => $end,
+			'place' => get_post_meta( $p->ID, '_agm_place', true ),
+			'url'   => $page ? get_permalink( $page ) : '',
+			'img'   => get_the_post_thumbnail_url( $p, 'large' ),
+			'count' => $page ? agm_thanks_count( $page ) : 0,
+		);
+		$out[ $start <= $now ? 'live' : 'soon' ][] = $ev;
+	}
+	usort( $out['live'], function ( $a, $b ) { return $a['end'] - $b['end']; } );
+	usort( $out['soon'], function ( $a, $b ) { return $a['start'] - $b['start']; } );
+	return $out;
+}

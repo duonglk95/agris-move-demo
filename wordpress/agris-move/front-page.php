@@ -38,31 +38,48 @@ $cover = function ( $post, $demo, $size = 'agm-card' ) {
   <div class="seam" data-next="#e8f4ec" data-h="96" data-tones="#0f513dd8,#2e8a63b8" data-line="lime"></div>
   <section class="band band-glow" id="su-kien">
     <div class="in stack">
-      <div class="event-head" data-rv><h2>Sự kiện sắp diễn ra</h2></div>
-      <div class="event-wrap" data-rv=".12">
-        <img class="abi" alt="ABI, linh vật của AgriS" src="<?php echo esc_url( agm_img( 'abi.png' ) ); ?>">
-        <div class="event">
-          <div class="ribbon" data-ribbon></div>
-          <div class="date" aria-hidden="true"><span id="evMonth">&nbsp;</span><b id="evDay">–</b><em id="evWd">&nbsp;</em></div>
-          <div class="txt">
-            <h3 id="evTitle">Sự kiện mới sẽ sớm cập nhật</h3>
-            <ul class="meta">
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg><span id="evDate"></span></li>
-              <li id="evPlaceLi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.500C5 14.900 12 21 12 21z"></path><circle cx="12" cy="9.500" r="2.500"></circle></svg><span id="evPlace"></span></li>
-            </ul>
+      <div class="event-head" data-rv><h2>Sự kiện</h2></div>
+      <?php
+      $evg = agm_event_groups();
+      $wd  = array( 'CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7' );
+      if ( ! $evg['live'] && ! $evg['soon'] ) :
+        ?><p class="ev-empty" data-rv>Sự kiện mới sẽ sớm cập nhật.</p><?php
+      endif;
+      if ( $evg['live'] ) :
+        ?>
+      <div class="ev-group" data-rv=".08">
+        <h3 class="ev-gh"><span class="ev-dot"></span>Đang diễn ra</h3>
+        <?php foreach ( $evg['live'] as $e ) : $tag = $e['url'] ? 'a' : 'div'; ?>
+        <<?php echo $tag; // phpcs:ignore ?> class="ev-live"<?php echo $e['url'] ? ' href="' . esc_url( $e['url'] ) . '"' : ''; // phpcs:ignore ?>>
+          <div class="ev-img"><?php if ( $e['img'] ) : ?><img src="<?php echo esc_url( $e['img'] ); ?>" alt=""><?php endif; ?></div>
+          <div class="ev-body">
+            <span class="ev-pill live">Đang diễn ra</span>
+            <h4><?php echo esc_html( $e['title'] ); ?></h4>
+            <p class="ev-meta">Đến <?php echo esc_html( wp_date( 'd/m/Y', $e['end'] ) ); ?><?php echo $e['place'] ? ' · ' . esc_html( $e['place'] ) : ''; ?></p>
+            <?php if ( $e['count'] ) : ?><p class="ev-meta"><?php echo esc_html( number_format_i18n( $e['count'] ) ); ?> lời cảm ơn đã lên tường</p><?php endif; ?>
+            <?php if ( $e['url'] ) : ?><span class="btn">Tham gia <?php echo agm_arrow( 'chev' ); // phpcs:ignore ?></span><?php endif; ?>
           </div>
-          <div class="cd">
-            <span class="cd-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 21h12M7 3c0 5 5 5 5 9s-5 4-5 9M17 3c0 5-5 5-5 9s5 4 5 9"></path></svg><span id="cdLabel">Còn lại đến sự kiện</span></span>
-            <div class="cd-tiles" role="timer" id="cdTimer" aria-label="Đếm ngược">
-              <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg><b id="cdD">--</b><span>Ngày</span></div>
-              <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg><b id="cdH">--</b><span>Giờ</span></div>
-              <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13.500" r="7.500"></circle><path d="M12 9.500v4M9.500 2.500h5M12 2.500V6"></path></svg><b id="cdM">--</b><span>Phút</span></div>
-              <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L5 13.500h6L10 22l8-11.500h-6z"></path></svg><b id="cdS">--</b><span>Giây</span></div>
+        </<?php echo $tag; // phpcs:ignore ?>>
+        <?php endforeach; ?>
+      </div>
+      <?php endif; if ( $evg['soon'] ) : ?>
+      <div class="ev-group" data-rv=".16">
+        <h3 class="ev-gh">Sắp diễn ra</h3>
+        <div class="ev-soon">
+          <?php foreach ( array_slice( $evg['soon'], 0, 6 ) as $e ) :
+            $days = (int) ceil( ( $e['start'] - time() ) / DAY_IN_SECONDS ); $tag = $e['url'] ? 'a' : 'div'; ?>
+          <<?php echo $tag; // phpcs:ignore ?> class="ev-card"<?php echo $e['url'] ? ' href="' . esc_url( $e['url'] ) . '"' : ''; // phpcs:ignore ?>>
+            <div class="ev-date"><b><?php echo esc_html( wp_date( 'd', $e['start'] ) ); ?></b><span>Th<?php echo esc_html( wp_date( 'n', $e['start'] ) ); ?> · <?php echo esc_html( $wd[ (int) wp_date( 'w', $e['start'] ) ] ); ?></span></div>
+            <div>
+              <span class="ev-pill"><?php echo $days <= 1 ? 'Ngày mai' : 'Còn ' . esc_html( $days ) . ' ngày'; ?></span>
+              <h4><?php echo esc_html( $e['title'] ); ?></h4>
+              <?php if ( $e['place'] ) : ?><p class="ev-meta"><?php echo esc_html( $e['place'] ); ?></p><?php endif; ?>
             </div>
-            <a class="btn" href="#su-kien">Xem lịch sự kiện <?php echo agm_arrow( 'chev' ); // phpcs:ignore ?></a>
-          </div>
+          </<?php echo $tag; // phpcs:ignore ?>>
+          <?php endforeach; ?>
         </div>
       </div>
+      <?php endif; ?>
     </div>
   </section>
 
