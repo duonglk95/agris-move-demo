@@ -30,8 +30,7 @@ function agm_hub_menu( $hub ) {
 	foreach ( agm_hub_children( $hub ) as $c ) {
 		$tpl = get_page_template_slug( $c );
 		if ( ! in_array( $tpl, array( 'page-pitcrew.php', 'page-contest.php' ), true ) ) { continue; }
-		$hot = 'page-pitcrew.php' === $tpl ? ' class="nav-hot"' : '';
-		printf( '<a href="%s"%s%s>%s</a>', esc_url( get_permalink( $c ) ), $hot, $cur === $c->ID ? ' aria-current="page"' : '', esc_html( get_the_title( $c ) ) );
+		printf( '<a href="%s"%s>%s</a>', esc_url( get_permalink( $c ) ), $cur === $c->ID ? ' aria-current="page"' : '', esc_html( get_the_title( $c ) ) );
 	}
 }
 
@@ -150,7 +149,7 @@ add_action( 'wp_enqueue_scripts', function () {
 			'event'    => agm_hub_id() ? get_the_title( agm_hub_id() ) : 'Vào vụ',
 			'frameCt'  => get_theme_mod( 'agm_frame_contest', agm_img( 'frame-contest.png' ) ),
 			'frameAv'  => get_theme_mod( 'agm_frame_avatar' ),
-			'logo'     => agm_img( 'logo-move.png' ),
+			'logo'     => agm_img( 'logo-agris-move.png' ),
 		) );
 	}
 } );

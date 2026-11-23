@@ -93,17 +93,20 @@
       c.fillStyle = "#fbfdf7"; c.fillRect(0, 0, W, H);
       photo ? cover(c, photo, 0, 0, PW, H) : placeholder(c, 0, 0, PW, H, "Chọn một ảnh");
       if (credit) { c.fillStyle = "rgba(0,0,0,.45)"; c.fillRect(0, H - 64, PW, 64); c.fillStyle = "#fff"; c.font = `500 24px ${BODY}`; c.fillText("Ảnh: " + credit, 28, H - 24); }
-      const x = PW + 60, w = W - x - 60;
-      c.fillStyle = G2; c.fillRect(W - 60 - 130, 60, 130, 150); c.fillStyle = "#fff"; c.font = `800 30px ${FONT}`; c.textAlign = "center"; c.fillText("AgriS", W - 125, 128); c.font = `italic 800 22px ${FONT}`; c.fillStyle = LIME; c.fillText("PITSTOP", W - 125, 164); c.textAlign = "left";
-      c.fillStyle = "#5f7a72"; c.font = `600 24px ${BODY}`; c.fillText("Gửi", x, 120);
-      c.fillStyle = INK; c.font = `800 40px ${FONT}`; wrap(c, val("to") || "Đồng đội", x, 172, w - 150, 48, 2);
-      c.strokeStyle = "#d5e5da"; c.lineWidth = 2; c.beginPath(); c.moveTo(x, 260); c.lineTo(W - 60, 260); c.stroke();
-      c.fillStyle = "#23423a"; c.font = `italic 500 38px ${BODY}`; const y = wrap(c, val("wish") || "Lời chúc của bạn…", x, 340, w, 56, 8);
-      c.fillStyle = "#5f7a72"; c.font = `600 26px ${BODY}`; c.fillText("Từ " + (val("from") || "một AgriS-er"), x, Math.max(y + 30, 860));
-      c.fillStyle = G2; c.font = `700 24px ${BODY}`; c.fillText(S.tags || "", x, H - 70);
+      const x = PW + 56, w = W - x - 56;
+      if (logo) { const lw = 300, lh = lw * logo.height / logo.width; c.drawImage(logo, W - 56 - lw, 56, lw, lh); }
+      c.fillStyle = "#5f7a72"; c.font = `600 24px ${BODY}`; c.fillText("Từ", x, 210);
+      c.fillStyle = INK; c.font = `800 34px ${FONT}`; wrap(c, val("from") || "một AgriS-er", x + 70, 210, w - 70, 40, 1);
+      c.fillStyle = "#5f7a72"; c.font = `600 24px ${BODY}`; c.fillText("Gửi đến", x, 266);
+      c.fillStyle = INK; c.font = `800 34px ${FONT}`; wrap(c, val("to") || "Đồng đội", x + 110, 266, w - 110, 40, 1);
+      c.strokeStyle = "#d5e5da"; c.lineWidth = 2; c.beginPath(); c.moveTo(x, 310); c.lineTo(W - 56, 310); c.stroke();
+      c.fillStyle = "#23423a"; c.font = `italic 500 36px ${BODY}`; wrap(c, val("wish") || "Lời chúc của bạn…", x, 380, w, 54, 10);
+      for (let i = 0; i < 24; i++) { c.fillStyle = i % 2 ? "#0b5d34" : "#fff"; c.fillRect(x + i * ((W - 56 - x) / 24), H - 100, (W - 56 - x) / 24, 10); }
+      c.fillStyle = G2; c.font = `700 24px ${BODY}`; c.fillText(S.tags || "", x, H - 56);
     };
     const pick = async () => { const r = pcForm.querySelector("[name=photo]:checked"); credit = r ? r.dataset.credit : ""; photo = r ? await loadImg(r.value).catch(() => null) : null; draw(); };
     pcForm.addEventListener("input", e => (e.target.name === "photo" ? pick() : draw()));
+    document.addEventListener("agm-logo", draw);
     document.getElementById("pcDown").addEventListener("click", () => download(cv, "buu-thiep-vao-vu.jpg"));
     pick();
   }

@@ -12,9 +12,9 @@ $photos = agm_postcard_photos();
         </div>
         <?php else : ?><p class="tk-empty">Ảnh từ cuộc thi sẽ xuất hiện ở đây.</p><?php endif; ?>
         <h2>2. Viết lời chúc</h2>
-        <label>Gửi tới<input name="to" maxlength="50" placeholder="Đội xe Nông trường 3"></label>
+        <label>Từ <small>(tên bạn)</small><input name="from" maxlength="40" autocomplete="name"></label>
+        <label>Gửi đến<input name="to" maxlength="50" placeholder="Đội xe Nông trường 3"></label>
         <label>Lời chúc<textarea name="wish" maxlength="220" placeholder="Chúc cả đội một mùa vụ về đích an toàn…"></textarea></label>
-        <label>Từ<input name="from" maxlength="40" autocomplete="name"></label>
         <button class="btn" type="button" id="pcDown">Tải bưu thiếp</button>
       </form>
       <div class="st-preview"><p class="st-cap">Xem trước</p><canvas id="pcCanvas" width="1600" height="1100"></canvas></div>

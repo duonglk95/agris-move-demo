@@ -526,3 +526,27 @@ a.ev-card:hover h4 { color: var(--green); }
 .tk .divider-img.campus { background: #fbfdf7; padding-bottom: clamp(60px, 7vw, 110px); margin-top: calc(-1 * clamp(28px, 4vw, 56px)); }
 .tk .st-grid.pit { grid-template-columns: minmax(0, 640px); justify-content: center; }
 .tk .pit fieldset > input[name=role_other] { font: 400 15px/1.4 var(--body); padding: 11px 13px; border: 1.5px solid #e1ece5; border-radius: 14px; background: #fafdfb; margin-top: 4px; }
+
+/* round 3 fixes */
+.tk .gt { line-height: 1.22; padding-top: .12em; }
+.tk .tk-hero h1.gt { padding-top: .14em; }
+.nav.is-hub a[aria-current] { background: var(--green); color: #fff !important; padding: 7px 14px; border-radius: 999px; border-bottom: 0; }
+.nav.is-hub a[aria-current]::after { display: none; }
+.top.is-compact .nav.is-hub a[aria-current] { padding: 5px 12px; }
+.tk .cane-edge { height: auto; background: none; margin-top: -10px; display: flex; justify-content: center; line-height: 0; }
+.tk .cane-edge img { width: 100%; max-width: 820px; height: auto; }
+.tk .divider-img.mill { background: linear-gradient(180deg, #eef7f1 0 70%, #f3faf5 70%); }
+.tk .divider-img.mill img { max-width: 1400px; }
+@media (max-width: 860px) { .tk .st-preview { order: 0; position: static; } }
+/* photo moments: two gently drifting rows */
+.tk #khoanh-khac { padding-block: clamp(40px, 6vw, 80px); background: linear-gradient(180deg, #f3faf5, #e9f6fb); }
+.ph-row { overflow: hidden; padding: 10px 0; mask: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
+.ph-row + .ph-row { margin-top: 6px; }
+.ph-track { display: flex; gap: 22px; width: max-content; animation: pwMove 90s linear infinite; }
+.ph-row.rev .ph-track { animation-direction: reverse; animation-duration: 110s; padding-left: 120px; }
+.ph-row:hover .ph-track { animation-play-state: paused; }
+.ph-item { flex: none; display: block; width: clamp(240px, 24vw, 360px); aspect-ratio: 4 / 3; border-radius: 18px; overflow: hidden; box-shadow: 0 20px 40px -26px rgba(11, 60, 40, .55); }
+.ph-row:not(.rev) .ph-item:nth-child(even), .ph-row.rev .ph-item:nth-child(odd) { transform: translateY(18px); }
+.ph-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s; }
+a.ph-item:hover img { transform: scale(1.04); }
+@media (prefers-reduced-motion: reduce) { .ph-track { animation: none; } .ph-row { overflow-x: auto; } }

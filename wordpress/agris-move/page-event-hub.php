@@ -43,10 +43,10 @@ while ( have_posts() ) : the_post();
       <span><?php echo esc_html( number_format_i18n( agm_thanks_count( $hub ) ) ); ?> lời tiếp sức đã lên tường</span></div>
   </section>
 
-  <div class="divider-img harvest" aria-hidden="true"><img src="<?php echo esc_url( agm_img( 'divider-harvest.webp' ) ); ?>" alt="" loading="lazy"></div>
+  <div class="divider-img mill" aria-hidden="true"><img src="<?php echo esc_url( agm_img( 'divider-mill.webp' ) ); ?>" alt="" loading="lazy"></div>
   <section class="band hub-sec alt" id="buu-thiep">
     <div class="in">
-      <div class="hub-head center"><img class="abi-side r" src="<?php echo esc_url( agm_img( 'abi-postcard.webp' ) ); ?>" alt="" aria-hidden="true"><p class="eyebrow-c">Bưu thiếp</p><h2 class="gt">Gửi bưu thiếp mùa vụ</h2><p>Chọn một khoảnh khắc đẹp của đội mình, viết lời chúc và tải bưu thiếp về gửi đồng đội.</p></div>
+      <div class="hub-head center"><img class="abi-side r" src="<?php echo esc_url( agm_img( 'abi-postcard.webp' ) ); ?>" alt="" aria-hidden="true"><h2 class="gt">Gửi bưu thiếp mùa vụ</h2><p>Chọn một khoảnh khắc đẹp của đội mình, viết lời chúc và tải bưu thiếp về gửi đồng đội.</p></div>
       <div class="st-grid wide"><?php get_template_part( 'parts/postcard' ); ?></div>
     </div>
   </section>
@@ -55,16 +55,22 @@ while ( have_posts() ) : the_post();
   <?php if ( isset( $kids['page-contest.php'] ) ) : $ct = $kids['page-contest.php']; ?>
   <section class="band hub-sec alt" id="khoanh-khac">
     <div class="in">
-      <?php if ( $shots ) : ?>
-      <div class="hub-slides" data-slides>
-        <div class="hub-track">
-          <?php foreach ( array_slice( $shots, 0, 12 ) as $p ) : $d = agm_entry_data( $p ); ?>
-          <a class="hub-slide" href="<?php echo esc_url( get_permalink( $ct ) . '#anh-' . $p->ID ); ?>"><img src="<?php echo esc_url( get_the_post_thumbnail_url( $p, 'medium_large' ) ); ?>" alt="<?php echo esc_attr( $d['title'] ); ?>" loading="lazy"></a>
-          <?php endforeach; ?>
-        </div>
-        <button type="button" class="hub-arrow prev" aria-label="Ảnh trước">‹</button><button type="button" class="hub-arrow next" aria-label="Ảnh sau">›</button>
-      </div>
-      <?php else : ?><p class="tk-empty">Chưa có ảnh nào. <a href="<?php echo esc_url( get_permalink( $ct ) ); ?>">Gửi ảnh đầu tiên</a></p><?php endif; ?>
+      <?php
+      $pics = array();
+      foreach ( $shots as $p ) { $d = agm_entry_data( $p ); if ( $d['raw'] ) { $pics[] = array( $d['raw'], $d['title'], get_permalink( $ct ) . '#anh-' . $p->ID ); } }
+      foreach ( get_posts( array( 'post_type' => 'anh_buu_thiep', 'post_status' => 'publish', 'numberposts' => 40, 'orderby' => 'menu_order', 'order' => 'ASC' ) ) as $p ) { $u = get_the_post_thumbnail_url( $p, 'medium_large' ); if ( $u ) { $pics[] = array( $u, get_the_title( $p ), '' ); } }
+      if ( $pics ) :
+        $rows = array( array(), array() );
+        foreach ( $pics as $i => $x ) { $rows[ $i % 2 ][] = $x; }
+        foreach ( $rows as $ri => $row ) : if ( ! $row ) { continue; } while ( count( $row ) < 6 ) { $row = array_merge( $row, $row ); } ?>
+    </div>
+    <div class="ph-row<?php echo $ri ? ' rev' : ''; ?>"><div class="ph-track">
+      <?php foreach ( array_merge( $row, $row ) as $k => $x ) : $tag = $x[2] ? 'a' : 'span'; ?>
+      <<?php echo $tag; // phpcs:ignore ?> class="ph-item"<?php echo $x[2] ? ' href="' . esc_url( $x[2] ) . '"' : ''; ?><?php echo $k >= count( $row ) ? ' aria-hidden="true" tabindex="-1"' : ''; ?>><img src="<?php echo esc_url( $x[0] ); ?>" alt="<?php echo esc_attr( $x[1] ); ?>" loading="lazy"></<?php echo $tag; // phpcs:ignore ?>>
+      <?php endforeach; ?>
+    </div></div>
+    <div class="in">
+      <?php endforeach; else : ?><p class="tk-empty">Chưa có ảnh nào. <a href="<?php echo esc_url( get_permalink( $ct ) ); ?>">Gửi ảnh đầu tiên</a></p><?php endif; ?>
     </div>
   </section>
   <?php endif; ?>
