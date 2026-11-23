@@ -1,0 +1,11 @@
+/*
+Theme Name: AgriS MOVE
+Theme URI: https://www.agrismove.com
+Description: Theme cho website văn hoá AgriS MOVE: hero đàn chim, Sự kiện có đếm ngược, TOP 50 MOVERS, podcast AgriS-thing và Bản tin MOVE. Dùng kèm plugin "AgriS MOVE – Bình chọn TOP 50 MOVERS".
+Version: 1.0.0
+Requires at least: 6.2
+Requires PHP: 7.4
+Text Domain: agris-move
+*/
+
+/* The real styles live in assets/css (site.css for the whole site, top50.css for the award page). */
