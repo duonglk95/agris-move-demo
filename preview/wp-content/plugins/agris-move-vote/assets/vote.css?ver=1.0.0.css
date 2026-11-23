@@ -1,0 +1,60 @@
+/* AgriS MOVE voting. Uses the theme's tokens when present, with fallbacks so it works under any theme. */
+.amv { --amv-green: var(--green, #007a3d); --amv-deep: var(--deep, #0b5d34); --amv-navy: var(--navy, #0f2b4c); --amv-mint: var(--mint, #eaf5ee); --amv-line: var(--line, #d5e5da); --amv-muted: var(--muted, #5f7a72); --amv-love: #e5484d; display: grid; gap: 20px; }
+.amv-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 14px 18px; border-radius: 16px; background: #fff; box-shadow: inset 0 0 0 1px var(--amv-line); }
+.amv-bar p { margin: 0; }
+.amv-who { color: var(--amv-navy); }
+.amv-who span { color: var(--amv-muted); }
+.amv-note { color: var(--amv-muted); }
+.amv-flash { flex-basis: 100%; color: #9a3412; font-weight: 600; }
+.amv-signin, .amv-signout { margin-left: auto; border: 0; border-radius: 999px; padding: 10px 18px; font: 700 14px/1 inherit; font-family: inherit; cursor: pointer; }
+.amv-signin { color: #fff; background: var(--amv-green); }
+.amv-signout { color: var(--amv-deep); background: var(--amv-mint); }
+.amv-filter input { width: 100%; max-width: 420px; padding: 12px 16px; border-radius: 999px; border: 1.5px solid var(--amv-line); font: inherit; background: #fff; }
+.amv-filter input:focus, .amv-dialog input:focus { outline: 3px solid #e7a92a; outline-offset: 2px; }
+.amv-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; }
+.amv-card { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 24px 50px -36px rgba(11, 93, 52, .6), inset 0 0 0 1px var(--amv-line); display: flex; flex-direction: column; }
+.amv-card[hidden] { display: none; }
+.amv-pic { display: block; aspect-ratio: 4 / 3; background: var(--amv-mint); overflow: hidden; }
+.amv-pic img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.amv-card:hover .amv-pic img { transform: scale(1.04); }
+.amv-initial { display: grid; place-items: center; height: 100%; font: 800 64px/1 var(--display, sans-serif); color: var(--amv-green); }
+.amv-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.amv-body h3 { margin: 0; font-size: 18px; }
+.amv-body h3 a { color: var(--amv-navy); text-decoration: none; }
+.amv-body h3 a:hover { color: var(--amv-green); }
+.amv-unit { font-size: 13px; font-weight: 600; color: var(--amv-green); }
+.amv-body p { margin: 0; font-size: 14px; color: #3b544d; flex: 1; }
+.amv-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
+.amv-read { font-size: 14px; font-weight: 700; color: var(--amv-green); text-decoration: none; }
+.amv-love { display: inline-flex; align-items: center; gap: 7px; border: 0; border-radius: 999px; padding: 8px 14px 8px 11px; background: #fff0f0; color: #b4232a; font: 700 14px/1 inherit; font-family: inherit; cursor: pointer; transition: background .2s, transform .15s; }
+.amv-love svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
+.amv-love.on { background: var(--amv-love); color: #fff; }
+.amv-love.on svg { fill: currentColor; }
+.amv-love:hover:not(:disabled) { transform: translateY(-1px); }
+.amv-love:disabled { opacity: .55; cursor: default; }
+.amv-love.busy { opacity: .7; }
+.amv-love.pop svg { animation: amvpop .45s ease; }
+.amv-love .amv-l { display: none; }
+.amv-love.big { padding: 12px 20px 12px 16px; font-size: 16px; }
+.amv-love.big .amv-l { display: inline; }
+.amv-love.big svg { width: 22px; height: 22px; }
+@keyframes amvpop { 40% { transform: scale(1.35); } }
+.amv-empty, .amv-none { color: var(--amv-muted); }
+.amv-single { margin-bottom: 28px; }
+.amv-hero { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
+.amv .amv-portrait, .entry .amv-portrait { width: 160px; height: 160px; max-width: none; object-fit: cover; border-radius: 50%; box-shadow: 0 0 0 6px var(--amv-mint); }
+.amv-hero .amv-unit { margin: 0 0 12px; font-size: 15px; }
+.amv-story { margin-top: 8px; }
+.amv-dialog { border: 0; border-radius: 22px; padding: 0; width: min(440px, calc(100vw - 32px)); box-shadow: 0 40px 80px -30px rgba(3, 20, 15, .5); }
+.amv-dialog::backdrop { background: rgba(3, 20, 15, .45); backdrop-filter: blur(3px); }
+.amv-form { display: grid; gap: 8px; padding: 28px; position: relative; font-family: var(--body, inherit); }
+.amv-form h2 { margin: 0 0 4px; font-size: 22px; color: var(--deep, #0b5d34); font-family: var(--display, inherit); }
+.amv-help, .amv-fine { margin: 0 0 8px; font-size: 14px; color: var(--muted, #5f7a72); }
+.amv-fine { margin: 6px 0 0; font-size: 12px; }
+.amv-form label { font-size: 14px; font-weight: 600; color: var(--navy, #0f2b4c); margin-top: 6px; }
+.amv-form input { padding: 12px 14px; border-radius: 12px; border: 1.5px solid var(--line, #d5e5da); font: inherit; font-size: 16px; }
+.amv-err { margin: 4px 0 0; color: #b4232a; font-size: 14px; font-weight: 600; }
+.amv-go { margin-top: 10px; border: 0; border-radius: 999px; padding: 14px; background: linear-gradient(180deg, #17994f, #00713a); color: #fff; font: 700 16px/1 inherit; font-family: inherit; cursor: pointer; }
+.amv-go:disabled { opacity: .7; }
+.amv-x { position: absolute; right: 14px; top: 12px; width: 36px; height: 36px; border: 0; border-radius: 50%; background: var(--mint, #eaf5ee); font-size: 22px; line-height: 1; cursor: pointer; color: var(--navy, #0f2b4c); }
+@media (prefers-reduced-motion: reduce) { .amv-love, .amv-pic img { transition: none; } .amv-love.pop svg { animation: none; } }
