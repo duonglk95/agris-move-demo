@@ -160,3 +160,36 @@ function agm_top50_guide_url() {
 	$u = agm_page_by_template( 'page-top50-guide.php' );
 	return $u ? $u : agm_top50_url();
 }
+
+/** Footer sitemap: one column per level-1 section with its level-2 pages. */
+function agm_footer_sitemap() {
+	$cols = array();
+	$names = array( 'page-event-hub.php' => 'Giới thiệu', 'page-top50.php' => 'Giới thiệu' );
+	$hubs = get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'numberposts' => 10, 'meta_key' => '_wp_page_template', 'meta_value' => 'page-event-hub.php' ) );
+	$t50  = get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'numberposts' => 1, 'meta_key' => '_wp_page_template', 'meta_value' => 'page-top50.php' ) );
+	foreach ( array_merge( $hubs, $t50 ) as $h ) {
+		$label = get_post_meta( $h->ID, 'menu_label', true ); $label = $label ? $label : get_the_title( $h );
+		$links = array( array( 'Giới thiệu', get_permalink( $h ) ) );
+		foreach ( agm_hub_children( $h->ID ) as $c ) {
+			$tpl = get_page_template_slug( $c );
+			if ( in_array( $tpl, array( 'page-thanks.php', 'page-postcard.php', 'page-avatar.php' ), true ) ) { continue; }
+			$links[] = array( 'page-top50-apply.php' === $tpl ? 'Ứng cử' : get_the_title( $c ), get_permalink( $c ) );
+		}
+		if ( 'page-event-hub.php' === get_page_template_slug( $h ) ) {
+			array_splice( $links, 1, 0, array( array( 'Tiếp sức đội mình', get_permalink( $h ) . '#tiep-suc' ), array( 'Thư tay tiếp sức', get_permalink( $h ) . '#buu-thiep' ) ) );
+		}
+		$cols[] = array( $label, $links );
+	}
+	$more = array( array( 'Trang chủ', home_url( '/' ) ) );
+	if ( $ev = agm_page_by_template( 'page-events.php' ) ) { $more[] = array( 'Sự kiện', $ev ); }
+	$more[] = array( 'AgriS-thing', home_url( '/#agris-thing' ) );
+	$more[] = array( 'Bản tin', home_url( '/#ban-tin' ) );
+	$cols[] = array( 'Khám phá', $more );
+	echo '<div class="foot-map">';
+	foreach ( $cols as $c ) {
+		echo '<nav class="foot-col" aria-label="' . esc_attr( $c[0] ) . '"><h4>' . esc_html( $c[0] ) . '</h4><ul>';
+		foreach ( $c[1] as $l ) { echo '<li><a href="' . esc_url( $l[1] ) . '">' . esc_html( $l[0] ) . '</a></li>'; }
+		echo '</ul></nav>';
+	}
+	echo '</div>';
+}
