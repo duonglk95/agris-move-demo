@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'AMV_VER', '1.0.0' );
+define( 'AMV_VER', '1.0.' . filemtime( __DIR__ . '/assets/vote.css' ) );
 define( 'AMV_FILE', __FILE__ );
 define( 'AMV_DIR', plugin_dir_path( __FILE__ ) );
 define( 'AMV_URL', plugin_dir_url( __FILE__ ) );
