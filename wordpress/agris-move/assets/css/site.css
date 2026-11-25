@@ -752,3 +752,4 @@ a.ph-item:hover img { transform: scale(1.04); }
 .g50-when { margin-left: 40px; }
 .g50 .tk-hero-txt { padding-block: clamp(40px, 5vw, 72px) 8px; }
 .g50 .g50-steps-sec { padding-top: 24px; }
+.ct-acc a { color: var(--green); font-weight: 600; text-underline-offset: 3px; }

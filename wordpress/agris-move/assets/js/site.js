@@ -181,3 +181,11 @@
   if ("IntersectionObserver" in window) new IntersectionObserver(([e]) => { e.isIntersecting ? v.play().catch(() => {}) : v.pause(); }).observe(v);
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); v.controls = true; }
 })();
+
+// accordions: opening one closes the others in the same group
+document.addEventListener("toggle", e => {
+  const d = e.target;
+  if (!(d instanceof HTMLDetailsElement) || !d.open) return;
+  const group = d.closest(".ct-acc, .faq");
+  if (group) group.querySelectorAll(":scope > details[open]").forEach(o => { if (o !== d) o.open = false; });
+}, true);
