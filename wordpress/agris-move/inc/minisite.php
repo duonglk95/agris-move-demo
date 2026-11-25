@@ -15,7 +15,7 @@ function agm_hub_id( $id = 0 ) {
 	$id = $id ? $id : ( is_page() ? get_queried_object_id() : 0 );
 	if ( ! $id ) { return 0; }
 	foreach ( array_merge( array( $id ), get_post_ancestors( $id ) ) as $pid ) {
-		if ( 'page-event-hub.php' === get_page_template_slug( $pid ) ) { return (int) $pid; }
+		if ( in_array( get_page_template_slug( $pid ), array( 'page-event-hub.php', 'page-top50.php' ), true ) ) { return (int) $pid; }
 	}
 	return 0;
 }
@@ -29,7 +29,7 @@ function agm_hub_menu( $hub ) {
 	printf( '<a href="%s"%s>%s</a>', esc_url( get_permalink( $hub ) ), $cur === $hub ? ' aria-current="page"' : '', esc_html( get_post_meta( $hub, 'menu_label', true ) ? get_post_meta( $hub, 'menu_label', true ) : get_the_title( $hub ) ) );
 	foreach ( agm_hub_children( $hub ) as $c ) {
 		$tpl = get_page_template_slug( $c );
-		if ( ! in_array( $tpl, array( 'page-pitcrew.php', 'page-contest.php' ), true ) ) { continue; }
+		if ( ! in_array( $tpl, array( 'page-pitcrew.php', 'page-contest.php', 'page-top50-guide.php' ), true ) ) { continue; }
 		printf( '<a href="%s"%s>%s</a>', esc_url( get_permalink( $c ) ), $cur === $c->ID ? ' aria-current="page"' : '', esc_html( get_the_title( $c ) ) );
 	}
 }

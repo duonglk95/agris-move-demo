@@ -730,3 +730,25 @@ a.ph-item:hover img { transform: scale(1.04); }
 .tk-split-txt .tk-intro p { margin: 0 0 12px; }
 .tk-split-txt .tk-intro strong { color: var(--green); }
 @media (max-width: 900px) { .tk .tk-split { grid-template-columns: 1fr; } }
+
+/* TOP 50 guide */
+.g50 .tk-hero { background: linear-gradient(180deg, #fff, #f3faf5); }
+.g50-hero { min-height: 0; }
+.g50-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; counter-reset: none; }
+.g50-step { display: grid; align-content: start; gap: 6px; padding: 24px 26px; }
+.g50-step h3 { margin: 0; }
+.g50-when { margin: 0 0 6px 40px; font: 600 13px var(--body); color: var(--muted); }
+.g50-body { font-size: 15px; line-height: 1.6; color: var(--ink); }
+.g50-body p { margin: 0 0 8px; }
+.g50-body ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+.g50-body b { color: var(--navy); }
+.g50-cta { margin-top: 22px; }
+.g50-cta h3 span { font-size: 14px; }
+@media (max-width: 1000px) { .g50-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .g50-steps { grid-template-columns: 1fr; } }
+.g50-step h3 { display: flex; align-items: center; gap: 10px; font: 800 19px/1.25 var(--display); color: var(--green); }
+.g50-step h3 span, .g50-cta h3 span { width: 30px; height: 30px; flex: none; border-radius: 50%; background: var(--grad, var(--green)); color: #fff; display: grid; place-items: center; font-size: 15px; }
+.g50-cta h3 { display: flex; align-items: center; gap: 10px; font: 800 17px var(--display); color: var(--green); }
+.g50-when { margin-left: 40px; }
+.g50 .tk-hero-txt { padding-block: clamp(40px, 5vw, 72px) 8px; }
+.g50 .g50-steps-sec { padding-top: 24px; }

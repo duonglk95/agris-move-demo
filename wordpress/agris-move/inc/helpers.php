@@ -154,3 +154,9 @@ add_action( 'init', function () {
 	}
 	update_option( 'agm_key_migrated', 1 );
 } );
+
+/** URL of the TOP 50 guide sub-page (falls back to the TOP 50 page). */
+function agm_top50_guide_url() {
+	$u = agm_page_by_template( 'page-top50-guide.php' );
+	return $u ? $u : agm_top50_url();
+}

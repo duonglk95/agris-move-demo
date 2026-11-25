@@ -2,7 +2,7 @@
   (function () {
     const at = d => new Date(d + "+07:00").getTime();
     const P = [
-      { from: at("2026-11-01T00:00:00"), to: at("2026-12-01T00:00:00"), label: "Mở nhận hồ sơ sau", title: "Nộp hồ sơ từ 01/12/2026", target: "to", cta: ["Xem cách tham gia", "#tham-gia"] },
+      { from: at("2026-11-01T00:00:00"), to: at("2026-12-01T00:00:00"), label: "Mở nhận hồ sơ sau", title: "Nộp hồ sơ từ 01/12/2026", target: "to", cta: ["Xem hướng dẫn tham gia", "#tham-gia"] },
       { from: at("2026-12-01T00:00:00"), to: at("2027-03-01T00:00:00"), label: "Hạn nộp hồ sơ còn", title: "Đang nhận hồ sơ, đề cử", target: "to", cta: ["Nộp hồ sơ ngay", "#tham-gia"] },
       { from: at("2027-03-01T00:00:00"), to: at("2027-05-01T00:00:00"), label: "Bình chọn kết thúc sau", title: "Đang bình chọn", target: "to", cta: ["Bình chọn ngay", "#binh-chon"] },
       { from: at("2027-05-01T00:00:00"), to: at("2027-05-16T00:00:00"), label: "Công bố kết quả sau", title: "Công bố ngày 16/05/2027", target: "to", cta: ["Xem giải thưởng", "#giai-thuong"] },
@@ -15,7 +15,7 @@
       if (ph !== cur) {
         cur = ph;
         $("phaseLabel").textContent = ph.label; $("phaseTitle").textContent = ph.title;
-        $("ctaMain").firstChild.textContent = ph.cta[0] + " "; $("ctaMain").href = ph.cta[1];
+        $("ctaMain").firstChild.textContent = ph.cta[0] + " "; if (!/^#(tham-gia|hoi-dap)$/.test(ph.cta[1])) $("ctaMain").href = ph.cta[1];
         $("phaseTimer").hidden = !ph.target;
         document.querySelectorAll(".timeline li[data-from]").forEach(li => {
           const f = at(li.dataset.from + "T00:00:00"), t = at(li.dataset.to + "T23:59:59");
