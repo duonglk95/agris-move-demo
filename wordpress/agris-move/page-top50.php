@@ -68,7 +68,10 @@ while ( have_posts() ) :
         <div><b>Impact</b><span>Tạo ra thay đổi cụ thể cho đội nhóm, khách hàng hoặc đơn vị.</span></div>
         <div><b>As One</b><span>Phối hợp, hỗ trợ, chia sẻ và lan toả đến đồng nghiệp, đơn vị khác.</span></div>
       </div>
-      <p class="note"><a href="<?php echo esc_url( agm_top50_guide_url() ); ?>">Xem thời gian biểu, giải thưởng và thể lệ →</a></p>
+      <div class="apply-cta">
+        <a class="btn main" href="<?php echo esc_url( get_theme_mod( 'agm_apply_link' ) ? get_theme_mod( 'agm_apply_link' ) : agm_top50_guide_url() ); ?>">Ứng cử ngay <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"></path></svg></a>
+        <span>Bạn là một MOVER? Kể câu chuyện của bạn và nhận sự ghi nhận từ đồng nghiệp.</span>
+      </div>
     </div>
   </section>
 

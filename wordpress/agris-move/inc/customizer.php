@@ -39,6 +39,9 @@ add_action( 'customize_register', function ( $wp ) {
 
 	$wp->add_setting( 'agm_contact_link', array( 'default' => '', 'sanitize_callback' => 'esc_url_raw' ) );
 	$wp->add_control( 'agm_contact_link', array( 'section' => 'agm', 'label' => 'Link nút "Liên hệ chương trình" ở chân trang', 'type' => 'url' ) );
+
+	$wp->add_setting( 'agm_apply_link', array( 'default' => '', 'sanitize_callback' => 'esc_url_raw' ) );
+	$wp->add_control( 'agm_apply_link', array( 'section' => 'agm', 'label' => 'Link nút "Ứng cử ngay" (TOP 50)', 'description' => 'Ví dụ link form nộp hồ sơ. Để trống để trỏ tới trang Hướng dẫn & thể lệ.', 'type' => 'url' ) );
 } );
 
 function agm_top50_banner() {

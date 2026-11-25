@@ -122,3 +122,6 @@
 @media (prefers-reduced-motion: reduce) {
 .t50 .btn { transition: none; }
 }
+.t50 .apply-cta { margin-top: 28px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 22px 26px; border-radius: 22px; background: linear-gradient(120deg, #0b5d34, #0e7a42); color: #fff; }
+.t50 .apply-cta .btn.main { background: #b6e34a; color: #0b3d22; box-shadow: none; font-size: 17px; padding: 14px 26px; }
+.t50 .apply-cta span { font-size: 15px; opacity: .9; }
