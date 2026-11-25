@@ -28,6 +28,7 @@ while ( have_posts() ) : the_post();
       <?php if ( ! $open ) : ?>
       <div class="pc-step ap-closed"><h3><span>!</span>Chưa đến thời gian nhận hồ sơ</h3><p>Bạn xem trước các mục cần chuẩn bị bên dưới và quay lại từ <?php echo esc_html( wp_date( 'd/m/Y', strtotime( $from ) ) ); ?> nhé.</p></div>
       <?php endif; ?>
+      <ol class="ap-progress" aria-hidden="true"><li class="on"><span>1</span>Thông tin</li><li><span>2</span>Câu chuyện</li><li><span>3</span>Video</li><li><span>4</span>Xác nhận</li></ol>
       <form class="ap-form" data-apply novalidate>
         <fieldset class="pc-step" <?php disabled( ! $open ); ?>>
           <h3><span>1</span>Thông tin của bạn</h3>
@@ -67,15 +68,17 @@ while ( have_posts() ) : the_post();
           <h3><span>3</span>Video và ảnh</h3>
           <p class="ap-hint">Video 60 – 90 giây (bắt buộc): giới thiệu bản thân, điều bạn muốn thay đổi ở AgriS, hoặc kể chính câu chuyện MOVE.</p>
           <label>Link video <small>(OneDrive, Google Drive, YouTube… nhớ mở quyền xem)</small><input name="video" type="url" placeholder="https://"></label>
-          <p class="ap-or">hoặc</p>
+          <p class="ap-or"><span>hoặc</span></p>
           <label>Tải file video <small>(MP4/MOV, tối đa <span data-max></span>)</small><input name="video_file" type="file" accept="video/mp4,video/quicktime"></label>
           <label>Ảnh chân dung <small>(không bắt buộc, dùng làm ảnh đại diện MOVER)</small><input name="photo" type="file" accept="image/jpeg,image/png"></label>
         </fieldset>
 
-        <div class="pc-dl ap-submit">
+        <fieldset class="pc-step ap-review" <?php disabled( ! $open ); ?>>
+          <h3><span>4</span>Xem lại và nộp</h3>
+          <dl class="ap-sum"></dl>
           <label class="ap-consent"><input type="checkbox" name="consent" value="1" required <?php disabled( ! $open ); ?>><span>Thông tin là sự thật. Tôi đồng ý để AgriS sử dụng câu chuyện, hình ảnh và video cho mục đích truyền thông nội bộ.</span></label>
-          <button class="btn" type="submit" <?php disabled( ! $open ); ?>>Nộp hồ sơ</button>
-        </div>
+        </fieldset>
+        <div class="ap-nav"><button type="button" class="btn ghost" data-prev>← Quay lại</button><button type="button" class="btn" data-next>Tiếp tục →</button><button class="btn" type="submit" data-send <?php disabled( ! $open ); ?>>Nộp hồ sơ</button></div>
         <p class="tk-msg ap-msg" role="alert" hidden></p>
       </form>
 
