@@ -722,3 +722,11 @@ a.ph-item:hover img { transform: scale(1.04); }
 .tk-sound svg { width: 20px; height: 20px; }
 .tk-sound .on, .tk-video.unmuted .tk-sound .off { display: none; }
 .tk-video.unmuted .tk-sound .on { display: inline; }
+/* hub hero: video left, intro right */
+.tk .tk-split { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(28px, 4vw, 64px); align-items: center; min-height: 0; }
+.tk-split .tk-video { border-radius: 24px; overflow: hidden; box-shadow: 0 34px 70px -40px rgba(11, 60, 30, .7); }
+.tk-split-txt h1.gt { font-size: clamp(36px, 4.2vw, 60px); }
+.tk-split-txt .tk-intro { margin-top: 14px; font-size: 16px; }
+.tk-split-txt .tk-intro p { margin: 0 0 12px; }
+.tk-split-txt .tk-intro strong { color: var(--green); }
+@media (max-width: 900px) { .tk .tk-split { grid-template-columns: 1fr; } }

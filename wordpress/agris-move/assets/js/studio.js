@@ -142,7 +142,7 @@
       for (; z >= 24; z -= 2) { c.font = `600 ${z}px ${HAND}`; lh = Math.round(z * 1.45); if (lines(wish, w) * lh <= bottom - top + lh * .3) break; }
       for (let y = top + 12; y < bottom; y += lh) line(y);
       c.fillStyle = "#1f3a33"; c.font = `600 ${Math.max(z, 24)}px ${HAND}`; wrap(c, wish, x, top, w, lh, Math.floor((bottom - top) / lh) + 1);
-      c.fillStyle = "#0b6b3a"; c.font = `800 27px ${FONT}`; { const t = S.tags || ""; if (c.measureText(t).width <= w) c.fillText(t, x, H - 66); else { const p = t.split(" "), h = Math.ceil(p.length / 2); c.fillText(p.slice(0, h).join(" "), x, H - 90); c.fillText(p.slice(h).join(" "), x, H - 54); } }
+      c.fillStyle = "#0b6b3a"; c.font = `800 27px ${FONT}`; { const t = (S.tags || "").replace(/\s*#Khoanhkhacdoiminh/i, ""); if (c.measureText(t).width <= w) c.fillText(t, x, H - 66); else { const p = t.split(" "), h = Math.ceil(p.length / 2); c.fillText(p.slice(0, h).join(" "), x, H - 90); c.fillText(p.slice(h).join(" "), x, H - 54); } }
     };
     if (document.fonts) Promise.all(['600 40px "Dancing Script"'].map(f => document.fonts.load(f, 'Đội ơi ạ'))).then(() => draw()).catch(() => {});
     const pick = async () => { const r = pcForm.querySelector("[name=photo]:checked"); credit = r ? r.dataset.credit : ""; photo = r ? await loadImg(r.value).catch(() => null) : null; pox = poy = 0; pz = 1; if (zr) zr.value = 1; draw(); };
