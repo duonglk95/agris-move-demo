@@ -58,3 +58,16 @@
 .amv-go:disabled { opacity: .7; }
 .amv-x { position: absolute; right: 14px; top: 12px; width: 36px; height: 36px; border: 0; border-radius: 50%; background: var(--mint, #eaf5ee); font-size: 22px; line-height: 1; cursor: pointer; color: var(--navy, #0f2b4c); }
 @media (prefers-reduced-motion: reduce) { .amv-love, .amv-pic img { transition: none; } .amv-love.pop svg { animation: none; } }
+/* love: red filled heart when loved, works outside .amv containers too */
+.amv-love { position: relative; --amv-love: #e5484d; }
+.amv-love.on { background: #ffe4e4; color: #e5484d; box-shadow: inset 0 0 0 1.5px #f7b4b6; }
+.amv-love.on svg { fill: #e5484d; stroke: #e5484d; }
+.amv-love.pop svg { animation: amvting .6s cubic-bezier(.3, 1.6, .5, 1); }
+.amv-love.pop .amv-n { animation: amvnum .5s ease; }
+@keyframes amvting { 0% { transform: scale(1); } 25% { transform: scale(.7); } 55% { transform: scale(1.45) rotate(-8deg); } 75% { transform: scale(.95) rotate(4deg); } 100% { transform: scale(1); } }
+@keyframes amvnum { 0% { transform: translateY(6px); opacity: 0; } 100% { transform: none; opacity: 1; } }
+.amv-plus { position: absolute; left: 12px; top: -4px; font: 800 13px/1 inherit; color: #e5484d; pointer-events: none; animation: amvplus .9s ease-out forwards; }
+@keyframes amvplus { 0% { transform: translateY(0) scale(.8); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(-26px) scale(1.1); opacity: 0; } }
+.amv-love.pop::after { content: ""; position: absolute; left: 6px; top: 50%; width: 30px; height: 30px; margin-top: -15px; border-radius: 50%; border: 2px solid #e5484d; opacity: 0; animation: amvring .55s ease-out; pointer-events: none; }
+@keyframes amvring { 0% { transform: scale(.3); opacity: .9; } 100% { transform: scale(1.6); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .amv-love.pop svg, .amv-love.pop .amv-n, .amv-plus, .amv-love.pop::after { animation: none; } }

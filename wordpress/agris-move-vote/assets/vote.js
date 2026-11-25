@@ -51,7 +51,10 @@
       me.voted = r.on ? [...new Set([...me.voted, id])] : me.voted.filter(x => x !== id);
       if (me.counts && r.count !== null) me.counts[id] = r.count;
       paint();
-      if (r.on) { btn.classList.remove("pop"); void btn.offsetWidth; btn.classList.add("pop"); }
+      if (r.on) {
+        btn.classList.remove("pop"); void btn.offsetWidth; btn.classList.add("pop");
+        const f = document.createElement("span"); f.className = "amv-plus"; f.textContent = "+1"; f.setAttribute("aria-hidden", "true"); btn.appendChild(f); setTimeout(() => f.remove(), 900);
+      }
     } catch (e) {
       if (e.login) return openLogin(() => vote(btn));
       alertBar(e.message);
