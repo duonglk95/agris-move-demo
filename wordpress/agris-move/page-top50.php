@@ -22,7 +22,6 @@ while ( have_posts() ) :
         <p>Mỗi ngày, ở văn phòng, nhà máy hay vùng nguyên liệu, có rất nhiều AgriS-er đang lặng lẽ MOVE: chủ động nhận việc, thử một cách làm mới, hỗ trợ đồng nghiệp. TOP 50 MOVERS là giải thưởng văn hoá thường niên của AgriS, do chính AgriS-ers bình chọn, để những câu chuyện ấy được kể ra và được ghi nhận.</p>
         <div class="actions">
           <a class="btn main" id="ctaMain" href="<?php echo esc_url( agm_top50_guide_url() ); ?>">Xem hướng dẫn tham gia <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8h11M9 4l4 4-4 4"></path></svg></a>
-          <a class="btn ghost" href="#cac-mover">Xem các MOVER</a>
         </div>
       </div>
       <aside class="status" aria-live="polite">
