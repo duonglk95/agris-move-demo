@@ -121,6 +121,7 @@ function agm_event_groups() {
 			'url'   => $page ? get_permalink( $page ) : '',
 			'img'   => get_the_post_thumbnail_url( $p, 'large' ),
 			'count' => $page ? agm_thanks_count( $page ) : 0,
+			'key'   => (bool) get_post_meta( $p->ID, '_agm_key', true ),
 		);
 		$out[ $start <= $now ? 'live' : 'soon' ][] = $ev;
 	}
@@ -145,3 +146,12 @@ function agm_sub_menu() {
 		printf( '<a href="%s"%s>%s</a>', esc_url( $i[1] ), $i[2] ? ' aria-current="page"' : '', esc_html( $i[0] ) );
 	}
 }
+
+/** One-time: mark existing events that already have a featured image or sub-page as key events. */
+add_action( 'init', function () {
+	if ( get_option( 'agm_key_migrated' ) ) { return; }
+	foreach ( get_posts( array( 'post_type' => 'su_kien', 'post_status' => 'any', 'numberposts' => -1 ) ) as $p ) {
+		if ( has_post_thumbnail( $p ) || get_post_meta( $p->ID, '_agm_page', true ) ) { update_post_meta( $p->ID, '_agm_key', '1' ); }
+	}
+	update_option( 'agm_key_migrated', 1 );
+} );

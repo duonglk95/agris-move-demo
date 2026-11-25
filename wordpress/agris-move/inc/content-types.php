@@ -69,6 +69,7 @@ function agm_event_box( $post ) {
 	<p><label for="agm_page"><strong>Trang con của sự kiện</strong> (để thẻ sự kiện bấm được)</label><br>
 		<?php wp_dropdown_pages( array( 'name' => 'agm_page', 'id' => 'agm_page', 'selected' => (int) get_post_meta( $post->ID, '_agm_page', true ), 'show_option_none' => '— Không có —', 'option_none_value' => '0' ) ); ?>
 		<span class="description">Ví dụ trang dùng mẫu "Lời cảm ơn" cho Vào vụ.</span></p>
+	<p><label><input type="checkbox" name="agm_key" value="1" <?php checked( get_post_meta( $post->ID, '_agm_key', true ), '1' ); ?>> <strong>Sự kiện key</strong> (hiện thẻ lớn có ảnh đại diện; bỏ chọn = sự kiện thường, hiện thẻ nhỏ)</label></p>
 	<p><label><input type="checkbox" name="agm_allday" value="1" <?php checked( $allday, '1' ); ?>> Sự kiện cả ngày (giữ trên trang chủ đến hết ngày)</label></p>
 	<p><label for="agm_place"><strong>Địa điểm hoặc ghi chú</strong></label><br>
 		<input type="text" id="agm_place" name="agm_place" class="widefat" value="<?php echo esc_attr( $place ); ?>" placeholder="Ví dụ: Khai vụ tại TTCA"></p>
@@ -108,6 +109,7 @@ add_action( 'save_post', function ( $post_id ) {
 		$end = isset( $_POST['agm_end'] ) ? sanitize_text_field( wp_unslash( $_POST['agm_end'] ) ) : '';
 		update_post_meta( $post_id, '_agm_end', preg_match( '/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', $end ) ? $end : '' );
 		update_post_meta( $post_id, '_agm_page', isset( $_POST['agm_page'] ) ? absint( $_POST['agm_page'] ) : 0 );
+		update_post_meta( $post_id, '_agm_key', empty( $_POST['agm_key'] ) ? '' : '1' );
 		update_post_meta( $post_id, '_agm_allday', empty( $_POST['agm_allday'] ) ? '' : '1' );
 		update_post_meta( $post_id, '_agm_place', isset( $_POST['agm_place'] ) ? sanitize_text_field( wp_unslash( $_POST['agm_place'] ) ) : '' );
 		update_post_meta( $post_id, '_agm_cd', isset( $_POST['agm_cd'] ) ? sanitize_text_field( wp_unslash( $_POST['agm_cd'] ) ) : '' );

@@ -11,7 +11,7 @@
         ?>
       <div class="ev-group" data-rv=".08">
         <h3 class="ev-gh"><span class="ev-dot"></span>Đang diễn ra</h3>
-        <?php $small = array(); foreach ( $evg['live'] as $e ) : if ( ! $e['img'] && ! $e['url'] ) { $small[] = $e; continue; } $tag = $e['url'] ? 'a' : 'div'; ?>
+        <?php $small = array(); foreach ( $evg['live'] as $e ) : if ( ! $e['key'] ) { $small[] = $e; continue; } $tag = $e['url'] ? 'a' : 'div'; ?>
         <<?php echo $tag; // phpcs:ignore ?> class="ev-live"<?php echo $e['url'] ? ' href="' . esc_url( $e['url'] ) . '"' : ''; // phpcs:ignore ?>>
           <div class="ev-img"><?php if ( $e['img'] ) : ?><img src="<?php echo esc_url( $e['img'] ); ?>" alt=""><?php endif; ?></div>
           <div class="ev-body">
@@ -24,11 +24,11 @@
         </<?php echo $tag; // phpcs:ignore ?>>
         <?php endforeach; if ( $small ) : ?>
         <div class="ev-soon">
-          <?php foreach ( $small as $e ) : ?>
-          <div class="ev-card">
+          <?php foreach ( $small as $e ) : $tag = $e['url'] ? 'a' : 'div'; ?>
+          <<?php echo $tag; // phpcs:ignore ?> class="ev-card"<?php echo $e['url'] ? ' href="' . esc_url( $e['url'] ) . '"' : ''; // phpcs:ignore ?>>
             <div class="ev-date"><b><?php echo esc_html( wp_date( 'd', $e['start'] ) ); ?></b><span>Th<?php echo esc_html( wp_date( 'n', $e['start'] ) ); ?> · <?php echo esc_html( $wd[ (int) wp_date( 'w', $e['start'] ) ] ); ?></span></div>
-            <div><span class="ev-pill live">Hôm nay</span><h4><?php echo esc_html( $e['place'] ? $e['place'] : $e['title'] ); ?></h4><?php if ( $e['place'] ) : ?><p class="ev-meta"><?php echo esc_html( $e['title'] ); ?></p><?php endif; ?></div>
-          </div>
+            <div><span class="ev-pill live">Đang diễn ra</span><h4><?php echo esc_html( $e['place'] ? $e['place'] : $e['title'] ); ?></h4><?php if ( $e['place'] ) : ?><p class="ev-meta"><?php echo esc_html( $e['title'] ); ?></p><?php endif; ?></div>
+          </<?php echo $tag; // phpcs:ignore ?>>
           <?php endforeach; ?>
         </div>
         <?php endif; ?>
