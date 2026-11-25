@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'AGM_VER', '1.0.0' );
+define( 'AGM_VER', '1.0.' . filemtime( __DIR__ . '/assets/css/site.css' ) );
 
 require get_template_directory() . '/inc/content-types.php';
 require get_template_directory() . '/inc/customizer.php';
