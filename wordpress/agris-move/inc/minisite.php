@@ -29,8 +29,8 @@ function agm_hub_menu( $hub ) {
 	printf( '<a href="%s"%s>%s</a>', esc_url( get_permalink( $hub ) ), $cur === $hub ? ' aria-current="page"' : '', esc_html( get_post_meta( $hub, 'menu_label', true ) ? get_post_meta( $hub, 'menu_label', true ) : get_the_title( $hub ) ) );
 	foreach ( agm_hub_children( $hub ) as $c ) {
 		$tpl = get_page_template_slug( $c );
-		if ( ! in_array( $tpl, array( 'page-pitcrew.php', 'page-contest.php', 'page-top50-guide.php' ), true ) ) { continue; }
-		printf( '<a href="%s"%s>%s</a>', esc_url( get_permalink( $c ) ), $cur === $c->ID ? ' aria-current="page"' : '', esc_html( get_the_title( $c ) ) );
+		if ( ! in_array( $tpl, array( 'page-pitcrew.php', 'page-contest.php', 'page-top50-guide.php', 'page-top50-apply.php' ), true ) ) { continue; }
+		printf( '<a href="%s"%s>%s</a>', esc_url( get_permalink( $c ) ), $cur === $c->ID ? ' aria-current="page"' : '', esc_html( 'page-top50-apply.php' === $tpl ? 'Ứng cử' : get_the_title( $c ) ) );
 	}
 }
 
