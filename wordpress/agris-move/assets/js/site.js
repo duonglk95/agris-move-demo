@@ -210,3 +210,12 @@
     } else animate(d, false);
   });
 })();
+
+// thank-you wall pager
+document.querySelectorAll("[data-tw]").forEach(box => {
+  const pages = [...box.querySelectorAll(".tw-page")], num = box.querySelector(".tw-num b"), prev = box.querySelector(".tw-prev"), next = box.querySelector(".tw-next");
+  if (!prev) return;
+  let i = 0;
+  const go = k => { i = (k + pages.length) % pages.length; pages.forEach((p, j) => (p.hidden = j !== i)); num.textContent = i + 1; prev.disabled = i === 0; next.disabled = i === pages.length - 1; };
+  prev.addEventListener("click", () => go(i - 1)); next.addEventListener("click", () => go(i + 1)); go(0);
+});

@@ -818,3 +818,25 @@ a.ph-item:hover img { transform: scale(1.04); }
 @keyframes apIn { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .ap-form fieldset.pc-step { animation: none; } }
 @media (max-width: 700px) { .ap-form fieldset.pc-step { padding: 24px 18px; } .ap-nav { padding: 14px 18px; } .ap-progress li { font-size: 12px; } .ap-sum { grid-template-columns: 1fr; gap: 2px; } .ap-sum dd { margin-bottom: 8px; } }
+
+/* thank-you wall: paged board */
+.tw-board { position: relative; padding: clamp(28px, 4vw, 56px) clamp(20px, 4vw, 56px) 28px; border-radius: 34px; border: 12px solid #fff; background: #cfeed9; background-image: linear-gradient(90deg, rgba(255,255,255,.28) 50%, transparent 50%), linear-gradient(rgba(255,255,255,.28) 50%, transparent 50%); background-size: 88px 88px; box-shadow: 0 30px 60px -36px rgba(11, 93, 52, .45); }
+.tw-page { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 34px 40px; animation: twIn .4s ease; }
+@keyframes twIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.tw-note { margin: 0; display: grid; gap: 12px; align-content: start; }
+.tw-note blockquote { margin: 0; max-height: 8.2em; overflow-y: auto; padding-right: 12px; font: italic 500 16px/1.62 var(--body); color: #33473d; scrollbar-width: thin; scrollbar-color: #5cb37a transparent; }
+.tw-note blockquote::-webkit-scrollbar { width: 6px; } .tw-note blockquote::-webkit-scrollbar-thumb { background: #5cb37a; border-radius: 6px; }
+.tw-note figcaption { display: grid; gap: 2px; }
+.tw-note figcaption b { font: 800 16px/1.3 var(--display); color: #1a9a46; }
+.tw-note figcaption span { font-size: 13px; color: #4f6f5d; }
+.tw-pager { display: flex; justify-content: center; align-items: center; gap: 22px; margin-top: 30px; }
+.tw-pager button { width: 52px; height: 52px; border-radius: 50%; border: 0; background: #fff; color: var(--green); display: grid; place-items: center; cursor: pointer; box-shadow: 0 10px 20px -12px rgba(11, 93, 52, .6); transition: opacity .2s; }
+.tw-pager button svg { width: 18px; height: 18px; }
+.tw-pager button:disabled { opacity: .45; cursor: default; box-shadow: none; }
+.tw-num { font: 800 20px var(--display); color: #0b4a2b; }
+.tw-spark { position: absolute; width: 34px; height: 34px; background: #fff; clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%); pointer-events: none; animation: twTw 3s ease-in-out infinite; }
+.tw-spark.s1 { right: 4%; top: 6%; width: 44px; height: 44px; } .tw-spark.s2 { left: 2.5%; top: 44%; animation-delay: 1s; } .tw-spark.s3 { left: 62%; bottom: 4%; animation-delay: 2s; }
+@keyframes twTw { 50% { transform: scale(.6) rotate(20deg); opacity: .6; } }
+@media (prefers-reduced-motion: reduce) { .tw-spark, .tw-page { animation: none; } }
+@media (max-width: 1000px) { .tw-page { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .tw-page { grid-template-columns: 1fr; gap: 24px; } .tw-board { border-width: 8px; } }

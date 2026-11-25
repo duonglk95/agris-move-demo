@@ -20,23 +20,24 @@ while ( have_posts() ) : the_post();
     <div class="in">
       <div class="hub-head center"><img class="abi-side l" src="<?php echo esc_url( agm_img( 'abi-letter.webp' ) ); ?>" alt="" aria-hidden="true"><p class="eyebrow-c">Bức tường cảm ơn</p><h2 class="gt">Tiếp sức đội mình</h2><p>Cùng gửi lời cảm ơn, lời chúc hoặc vài dòng động viên đến đồng đội trong mùa vụ này nhé!</p></div>
     </div>
-    <?php if ( $notes ) :
-      $rows = array( array(), array() );
-      foreach ( $notes as $i => $n ) { $rows[ $i % 2 ][] = $n; }
-      foreach ( $rows as $ri => $row ) :
-        if ( ! $row ) { continue; }
-        while ( count( $row ) < 6 ) { $row = array_merge( $row, $row ); } ?>
-    <div class="pw-row<?php echo $ri ? ' rev' : ''; ?>"><div class="pw-track">
-      <?php foreach ( array_merge( $row, $row ) as $k => $n ) :
-        $to = get_post_meta( $n->ID, '_agm_to', true ); $from = get_post_meta( $n->ID, '_agm_from', true ); $from = $from ? $from : 'Ẩn danh'; ?>
-      <figure class="pw-card"<?php echo $k >= count( $row ) ? ' aria-hidden="true"' : ''; ?>>
-        <span class="pw-to">Gửi <?php echo esc_html( $to ? $to : 'đồng đội' ); ?></span>
-        <blockquote><?php echo esc_html( wp_trim_words( $n->post_content, 32 ) ); ?></blockquote>
-        <figcaption><span class="pw-av"><?php echo esc_html( mb_strtoupper( mb_substr( $from, 0, 1 ) ) ); ?></span><?php echo esc_html( $from ); ?></figcaption>
-      </figure>
+    <?php if ( $notes ) : $pages = array_chunk( $notes, 8 ); ?>
+    <div class="in"><div class="tw-board" data-tw>
+      <span class="tw-spark s1" aria-hidden="true"></span><span class="tw-spark s2" aria-hidden="true"></span><span class="tw-spark s3" aria-hidden="true"></span>
+      <?php foreach ( $pages as $pi => $pg ) : ?>
+      <div class="tw-page"<?php echo $pi ? ' hidden' : ''; ?>>
+        <?php foreach ( $pg as $n ) : $to = get_post_meta( $n->ID, '_agm_to', true ); $from = get_post_meta( $n->ID, '_agm_from', true ); ?>
+        <figure class="tw-note">
+          <blockquote tabindex="0">“<?php echo esc_html( $n->post_content ); ?>”</blockquote>
+          <figcaption><b><?php echo esc_html( $from ? $from : 'Ẩn danh' ); ?></b><span>gửi <?php echo esc_html( $to ? $to : 'đồng đội' ); ?></span></figcaption>
+        </figure>
+        <?php endforeach; ?>
+      </div>
       <?php endforeach; ?>
+      <?php if ( count( $pages ) > 1 ) : ?>
+      <div class="tw-pager"><button type="button" class="tw-prev" aria-label="Trang trước"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 3 5 8l5 5"/></svg></button><span class="tw-num"><b>1</b> / <?php echo count( $pages ); ?></span><button type="button" class="tw-next" aria-label="Trang sau"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 3 5 5-5 5"/></svg></button></div>
+      <?php endif; ?>
     </div></div>
-    <?php endforeach; else : ?>
+    <?php else : ?>
     <div class="in"><p class="tk-empty">Tường đang chờ lời tiếp sức đầu tiên. Bạn mở màn nhé!</p></div>
     <?php endif; ?>
     <div class="in hub-cta center"><button type="button" class="btn" data-tk-open>Gửi lời cảm ơn <?php echo agm_arrow( 'chev' ); // phpcs:ignore ?></button>
