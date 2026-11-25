@@ -72,15 +72,14 @@ function agm_arrow( $type = 'line' ) {
 
 /** Fallback menu that mirrors the homepage sections. */
 function agm_default_menu() {
+	$hub = get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'numberposts' => 1, 'meta_key' => '_wp_page_template', 'meta_value' => 'page-event-hub.php', 'fields' => 'ids' ) );
 	$items = array(
-		'top'         => 'Về MOVE',
-		'su-kien'     => 'Sự kiện',
-		'movers'      => '50 Movers',
-		'agris-thing' => 'AgriS-thing',
-		'ban-tin'     => 'Bản tin',
+		array( 'Vào vụ', $hub ? get_permalink( $hub[0] ) : agm_anchor( 'su-kien' ) ),
+		array( 'TOP 50 MOVERS', agm_top50_url() ),
+		array( 'Bản tin', agm_anchor( 'ban-tin' ) ),
 	);
-	foreach ( $items as $id => $label ) {
-		echo '<a href="' . esc_url( agm_anchor( $id ) ) . '">' . esc_html( $label ) . '</a>';
+	foreach ( $items as $i ) {
+		echo '<a href="' . esc_url( $i[1] ) . '">' . esc_html( $i[0] ) . '</a>';
 	}
 }
 
