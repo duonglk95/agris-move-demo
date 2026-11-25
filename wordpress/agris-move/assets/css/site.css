@@ -840,3 +840,12 @@ a.ph-item:hover img { transform: scale(1.04); }
 @media (prefers-reduced-motion: reduce) { .tw-spark, .tw-page { animation: none; } }
 @media (max-width: 1000px) { .tw-page { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .tw-page { grid-template-columns: 1fr; gap: 24px; } .tw-board { border-width: 8px; } }
+/* wall: individual cards on a light board */
+.tw-board { background: linear-gradient(180deg, #f3faf5, #e7f5ec); border: 0; padding: clamp(24px, 3vw, 40px); }
+.tw-page { gap: 18px; }
+.tw-note { background: #fff; border-radius: 20px; padding: 20px 20px 18px; border: 1px solid #e3eee7; box-shadow: 0 18px 36px -30px rgba(11, 93, 52, .55); min-height: 168px; position: relative; }
+.tw-note::before { content: "“"; position: absolute; right: 16px; top: -2px; font: 800 60px/1 var(--display); color: #e7f3eb; }
+.tw-note blockquote { position: relative; font-size: 15px; max-height: 7.4em; }
+.tw-note figcaption { margin-top: auto; }
+.tw-note { grid-template-rows: 1fr auto; }
+.tw-spark { background: #b9e5c7; }
