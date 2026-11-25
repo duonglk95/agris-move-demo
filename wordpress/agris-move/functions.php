@@ -42,7 +42,7 @@ add_action( 'wp_enqueue_scripts', function () {
 		wp_enqueue_script( 'agm-hero', $uri . '/js/hero.js', array(), AGM_VER, true );
 		wp_add_inline_script( 'agm-hero', 'window.HERO_THEME = "B";', 'before' );
 	}
-	if ( is_page_template( 'page-top50.php' ) ) {
+	if ( is_page_template( array( 'page-top50.php', 'page-top50-guide.php' ) ) ) {
 		wp_enqueue_style( 'agm-top50', $uri . '/css/top50.css', array( 'agm-site' ), AGM_VER );
 		wp_enqueue_script( 'agm-top50', $uri . '/js/top50.js', array(), AGM_VER, true );
 	}

@@ -39,6 +39,51 @@ while ( have_posts() ) : the_post();
     </div>
   </section>
 
+  <div class="t50 g50-t50">
+  <section class="sec mint" id="lich" aria-labelledby="t-lich">
+    <div class="in">
+      <div class="sec-head"><h2 id="t-lich">Thời gian biểu</h2></div>
+      <ol class="timeline">
+        <li data-from="2026-11-01" data-to="2026-11-30"><b>Ra mắt website AgriS MOVE</b><time>Tháng 11/2026</time></li>
+        <li data-from="2026-12-01" data-to="2027-02-28"><b>Nộp hồ sơ, đề cử</b><time>01/12/2026 – 28/02/2027</time></li>
+        <li data-from="2027-03-01" data-to="2027-04-30"><b>Bình chọn</b><time>01/03 – 30/04/2027</time></li>
+        <li data-from="2027-05-01" data-to="2027-05-10"><b>Tiếp nhận khiếu nại</b><time>01 – 10/05/2027</time></li>
+        <li data-from="2027-05-16" data-to="2027-05-16"><b>Công bố TOP 50 và AgriS’ Choice</b><time>16/05/2027</time></li>
+        <li><b>Vinh danh</b><time>Tại sự kiện chính thức (thông báo sau)</time></li>
+      </ol>
+    </div>
+  </section>
+  <section class="sec mint" id="giai-thuong" aria-labelledby="t-giai">
+    <div class="in">
+      <div class="sec-head"><h2 id="t-giai">Giải thưởng</h2></div>
+      <div class="prizes">
+        <article class="prize gold">
+          <span class="who">50 MOVER có lượt bình chọn cao nhất toàn hệ thống</span>
+          <h3>TOP 50 AgriS MOVERS</h3>
+          <div class="slot"><span><b>Ảnh cần bổ sung</b>Cúp ABI TOP 50 MOVERS (ảnh chụp hoặc render, nền trong suốt)</span></div>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17l-6 3.3 1.3-6.7-5-4.6 6.8-.8z"></path></svg>Thư chúc mừng của Ban Lãnh đạo</li>
+            <li><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17l-6 3.3 1.3-6.7-5-4.6 6.8-.8z"></path></svg>Cúp ABI TOP 50 MOVERS</li>
+            <li><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17l-6 3.3 1.3-6.7-5-4.6 6.8-.8z"></path></svg>Áo thun phiên bản đặc biệt</li>
+            <li><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17l-6 3.3 1.3-6.7-5-4.6 6.8-.8z"></path></svg>Vinh danh tại sự kiện chính thức</li>
+            <li><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17l-6 3.3 1.3-6.7-5-4.6 6.8-.8z"></path></svg>Cơ hội trở thành đại diện văn hoá trong các chương trình nội bộ khác</li>
+            <li><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17l-6 3.3 1.3-6.7-5-4.6 6.8-.8z"></path></svg>Câu chuyện được lưu tại Hall of Fame</li>
+          </ul>
+        </article>
+        <article class="prize green">
+          <span class="who">MOVER ngoài TOP 50 đạt từ 100 lượt bình chọn</span>
+          <h3>AgriS’ Choice</h3>
+          <div class="slot"><span><b>Ảnh cần bổ sung</b>Thiệp chúc mừng AgriS’ Choice (mockup)</span></div>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>Thiệp chúc mừng</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>Được vinh danh trong danh sách AgriS’ Choice 2027</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+  </div>
+
   <div class="seam" data-next="#e9f6fb" data-h="90" data-tones="#d3eadb,#9bd8b1d0" data-line="lime"></div>
   <section class="band ct-rules" id="the-le">
     <div class="in ct-faq">
@@ -47,7 +92,7 @@ while ( have_posts() ) : the_post();
         <details open><summary>Điều kiện ứng viên</summary><div><ul><li>Đang làm việc tại AgriS.</li><li>Không có quyết định kỷ luật hay vi phạm quy tắc ứng xử trong niên độ.</li><li>Không có kết quả KPI Không đạt ở cả hai kỳ gần nhất.</li></ul></div></details>
         <details><summary>Tiêu chí câu chuyện MOVE</summary><div><p>Câu chuyện nêu rõ hành động và kết quả, thể hiện ít nhất một tinh thần:</p><ul><li><b>Action:</b> chủ động hành động, không đợi được giao hay nhắc.</li><li><b>Innovation:</b> thử cách làm mới hoặc khác trước, dù chỉ là cải tiến nhỏ.</li><li><b>Impact:</b> tạo thay đổi cụ thể cho đội nhóm, khách hàng hoặc đơn vị.</li><li><b>As One:</b> phối hợp, hỗ trợ, chia sẻ và lan toả đến đồng nghiệp.</li></ul></div></details>
         <details><summary>Quy định bình chọn</summary><div><ul><li>Chỉ dùng tài khoản của chính mình; mọi lượt bình chọn có giá trị như nhau.</li><li>Nghiêm cấm dùng tài khoản người khác, công cụ bình chọn tự động hoặc trao đổi lượt bình chọn.</li><li>Vi phạm có thể bị huỷ lượt bình chọn, loại khỏi chương trình hoặc thu hồi danh hiệu.</li></ul></div></details>
-        <details><summary>Giải thưởng</summary><div><ul><li><b>TOP 50 AgriS MOVERS:</b> 50 MOVER có lượt bình chọn cao nhất toàn hệ thống.</li><li><b>AgriS’ Choice:</b> MOVER ngoài TOP 50 đạt từ 100 lượt bình chọn.</li></ul><p><a href="<?php echo esc_url( $top50 . '#giai-thuong' ); ?>">Xem chi tiết giải thưởng</a></p></div></details>
+        <details><summary>Giải thưởng</summary><div><ul><li><b>TOP 50 AgriS MOVERS:</b> 50 MOVER có lượt bình chọn cao nhất toàn hệ thống.</li><li><b>AgriS’ Choice:</b> MOVER ngoài TOP 50 đạt từ 100 lượt bình chọn.</li></ul><p><a href="#giai-thuong">Xem chi tiết giải thưởng</a></p></div></details>
         <details><summary>Xác định kết quả và khiếu nại</summary><div><p>Theo tổng lượt bình chọn hợp lệ đến hết 30/04/2027. Nếu nhiều ứng viên bằng lượt ở vị trí thứ 50: từ 3 người trở xuống đều vào TOP 50; từ 4 người trở lên, ưu tiên người nộp hồ sơ sớm hơn. Khiếu nại gửi Ban Tổ chức từ 01 – 10/05/2027; quyết định của Hội đồng xác nhận kết quả là quyết định cuối cùng.</p></div></details>
         <details><summary>Sử dụng AI và quyền sử dụng nội dung</summary><div><p>Bạn được dùng AI hỗ trợ viết và dựng video, nhưng thông tin phải đúng sự thật. Khi nộp hồ sơ, bạn đồng ý để AgriS sử dụng câu chuyện, hình ảnh và video cho mục đích truyền thông nội bộ.</p></div></details>
       </div>

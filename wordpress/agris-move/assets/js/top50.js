@@ -14,15 +14,17 @@
       const now = Date.now(), ph = P.find(p => now < p.to) || P[P.length - 1];
       if (ph !== cur) {
         cur = ph;
-        $("phaseLabel").textContent = ph.label; $("phaseTitle").textContent = ph.title;
-        $("ctaMain").firstChild.textContent = ph.cta[0] + " "; if (!/^#(tham-gia|hoi-dap)$/.test(ph.cta[1])) $("ctaMain").href = ph.cta[1];
-        $("phaseTimer").hidden = !ph.target;
+        if ($("phaseLabel")) {
+          $("phaseLabel").textContent = ph.label; $("phaseTitle").textContent = ph.title;
+          $("ctaMain").firstChild.textContent = ph.cta[0] + " "; if (!/^#(tham-gia|hoi-dap)$/.test(ph.cta[1])) $("ctaMain").href = ph.cta[1];
+          $("phaseTimer").hidden = !ph.target;
+        }
         document.querySelectorAll(".timeline li[data-from]").forEach(li => {
           const f = at(li.dataset.from + "T00:00:00"), t = at(li.dataset.to + "T23:59:59");
           li.classList.toggle("done", now > t); li.classList.toggle("now", now >= f && now <= t);
         });
       }
-      if (!ph.target) return;
+      if (!ph.target || !$("cD")) return;
       const s = Math.max(0, Math.floor((ph.to - now) / 1000));
       $("cD").textContent = pad(Math.floor(s / 86400)); $("cH").textContent = pad(Math.floor(s % 86400 / 3600));
       $("cM").textContent = pad(Math.floor(s % 3600 / 60)); $("cS").textContent = pad(s % 60);

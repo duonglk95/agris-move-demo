@@ -43,22 +43,21 @@ while ( have_posts() ) :
   </section>
   <?php endif; ?>
 
-  <section class="sec mint" id="lich" aria-labelledby="t-lich">
+
+
+
+
+  <?php if ( shortcode_exists( 'amv_movers' ) ) : ?>
+  <section class="sec mint" id="cac-mover" aria-labelledby="t-mover">
     <div class="in">
-      <div class="sec-head"><h2 id="t-lich">Thời gian biểu</h2></div>
-      <ol class="timeline">
-        <li data-from="2026-11-01" data-to="2026-11-30"><b>Ra mắt website AgriS MOVE</b><time>Tháng 11/2026</time></li>
-        <li data-from="2026-12-01" data-to="2027-02-28"><b>Nộp hồ sơ, đề cử</b><time>01/12/2026 – 28/02/2027</time></li>
-        <li data-from="2027-03-01" data-to="2027-04-30"><b>Bình chọn</b><time>01/03 – 30/04/2027</time></li>
-        <li data-from="2027-05-01" data-to="2027-05-10"><b>Tiếp nhận khiếu nại</b><time>01 – 10/05/2027</time></li>
-        <li data-from="2027-05-16" data-to="2027-05-16"><b>Công bố TOP 50 và AgriS’ Choice</b><time>16/05/2027</time></li>
-        <li><b>Vinh danh</b><time>Tại sự kiện chính thức (thông báo sau)</time></li>
-      </ol>
+      <div class="sec-head">
+        <h2 id="t-mover">MOVER tiêu biểu</h2>
+        <p>Đọc câu chuyện MOVE của đồng nghiệp và thả “love” cho những câu chuyện bạn yêu thích.</p>
+      </div>
+      <?php echo do_shortcode( '[amv_movers]' ); // phpcs:ignore ?>
     </div>
   </section>
-
-
-
+  <?php endif; ?>
 
   <section class="sec" id="tinh-than" aria-labelledby="t-move">
     <div class="in">
@@ -69,51 +68,11 @@ while ( have_posts() ) :
         <div><b>Impact</b><span>Tạo ra thay đổi cụ thể cho đội nhóm, khách hàng hoặc đơn vị.</span></div>
         <div><b>As One</b><span>Phối hợp, hỗ trợ, chia sẻ và lan toả đến đồng nghiệp, đơn vị khác.</span></div>
       </div>
-      <p class="note"><a href="<?php echo esc_url( agm_top50_guide_url() ); ?>">Xem hướng dẫn và thể lệ đầy đủ →</a></p>
+      <p class="note"><a href="<?php echo esc_url( agm_top50_guide_url() ); ?>">Xem thời gian biểu, giải thưởng và thể lệ →</a></p>
     </div>
   </section>
 
-  <section class="sec mint" id="giai-thuong" aria-labelledby="t-giai">
-    <div class="in">
-      <div class="sec-head"><h2 id="t-giai">Giải thưởng</h2></div>
-      <div class="prizes">
-        <article class="prize gold">
-          <span class="who">50 MOVER có lượt bình chọn cao nhất toàn hệ thống</span>
-          <h3>TOP 50 AgriS MOVERS</h3>
-          <div class="slot"><span><b>Ảnh cần bổ sung</b>Cúp ABI TOP 50 MOVERS (ảnh chụp hoặc render, nền trong suốt)</span></div>
-          <ul>
-            <li><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17l-6 3.3 1.3-6.7-5-4.6 6.8-.8z"></path></svg>Thư chúc mừng của Ban Lãnh đạo</li>
-            <li><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17l-6 3.3 1.3-6.7-5-4.6 6.8-.8z"></path></svg>Cúp ABI TOP 50 MOVERS</li>
-            <li><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17l-6 3.3 1.3-6.7-5-4.6 6.8-.8z"></path></svg>Áo thun phiên bản đặc biệt</li>
-            <li><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17l-6 3.3 1.3-6.7-5-4.6 6.8-.8z"></path></svg>Vinh danh tại sự kiện chính thức</li>
-            <li><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17l-6 3.3 1.3-6.7-5-4.6 6.8-.8z"></path></svg>Cơ hội trở thành đại diện văn hoá trong các chương trình nội bộ khác</li>
-            <li><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.8.8-5 4.6 1.3 6.7L12 17l-6 3.3 1.3-6.7-5-4.6 6.8-.8z"></path></svg>Câu chuyện được lưu tại Hall of Fame</li>
-          </ul>
-        </article>
-        <article class="prize green">
-          <span class="who">MOVER ngoài TOP 50 đạt từ 100 lượt bình chọn</span>
-          <h3>AgriS’ Choice</h3>
-          <div class="slot"><span><b>Ảnh cần bổ sung</b>Thiệp chúc mừng AgriS’ Choice (mockup)</span></div>
-          <ul>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>Thiệp chúc mừng</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>Được vinh danh trong danh sách AgriS’ Choice 2027</li>
-          </ul>
-        </article>
-      </div>
-    </div>
-  </section>
 
-  <?php if ( shortcode_exists( 'amv_movers' ) ) : ?>
-  <section class="sec" id="cac-mover" aria-labelledby="t-mover">
-    <div class="in">
-      <div class="sec-head">
-        <h2 id="t-mover">Các MOVER</h2>
-        <p>Đọc câu chuyện MOVE của đồng nghiệp và thả “love” cho những câu chuyện bạn yêu thích.</p>
-      </div>
-      <?php echo do_shortcode( '[amv_movers]' ); // phpcs:ignore ?>
-    </div>
-  </section>
-  <?php endif; ?>
 
 
   <div class="in contact">
