@@ -182,10 +182,31 @@
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) { v.removeAttribute("autoplay"); v.pause(); v.controls = true; }
 })();
 
-// accordions: opening one closes the others in the same group
-document.addEventListener("toggle", e => {
-  const d = e.target;
-  if (!(d instanceof HTMLDetailsElement) || !d.open) return;
-  const group = d.closest(".ct-acc, .faq");
-  if (group) group.querySelectorAll(":scope > details[open]").forEach(o => { if (o !== d) o.open = false; });
-}, true);
+// accordions: smooth open/close; opening one closes the others in the same group
+(() => {
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const body = d => d.querySelector(":scope > summary ~ *");
+  const animate = (d, open) => {
+    const b = body(d); if (!b) { d.open = open; return; }
+    if (d._anim) d._anim.cancel();
+    if (reduce) { d.open = open; return; }
+    const start = open ? 0 : b.offsetHeight;
+    if (open) d.open = true;
+    const end = open ? b.scrollHeight : 0;
+    b.style.overflow = "hidden";
+    d._anim = b.animate([{ height: start + "px", opacity: open ? 0 : 1 }, { height: end + "px", opacity: open ? 1 : 0 }], { duration: 320, easing: "cubic-bezier(.2,.7,.2,1)" });
+    d.classList.toggle("is-opening", open);
+    d._anim.onfinish = () => { if (!open) d.open = false; b.style.overflow = ""; d._anim = null; d.classList.remove("is-opening"); };
+    d._anim.oncancel = () => { b.style.overflow = ""; };
+  };
+  document.addEventListener("click", e => {
+    const sum = e.target.closest(".ct-acc > details > summary, .faq > details > summary");
+    if (!sum) return;
+    e.preventDefault();
+    const d = sum.parentElement, opening = !d.open || d._closing;
+    if (opening) {
+      d.parentElement.querySelectorAll(":scope > details[open]").forEach(o => { if (o !== d) animate(o, false); });
+      animate(d, true);
+    } else animate(d, false);
+  });
+})();
