@@ -46,7 +46,7 @@ while ( have_posts() ) : the_post();
   </section>
   <?php endif; ?>
 
-  <div class="divider-img mill" aria-hidden="true"><img src="<?php echo esc_url( agm_img( 'divider-mill.webp' ) ); ?>" alt="" loading="lazy"></div>
+  <?php if ( agm_show( 'wall' ) ) : ?><div class="divider-img mill" aria-hidden="true"><img src="<?php echo esc_url( agm_img( 'divider-mill.webp' ) ); ?>" alt="" loading="lazy"></div><?php endif; ?>
   <section class="band hub-sec alt" id="buu-thiep">
     <div class="in">
       <div class="hub-head center"><img class="abi-side r" src="<?php echo esc_url( agm_img( 'abi-postcard.webp' ) ); ?>" alt="" aria-hidden="true"><h2 class="gt">Thư tay tiếp sức</h2><p>Chọn một khoảnh khắc đẹp của đội mình, viết lời chúc và tải bưu thiếp về gửi đồng đội.</p></div>

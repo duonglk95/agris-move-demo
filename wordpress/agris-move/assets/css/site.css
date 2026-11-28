@@ -876,3 +876,18 @@ a.ph-item:hover img { transform: scale(1.04); }
 .vid-title{font-size:1.125rem;line-height:1.35;margin:4px 0 0}
 .vid-desc{margin:0;color:#4a5d50;font-size:.95rem;line-height:1.55}
 @media (prefers-reduced-motion:reduce){.vid-thumb img{transition:none}}
+
+/* ---------- Mobile polish (28/11) ---------- */
+.nav.is-hub { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); padding-right: 24px; }
+.pc-dl .btn { max-width: 100%; box-sizing: border-box; }
+@media (max-width: 760px) {
+  .tk .tk-hero .abi-hero { position: static !important; display: block; width: 140px; margin: 16px auto 0; transform: none; }
+  .pit-cd-t { gap: 8px; width: 100%; justify-content: center; }
+  .pit-cd-t div { min-width: 0; flex: 1 1 0; max-width: 84px; padding: 12px 4px; }
+  .ct-pills { gap: 8px; }
+  .ct-pills li + li { margin-left: 0; }
+  .ct-pills li { font-size: 14px; padding-right: 12px; }
+  .pc-dl .btn { width: 100%; justify-content: center; }
+  .foot-col ul { gap: 0; }
+  .foot-col a { display: inline-block; padding: 9px 0; }
+}
