@@ -23,6 +23,11 @@ add_action( 'customize_register', function ( $wp ) {
 		'label'   => 'Banner TOP 50 MOVERS (16:9)',
 	) ) );
 
+	foreach ( array( 'top50' => 'Hiện TOP 50 MOVERS (menu, trang chủ, footer)', 'wall' => 'Hiện tường "Tiếp sức đội mình" ở mini-site Vào vụ' ) as $k => $lbl ) {
+		$wp->add_setting( 'agm_show_' . $k, array( 'default' => false, 'sanitize_callback' => 'wp_validate_boolean' ) );
+		$wp->add_control( 'agm_show_' . $k, array( 'section' => 'agm', 'label' => $lbl, 'type' => 'checkbox' ) );
+	}
+
 	$wp->add_setting( 'agm_top50_text', array(
 		'default'           => 'Mỗi cá nhân đều là một “động lực tăng trưởng”. TOP 50 MOVERS vinh danh những con người không ngừng chủ động kiến tạo giá trị, đại diện cho văn hoá MOVE của AgriS.',
 		'sanitize_callback' => 'sanitize_textarea_field',

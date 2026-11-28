@@ -862,3 +862,17 @@ a.ph-item:hover img { transform: scale(1.04); }
 .foot .foot-in small { grid-column: 1 / -1; border-top: 1px solid rgba(11, 93, 52, .12); padding-top: 16px; }
 @media (max-width: 760px) { .foot .foot-in { grid-template-columns: 1fr; } .foot-map { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .foot .ribbon { opacity: .3; z-index: 0; } .foot .foot-in { position: relative; z-index: 1; }
+
+/* ---------- Podcast / Video ---------- */
+.vid-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:32px 28px;margin-top:12px}
+.vid-card{display:flex;flex-direction:column;gap:10px}
+.vid-thumb{position:relative;display:block;width:100%;aspect-ratio:16/9;border:0;padding:0;border-radius:16px;overflow:hidden;background:#0d3b1e;cursor:pointer}
+.vid-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.vid-thumb:hover img,.vid-thumb:focus-visible img{transform:scale(1.04)}
+.vid-thumb:focus-visible{outline:3px solid #8ccf3f;outline-offset:3px}
+.vid-thumb .playb{width:64px}.vid-thumb:hover .playb{background:var(--green)}
+.vid-thumb .time{position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.72);color:#fff;font-size:.8rem;padding:2px 8px;border-radius:6px}
+.vid-thumb iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vid-title{font-size:1.125rem;line-height:1.35;margin:4px 0 0}
+.vid-desc{margin:0;color:#4a5d50;font-size:.95rem;line-height:1.55}
+@media (prefers-reduced-motion:reduce){.vid-thumb img{transition:none}}

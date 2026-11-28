@@ -219,3 +219,15 @@ document.querySelectorAll("[data-tw]").forEach(box => {
   const go = k => { i = (k + pages.length) % pages.length; pages.forEach((p, j) => (p.hidden = j !== i)); num.textContent = i + 1; prev.disabled = i === 0; next.disabled = i === pages.length - 1; };
   prev.addEventListener("click", () => go(i - 1)); next.addEventListener("click", () => go(i + 1)); go(0);
 });
+
+/* Podcast page: play YouTube in place */
+document.addEventListener("click", (e) => {
+  const b = e.target.closest(".vid-thumb[data-yt]");
+  if (!b || b.querySelector("iframe")) return;
+  const f = document.createElement("iframe");
+  f.src = "https://www.youtube-nocookie.com/embed/" + encodeURIComponent(b.dataset.yt) + "?autoplay=1&rel=0";
+  f.title = b.getAttribute("aria-label") || "Video";
+  f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+  f.allowFullscreen = true;
+  b.appendChild(f);
+});

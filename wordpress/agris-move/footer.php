@@ -16,7 +16,7 @@
     <h2 id="cfTitle">Liên hệ chương trình</h2>
     <label>Tên người gửi <small>(không bắt buộc)</small><input name="name" maxlength="120" autocomplete="name"></label>
     <label>Vấn đề<select name="topic" required>
-      <option value="">Chọn vấn đề</option><option>Góp ý chương trình</option><option>Hỏi về sự kiện</option><option>TOP 50 MOVERS</option><option>AgriS-thing</option><option>Khác</option>
+      <option value="">Chọn vấn đề</option><option>Góp ý chương trình</option><option>Hỏi về sự kiện</option><?php if ( agm_show( 'top50' ) ) : ?><option>TOP 50 MOVERS</option><?php endif; ?><option>Podcast</option><option>Khác</option>
     </select></label>
     <label>Nội dung lời nhắn<textarea name="message" required maxlength="3000"></textarea></label>
     <p class="cf-msg" role="status" hidden></p>

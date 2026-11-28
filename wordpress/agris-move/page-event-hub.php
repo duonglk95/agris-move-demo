@@ -16,6 +16,7 @@ while ( have_posts() ) : the_post();
   <?php get_template_part( 'parts/mini-hero' ); ?>
 
 
+  <?php if ( agm_show( 'wall' ) ) : ?>
   <section class="hub-sec pitwall" id="tiep-suc">
     <div class="in">
       <div class="hub-head center"><img class="abi-side l" src="<?php echo esc_url( agm_img( 'abi-letter.webp' ) ); ?>" alt="" aria-hidden="true"><p class="eyebrow-c">Bức tường cảm ơn</p><h2 class="gt">Tiếp sức đội mình</h2><p>Cùng gửi lời cảm ơn, lời chúc hoặc vài dòng động viên đến đồng đội trong mùa vụ này nhé!</p></div>
@@ -43,6 +44,7 @@ while ( have_posts() ) : the_post();
     <div class="in hub-cta center"><button type="button" class="btn" data-tk-open>Gửi lời cảm ơn <?php echo agm_arrow( 'chev' ); // phpcs:ignore ?></button>
       <span><?php echo esc_html( number_format_i18n( agm_thanks_count( $hub ) ) ); ?> lời tiếp sức đã lên tường</span></div>
   </section>
+  <?php endif; ?>
 
   <div class="divider-img mill" aria-hidden="true"><img src="<?php echo esc_url( agm_img( 'divider-mill.webp' ) ); ?>" alt="" loading="lazy"></div>
   <section class="band hub-sec alt" id="buu-thiep">
@@ -78,6 +80,7 @@ while ( have_posts() ) : the_post();
 
   <div class="divider-img campus" aria-hidden="true"><img src="<?php echo esc_url( agm_img( 'divider-campus.webp' ) ); ?>" alt="" loading="lazy"></div>
 
+  <?php if ( agm_show( 'wall' ) ) : ?>
   <dialog class="cf-dlg" id="tkDlg" aria-labelledby="tkT">
     <form class="tk-form" data-tk data-page="<?php echo esc_attr( $hub ); ?>">
       <h2 id="tkT">Gửi lời cảm ơn</h2>
@@ -89,5 +92,6 @@ while ( have_posts() ) : the_post();
       <div class="cf-act"><button type="button" class="cf-x" data-tk-close>Đóng</button><button class="btn" type="submit">Gửi lời cảm ơn</button></div>
     </form>
   </dialog>
+  <?php endif; ?>
 </main>
 <?php endwhile; get_footer();

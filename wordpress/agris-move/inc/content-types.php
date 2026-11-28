@@ -84,7 +84,7 @@ function agm_podcast_box( $post ) {
 	$video = get_post_meta( $post->ID, '_agm_video', true );
 	$dur   = get_post_meta( $post->ID, '_agm_duration', true );
 	?>
-	<p><label for="agm_video"><strong>Link video</strong> (YouTube, Vimeo, Microsoft Stream…)</label><br>
+	<p><label for="agm_video"><strong>Link video</strong> (dán link YouTube public; ảnh bìa tự lấy từ YouTube nếu không đặt ảnh đại diện)</label><br>
 		<input type="url" id="agm_video" name="agm_video" class="widefat" value="<?php echo esc_attr( $video ); ?>" placeholder="https://"></p>
 	<p><label for="agm_duration"><strong>Thời lượng</strong></label><br>
 		<input type="text" id="agm_duration" name="agm_duration" value="<?php echo esc_attr( $dur ); ?>" placeholder="24:16"></p>
@@ -149,4 +149,9 @@ add_filter( 'the_content', function ( $content ) {
 		}
 	}
 	return $content;
+} );
+
+/* Podcast archive: 12 videos per page */
+add_action( 'pre_get_posts', function ( $q ) {
+	if ( ! is_admin() && $q->is_main_query() && $q->is_post_type_archive( 'podcast' ) ) { $q->set( 'posts_per_page', 12 ); }
 } );

@@ -59,6 +59,31 @@ function agm_top50_url() {
 }
 
 /** Link to a homepage section: a plain #anchor on the homepage, a full URL elsewhere. */
+/** Section switches (Tùy biến → AgriS MOVE): 'top50', 'wall'. Off by default. */
+function agm_show( $what ) {
+	return (bool) get_theme_mod( 'agm_show_' . $what, false );
+}
+
+function agm_podcast_url() {
+	$u = get_post_type_archive_link( 'podcast' );
+	return $u ? $u : home_url( '/agris-thing/' );
+}
+
+/** YouTube video id from a watch / youtu.be / shorts / embed link, or ''. */
+function agm_yt_id( $url ) {
+	if ( preg_match( '~(?:youtu\.be/|youtube(?:-nocookie)?\.com/(?:watch\?(?:.*&)?v=|embed/|shorts/|live/))([A-Za-z0-9_-]{11})~', (string) $url, $m ) ) {
+		return $m[1];
+	}
+	return '';
+}
+
+/** Cover for a podcast entry: featured image, else YouTube thumbnail, else $fallback. */
+function agm_pod_cover( $post, $fallback = '' ) {
+	if ( $post && has_post_thumbnail( $post ) ) { return get_the_post_thumbnail_url( $post, 'agm-card' ); }
+	$id = $post ? agm_yt_id( get_post_meta( $post->ID, '_agm_video', true ) ) : '';
+	return $id ? 'https://i.ytimg.com/vi/' . $id . '/hqdefault.jpg' : $fallback;
+}
+
 function agm_anchor( $id ) {
 	return is_front_page() ? '#' . $id : home_url( '/#' . $id );
 }
@@ -75,9 +100,10 @@ function agm_default_menu() {
 	$hub = get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'numberposts' => 1, 'meta_key' => '_wp_page_template', 'meta_value' => 'page-event-hub.php', 'fields' => 'ids' ) );
 	$items = array(
 		array( 'Vào vụ', $hub ? get_permalink( $hub[0] ) : agm_anchor( 'su-kien' ) ),
-		array( 'TOP 50 MOVERS', agm_top50_url() ),
+		array( 'Podcast', agm_podcast_url() ),
 		array( 'Bản tin', agm_anchor( 'ban-tin' ) ),
 	);
+	if ( agm_show( 'top50' ) ) { array_splice( $items, 1, 0, array( array( 'TOP 50 MOVERS', agm_top50_url() ) ) ); }
 	foreach ( $items as $i ) {
 		echo '<a href="' . esc_url( $i[1] ) . '">' . esc_html( $i[0] ) . '</a>';
 	}
@@ -137,14 +163,25 @@ function agm_page_by_template( $tpl ) {
 
 /** Navigation on sub-pages: homepage plus level-2 pages only (no homepage section anchors). */
 function agm_sub_menu() {
-	$items = array( array( 'Trang chủ', home_url( '/' ), is_front_page() ) );
-	$ev = agm_page_by_template( 'page-events.php' );
-	if ( $ev ) { $items[] = array( 'Sự kiện', $ev, is_page_template( 'page-events.php' ) || is_page_template( 'page-thanks.php' ) ); }
-	$items[] = array( 'TOP 50 MOVERS', agm_top50_url(), is_page_template( 'page-top50.php' ) || is_singular( 'mover' ) );
+	$hub   = get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'numberposts' => 1, 'meta_key' => '_wp_page_template', 'meta_value' => 'page-event-hub.php', 'fields' => 'ids' ) );
+	$items = array( array( 'Trang chủ', home_url( '/' ), false ) );
+	if ( $hub ) { $items[] = array( 'Vào vụ', get_permalink( $hub[0] ), false ); }
+	if ( agm_show( 'top50' ) ) { $items[] = array( 'TOP 50 MOVERS', agm_top50_url(), is_page_template( 'page-top50.php' ) || is_singular( 'mover' ) ); }
+	$items[] = array( 'Podcast', agm_podcast_url(), is_post_type_archive( 'podcast' ) || is_singular( 'podcast' ) );
+	$items[] = array( 'Bản tin', home_url( '/#ban-tin' ), false );
 	foreach ( $items as $i ) {
 		printf( '<a href="%s"%s>%s</a>', esc_url( $i[1] ), $i[2] ? ' aria-current="page"' : '', esc_html( $i[0] ) );
 	}
 }
+
+/* Hidden sections: drop their links from any WP menu built in admin too. */
+add_filter( 'wp_nav_menu_objects', function ( $items ) {
+	if ( agm_show( 'top50' ) ) { return $items; }
+	$t50 = untrailingslashit( agm_top50_url() );
+	return array_filter( $items, function ( $it ) use ( $t50 ) {
+		return untrailingslashit( $it->url ) !== $t50 && false === stripos( $it->title, 'TOP 50' );
+	} );
+} );
 
 /** One-time: mark existing events that already have a featured image or sub-page as key events. */
 add_action( 'init', function () {
@@ -166,7 +203,7 @@ function agm_footer_sitemap() {
 	$cols = array();
 	$names = array( 'page-event-hub.php' => 'Giới thiệu', 'page-top50.php' => 'Giới thiệu' );
 	$hubs = get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'numberposts' => 10, 'meta_key' => '_wp_page_template', 'meta_value' => 'page-event-hub.php' ) );
-	$t50  = get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'numberposts' => 1, 'meta_key' => '_wp_page_template', 'meta_value' => 'page-top50.php' ) );
+	$t50  = ! agm_show( 'top50' ) ? array() : get_posts( array( 'post_type' => 'page', 'post_status' => 'publish', 'numberposts' => 1, 'meta_key' => '_wp_page_template', 'meta_value' => 'page-top50.php' ) );
 	foreach ( array_merge( $hubs, $t50 ) as $h ) {
 		$label = get_post_meta( $h->ID, 'menu_label', true ); $label = $label ? $label : get_the_title( $h );
 		$links = array( array( 'Giới thiệu', get_permalink( $h ) ) );
@@ -176,13 +213,15 @@ function agm_footer_sitemap() {
 			$links[] = array( 'page-top50-apply.php' === $tpl ? 'Ứng cử' : get_the_title( $c ), get_permalink( $c ) );
 		}
 		if ( 'page-event-hub.php' === get_page_template_slug( $h ) ) {
-			array_splice( $links, 1, 0, array( array( 'Tiếp sức đội mình', get_permalink( $h ) . '#tiep-suc' ), array( 'Thư tay tiếp sức', get_permalink( $h ) . '#buu-thiep' ) ) );
+			$add = array( array( 'Thư tay tiếp sức', get_permalink( $h ) . '#buu-thiep' ) );
+			if ( agm_show( 'wall' ) ) { array_unshift( $add, array( 'Tiếp sức đội mình', get_permalink( $h ) . '#tiep-suc' ) ); }
+			array_splice( $links, 1, 0, $add );
 		}
 		$cols[] = array( $label, $links );
 	}
 	$more = array( array( 'Trang chủ', home_url( '/' ) ) );
 	if ( $ev = agm_page_by_template( 'page-events.php' ) ) { $more[] = array( 'Sự kiện', $ev ); }
-	$more[] = array( 'AgriS-thing', home_url( '/#agris-thing' ) );
+	$more[] = array( 'Podcast', agm_podcast_url() );
 	$more[] = array( 'Bản tin', home_url( '/#ban-tin' ) );
 	$cols[] = array( 'Khám phá', $more );
 	echo '<div class="foot-map">';

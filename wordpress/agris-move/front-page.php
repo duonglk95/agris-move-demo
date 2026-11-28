@@ -56,6 +56,7 @@ $cover = function ( $post, $demo, $size = 'agm-card' ) {
 	}
   ?></div></div>
   <div class="seam" data-next="#f8fcf9" data-h="112" data-tones="#2faa5ab0,#9bd8b1d0" data-line="lime"></div>
+  <?php if ( agm_show( 'top50' ) ) : ?>
   <section class="band movers" id="movers">
     <div class="in">
       <figure class="top50">
@@ -67,6 +68,7 @@ $cover = function ( $post, $demo, $size = 'agm-card' ) {
       </figure>
     </div>
   </section>
+  <?php endif; ?>
 
   <div class="seam" data-next="#e8f4ec" data-h="84" data-tones="#d3eadb,#ffffffc0"></div>
   <section class="band band-glow pod" id="agris-thing">
@@ -86,8 +88,8 @@ $cover = function ( $post, $demo, $size = 'agm-card' ) {
           $p = isset( $pods[ $i ] ) ? $pods[ $i ] : null;
           return array(
               'title' => $p ? get_the_title( $p ) : $demo_pods[ $i ][0],
-              'url'   => $p ? get_permalink( $p ) : get_post_type_archive_link( 'podcast' ),
-              'img'   => $cover( $p, $demo_pods[ $i ][1] ),
+              'url'   => $p ? get_permalink( $p ) : agm_podcast_url(),
+              'img'   => agm_pod_cover( $p, agm_img( $demo_pods[ $i ][1] ) ),
               'time'  => $p ? get_post_meta( $p->ID, '_agm_duration', true ) : $demo_pods[ $i ][2],
           );
       };
@@ -103,7 +105,7 @@ $cover = function ( $post, $demo, $size = 'agm-card' ) {
           <?php for ( $i = 1; $i <= 2; $i++ ) : $pi = $pod( $i ); ?>
           <div><a class="thumb sm" href="<?php echo esc_url( $pi['url'] ); ?>" aria-label="Phát: <?php echo esc_attr( $pi['title'] ); ?>"><img alt="" src="<?php echo esc_url( $pi['img'] ); ?>"><span class="playb"></span><?php if ( $pi['time'] ) : ?><span class="time"><?php echo esc_html( $pi['time'] ); ?></span><?php endif; ?></a><p class="cap"><?php echo esc_html( $pi['title'] ); ?></p></div>
           <?php endfor; ?>
-          <a class="more" href="<?php echo esc_url( get_post_type_archive_link( 'podcast' ) ); ?>">Xem tập cũ hơn <?php echo agm_arrow(); // phpcs:ignore ?></a>
+          <a class="more" href="<?php echo esc_url( agm_podcast_url() ); ?>">Xem tất cả video <?php echo agm_arrow(); // phpcs:ignore ?></a>
         </div>
       </div>
     </div>
