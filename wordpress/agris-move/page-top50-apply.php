@@ -3,6 +3,7 @@
  * Template Name: TOP 50 – Ứng cử
  * Candidacy form in four steps; dossier is checked against the HR list and stored for review.
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
 while ( have_posts() ) : the_post();
 	$open = agm_apply_open(); list( $from, $to ) = agm_apply_window();

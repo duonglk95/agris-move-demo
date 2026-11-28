@@ -44,7 +44,7 @@ function agm_apply_submit() {
 	if ( ! agm_apply_open() ) { wp_send_json_error( array( 'message' => 'Chưa đến thời gian nhận hồ sơ.' ), 400 ); }
 	if ( ! function_exists( 'amv_check_identity' ) ) { wp_send_json_error( array( 'message' => 'Chưa bật plugin danh sách nhân viên.' ), 500 ); }
 	$g = function ( $k, $area = false ) { $v = wp_unslash( $_POST[ $k ] ?? '' ); return $area ? sanitize_textarea_field( $v ) : sanitize_text_field( $v ); };
-	$row = amv_check_identity( $g( 'name' ), $g( 'msnv' ), $g( 'phone' ) );
+	$row = agm_identity( $g( 'name' ), $g( 'msnv' ), $g( 'phone' ) );
 	if ( ! $row ) { wp_send_json_error( array( 'message' => 'Họ tên, MSNV hoặc số điện thoại chưa khớp với danh sách HR. Bạn kiểm tra lại nhé.', 'field' => 'msnv' ), 403 ); }
 	if ( $old = agm_hs_find( $row->msnv ) ) {
 		wp_send_json_error( array( 'message' => 'Bạn đã nộp hồ sơ ' . agm_hs_code( $old->ID ) . '. Mỗi người một hồ sơ; cần sửa, bạn bấm Liên hệ chương trình ở cuối trang.' ), 409 );
@@ -56,6 +56,8 @@ function agm_apply_submit() {
 		wp_send_json_error( array( 'message' => 'Bạn điền đủ các mục bắt buộc và đồng ý điều khoản nhé.' ), 400 );
 	}
 	$has_file = ! empty( $_FILES['video_file']['tmp_name'] );
+	if ( $has_file && (int) $_FILES['video_file']['size'] > 200 * MB_IN_BYTES ) { wp_send_json_error( array( 'message' => 'Video quá 200MB. Bạn dán link video thay cho file nhé.' ), 400 ); }
+	if ( ! empty( $_FILES['photo']['tmp_name'] ) && (int) $_FILES['photo']['size'] > 8 * MB_IN_BYTES ) { wp_send_json_error( array( 'message' => 'Ảnh quá 8MB. Bạn chọn ảnh nhỏ hơn nhé.' ), 400 ); }
 	if ( ! $f['video'] && ! $has_file ) { wp_send_json_error( array( 'message' => 'Bạn gửi video bằng link hoặc tải file lên nhé.', 'field' => 'video' ), 400 ); }
 	$body = "<h3>Bối cảnh</h3>\n" . wpautop( esc_html( $f['s'] ) ) . "<h3>Nhiệm vụ</h3>\n" . wpautop( esc_html( $f['t'] ) ) . "<h3>Hành động</h3>\n" . wpautop( esc_html( $f['a'] ) ) . "<h3>Kết quả</h3>\n" . wpautop( esc_html( $f['r'] ) );
 	$id = wp_insert_post( array( 'post_type' => 'ho_so_mover', 'post_status' => 'private', 'post_title' => $row->name . ' – ' . $f['title'], 'post_content' => $body ) );

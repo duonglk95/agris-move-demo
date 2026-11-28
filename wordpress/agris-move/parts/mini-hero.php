@@ -1,5 +1,6 @@
 <?php
 /** Banner for mini-site pages: the hub's featured image, this page's title and intro (page content). */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 $hub = agm_hub_id();
 $img = get_the_post_thumbnail_url( get_the_ID(), 'full' );
 $img = $img ? $img : ( $hub ? get_the_post_thumbnail_url( $hub, 'full' ) : '' );

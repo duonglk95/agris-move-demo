@@ -65,7 +65,7 @@ function agm_pit_identity() {
 	$name  = sanitize_text_field( wp_unslash( $_POST['name'] ?? '' ) );
 	$msnv  = sanitize_text_field( wp_unslash( $_POST['msnv'] ?? '' ) );
 	$phone = sanitize_text_field( wp_unslash( $_POST['phone'] ?? '' ) );
-	$row   = amv_check_identity( $name, $msnv, $phone );
+	$row   = agm_identity( $name, $msnv, $phone );
 	if ( ! $row ) { wp_send_json_error( array( 'message' => 'Họ tên, MSNV hoặc số điện thoại chưa khớp với danh sách HR. Bạn kiểm tra lại nhé.' ), 403 ); }
 	return $row;
 }

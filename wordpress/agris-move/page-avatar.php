@@ -3,6 +3,7 @@
  * Template Name: Khung avatar
  * Put your photo in the event frame and download it. Done in the browser; nothing is uploaded.
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
 while ( have_posts() ) : the_post(); ?>
 <main id="top" class="tk">

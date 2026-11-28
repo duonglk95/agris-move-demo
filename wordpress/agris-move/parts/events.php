@@ -1,5 +1,6 @@
 <?php
 /** Live + upcoming event groups; used on the homepage and the Sự kiện page. */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 ?>
       <?php
       $evg = agm_event_groups();

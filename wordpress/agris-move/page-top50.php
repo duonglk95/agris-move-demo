@@ -4,6 +4,7 @@
  * The award page. Text in the page editor shows as an announcement under the intro;
  * MOVER profiles and voting come from the "AgriS MOVE – Bình chọn" plugin.
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
 while ( have_posts() ) :
 	the_post();

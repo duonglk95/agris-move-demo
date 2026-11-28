@@ -2,6 +2,7 @@
 /**
  * Homepage: hero animation, next event, quarter ticker, TOP 50 banner, AgriS-thing, Bản tin MOVE.
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
 
 $pods = get_posts( array( 'post_type' => 'podcast', 'posts_per_page' => 3, 'post_status' => 'publish' ) );

@@ -2,6 +2,7 @@
 /**
  * Ordinary pages (thể lệ, giới thiệu, form ứng cử…).
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
 while ( have_posts() ) :
 	the_post();

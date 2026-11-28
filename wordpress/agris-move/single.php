@@ -2,6 +2,7 @@
 /**
  * One article, podcast episode or MOVER profile.
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
 while ( have_posts() ) :
 	the_post();

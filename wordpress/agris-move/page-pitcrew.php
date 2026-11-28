@@ -2,6 +2,7 @@
 /**
  * Template Name: Đăng ký Pit Crew
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
 while ( have_posts() ) : the_post();
 	$tours = agm_pit_tours(); $open = agm_pit_open();

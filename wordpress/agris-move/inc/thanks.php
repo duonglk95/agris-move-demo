@@ -3,6 +3,7 @@
  * Lời cảm ơn: anyone can send one from a page using the "Lời cảm ơn" template; it waits as Pending
  * until an admin publishes it (Lời cảm ơn → tick → Bulk actions → Edit → Status: Published, or open and Publish).
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 add_action( 'init', function () {
 	register_post_type( 'loi_cam_on', array(
 		'label' => 'Lời cảm ơn', 'public' => false, 'show_ui' => true, 'menu_icon' => 'dashicons-heart', 'menu_position' => 23,
@@ -23,6 +24,7 @@ function agm_thanks_list( $page_id, $n = 60 ) {
 
 function agm_thanks_submit() {
 	check_ajax_referer( 'agm_thanks', 'nonce' );
+	if ( ! agm_show( 'wall' ) ) { wp_send_json_error( array( 'message' => 'Tường tiếp sức đang tạm đóng.' ), 403 ); }
 	$page = absint( $_POST['page'] ?? 0 );
 	$to   = sanitize_text_field( wp_unslash( $_POST['to'] ?? '' ) );
 	$from = sanitize_text_field( wp_unslash( $_POST['from'] ?? '' ) );
@@ -30,6 +32,7 @@ function agm_thanks_submit() {
 	if ( ! $page || 'page' !== get_post_type( $page ) || '' === $msg ) {
 		wp_send_json_error( array( 'message' => 'Bạn viết lời cảm ơn trước đã nhé.' ), 400 );
 	}
+	agm_throttle( 'thanks', 30 );
 	$id = wp_insert_post( array( 'post_type' => 'loi_cam_on', 'post_status' => 'pending', 'post_title' => 'Gửi ' . ( $to ? $to : 'đồng đội' ) . ' – ' . ( $from ? $from : 'Ẩn danh' ), 'post_content' => mb_substr( $msg, 0, 600 ) ) );
 	update_post_meta( $id, '_agm_page', $page );
 	update_post_meta( $id, '_agm_to', $to );

@@ -2,6 +2,7 @@
 /**
  * "Liên hệ chương trình": messages stored as a private post type, listed in admin, exportable to CSV (Excel).
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 add_action( 'init', function () {
 	register_post_type( 'lien_he', array(
 		'label' => 'Lời nhắn liên hệ', 'public' => false, 'show_ui' => true, 'menu_icon' => 'dashicons-email-alt',
@@ -19,6 +20,8 @@ function agm_contact_submit() {
 	if ( '' === $topic || '' === $msg ) {
 		wp_send_json_error( array( 'message' => 'Bạn chọn vấn đề và viết nội dung lời nhắn nhé.' ), 400 );
 	}
+	agm_throttle( 'contact', 30 );
+	$msg = mb_substr( $msg, 0, 2000 );
 	$id = wp_insert_post( array( 'post_type' => 'lien_he', 'post_status' => 'private', 'post_title' => $topic . ' – ' . ( $name ? $name : 'Ẩn danh' ), 'post_content' => $msg ) );
 	update_post_meta( $id, '_agm_name', $name );
 	update_post_meta( $id, '_agm_topic', $topic );

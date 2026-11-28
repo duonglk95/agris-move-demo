@@ -3,6 +3,7 @@
  * Template Name: Bưu thiếp
  * Pick a contest photo (credited), write a wish, download the postcard. Nothing is stored.
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
 while ( have_posts() ) : the_post();
 	?>

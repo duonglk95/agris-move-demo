@@ -4,6 +4,7 @@
  * Sub-page for an event such as Vào vụ: banner (featured image), send-a-thank-you form, wall of approved notes.
  * The page's own content shows under the title as the introduction.
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
 while ( have_posts() ) :
 	the_post();

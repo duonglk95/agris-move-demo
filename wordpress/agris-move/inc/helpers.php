@@ -232,3 +232,29 @@ function agm_footer_sitemap() {
 	}
 	echo '</div>';
 }
+
+/**
+ * Public-form guards. agm_identity(): HR check with a cap of 10 wrong tries per IP per 15 minutes,
+ * shared by Pit Crew and the candidacy form. agm_throttle(): one submission per IP per $sec seconds.
+ */
+function agm_client_ip() {
+	return function_exists( 'amv_client_ip' ) ? amv_client_ip() : sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ?? '' ) );
+}
+function agm_identity( $name, $msnv, $phone ) {
+	if ( ! function_exists( 'amv_check_identity' ) ) { return null; }
+	$key   = 'agm_idf_' . md5( agm_client_ip() );
+	$fails = (int) get_transient( $key );
+	if ( $fails >= 10 ) {
+		wp_send_json_error( array( 'message' => 'Bạn đã nhập sai nhiều lần. Hãy thử lại sau 15 phút.' ), 429 );
+	}
+	$row = amv_check_identity( $name, $msnv, $phone );
+	if ( $row ) { delete_transient( $key ); } else { set_transient( $key, $fails + 1, 15 * MINUTE_IN_SECONDS ); }
+	return $row;
+}
+function agm_throttle( $what, $sec = 60 ) {
+	$key = 'agm_th_' . $what . '_' . md5( agm_client_ip() );
+	if ( get_transient( $key ) ) {
+		wp_send_json_error( array( 'message' => 'Bạn vừa gửi xong. Đợi một chút rồi gửi tiếp nhé.' ), 429 );
+	}
+	set_transient( $key, 1, $sec );
+}

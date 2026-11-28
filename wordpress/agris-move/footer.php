@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) { exit; } ?>
 <div class="seam" data-next="#dcefe3" data-h="100" data-tones="#eaf5ee,#cfe7d8"></div>
 <footer class="foot">
   <div class="ribbon" data-ribbon></div>

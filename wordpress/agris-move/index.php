@@ -2,6 +2,7 @@
 /**
  * Lists: Bản tin MOVE (blog), AgriS-thing archive, categories, search results.
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
 
 if ( is_search() ) {

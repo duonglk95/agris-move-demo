@@ -3,6 +3,7 @@
  * Podcast / Video: grid of company YouTube videos (AgriS-thing entries).
  * Each entry = one "Tập podcast" in admin with a YouTube link. Click plays in place.
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
 ?>
 <main id="top" class="page-main vid-page">

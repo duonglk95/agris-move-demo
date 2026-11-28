@@ -1,3 +1,4 @@
+<?php if ( ! defined( 'ABSPATH' ) ) { exit; } ?>
       <form class="tk-form st-form" data-avatar>
         <h2>Tạo avatar</h2>
         <label>Ảnh của bạn<input type="file" name="photo" accept="image/*"></label>

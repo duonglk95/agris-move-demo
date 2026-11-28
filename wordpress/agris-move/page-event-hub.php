@@ -4,6 +4,7 @@
  * One long page: "Tiếp sức đội mình" wall (+ popup form), postcard, slideshow of
  * contest photos. Child pages (Đăng ký Pit Crew, Khoảnh khắc đội mình) appear in the mini-site menu.
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
 while ( have_posts() ) : the_post();
 	$hub   = get_the_ID();

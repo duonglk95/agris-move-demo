@@ -3,6 +3,7 @@
  * Template Name: TOP 50 – Hướng dẫn và thể lệ
  * Child page of the TOP 50 MOVERS page: step-by-step guide, rules accordion and FAQ.
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
 while ( have_posts() ) : the_post();
 	$steps = array(

@@ -1,5 +1,6 @@
 <?php
 /** Postcard studio: photo strip on top, then wish fields beside the live preview. */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 $photos = agm_postcard_photos();
 ?>
 <form class="pc-studio" data-postcard>

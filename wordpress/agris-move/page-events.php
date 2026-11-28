@@ -3,6 +3,7 @@
  * Template Name: Sự kiện
  * Level-2 page listing events that are live or coming up.
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
 ?>
 <main id="top" class="page-main">

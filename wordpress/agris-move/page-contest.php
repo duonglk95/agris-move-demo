@@ -4,6 +4,7 @@
  * Upload a photo, it is framed in the browser (frame + name, place, center, fixed hashtags), published at once,
  * then shown in the gallery with a love button (sign-in by MSNV, same as TOP 50).
  */
+if ( ! defined( 'ABSPATH' ) ) { exit; }
 get_header();
 while ( have_posts() ) : the_post();
 	$pid   = get_the_ID();
